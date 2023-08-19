@@ -1,11 +1,29 @@
-import React from 'react';
-import './Login.css';
+import { createUser } from '@/redux/states/user';
+import { initLogin } from '@/services/firebase/auth/auth.service';
+import { useDispatch } from 'react-redux';
 
-export type LoginProps = {
+function Login() {
+  const dispatch = useDispatch();
+
+  const username = 'adminAlfredo1';
+  const password = 'bautista2002';
+
+  const login = async () => {
+    try{
+		const result = await initLogin(username, password);
+		dispatch(createUser({...result}));
+	}catch{
+
+	}
+  };
+
+  return (
+    <div>
+      <h2>HOLA ESTE ES EL LOGIN</h2>
+      <button onClick={login}>LOGIN</button>
+    </div>
+  );
 }
 
-const Login: React.FC<LoginProps>  = ({}) => {
-	return <div className='login'>Login</div>;
-};
-
 export default Login;
+
