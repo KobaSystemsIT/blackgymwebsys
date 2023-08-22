@@ -1,14 +1,20 @@
-import './App.css'
+import { lazy, Suspense } from 'react';
+import { Provider } from 'react-redux';
+import './App.css';
+import store from './redux/store';
+import Rutas from './routes/routes';
+
+const Login = lazy(() => import('./pages/Login/Login'));
+const Private = lazy(() => import('./pages/Private/Private'));
 
 function App() {
-
   return (
-    <div className="flex flex-col min-h-screen" >
-      <div className="flex-grow flex items-center justify-center">
-        <h1>Hola</h1>
-      </div>
-    </div>
-  )
+      <Suspense fallback={<>Cargando</>}>
+        <Provider store={store}>
+          <Rutas></Rutas>
+        </Provider>
+      </Suspense>
+  );
 }
 
-export default App
+export default App;

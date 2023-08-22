@@ -1,40 +1,35 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { userData } from '@/models/users/user.model';
-import { Roles } from '@/models/roles/roles';
-import { clearLocalStorage, persistLocalStorage } from '@/utilities/genLocalStorage';
+import { Roles, UserInfo } from '../../models';
+import { clearLocalStorage, persistLocalStorage } from '../../utilities';
 
-export const EmptyUserState: userData = {
-    idUser: 0,
-    username: '',
-    idClub: 0,
-    rol: Roles.invitado
+export const EmptyUserState: UserInfo = {
+  idUser: 0,
+  username: '',
+  userType: '',
+  token: '',
+  rol: Roles.USER
 };
 
-export const userKey = 'user';
+export const UserKey = 'user';
 
 export const userSlice = createSlice({
-    name: 'user',
-    initialState: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : EmptyUserState,
-    reducers: {
-        createUser: (state, action) => {
-            const {idUser, username, idClub, rol} = action.payload;
-            state.idUser = idUser;
-            state.username = username;
-            state.idClub = idClub;
-            state.rol = rol;
-            persistLocalStorage<userData>(userKey, action.payload);
-            return action.payload;
-        },
-        updateUser: (state, action) => {
-            const result = { ...state, ...action.payload};
-            persistLocalStorage<userData>(userKey, result);
-            return result;
-        },
-        resetUser: () => {
-            clearLocalStorage(userKey);
-            return EmptyUserState;
-        }
+  name: 'user',
+  initialState: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : EmptyUserState,
+  reducers: {
+    createUser: (state, action) => {
+      persistLocalStorage<UserInfo>(UserKey, action.payload);
+      return action.payload;
+    },
+    updateUser: (state, action) => {
+      const result = { ...state, ...action.payload };
+      persistLocalStorage<UserInfo>(UserKey, result);
+      return result;
+    },
+    resetUser: () => {
+      clearLocalStorage(UserKey);
+      return EmptyUserState;
     }
+  }
 });
 
 export const { createUser, updateUser, resetUser } = userSlice.actions;

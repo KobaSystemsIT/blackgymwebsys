@@ -1,12 +1,13 @@
-import { userData } from "@/models/users/user.model";
-import { configureStore } from "@reduxjs/toolkit";
-import userSliceReducer from '@/redux/states/user'
-export interface dataStore {
-    user: userData
+import { configureStore } from '@reduxjs/toolkit';
+import { UserInfo } from '../models';
+import userSliceReducer from './states/user';
+
+export interface AppStore {
+  user: UserInfo;
 }
 
-export const store = configureStore({
-    reducer: {
-        user: userSliceReducer
-    }
+export default configureStore<AppStore>({
+  reducer: {
+    user: userSliceReducer
+  }
 });
