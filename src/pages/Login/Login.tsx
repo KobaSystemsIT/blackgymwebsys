@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { PrivateRoutes, PublicRoutes, Roles } from '../../models';
-import { createUser, resetUser, UserKey } from '../../redux/states/user';
-import { initLogin } from '../../services';
-import { clearLocalStorage, persistLocalStorage } from '../../utilities';
+import { PrivateRoutes, PublicRoutes, Roles } from '@/models';
+import { createUser, resetUser, UserKey } from '@/redux/states/user';
+import { initLogin } from '@/services';
+import { clearLocalStorage, persistLocalStorage } from '@/utilities';
 import logo from '@/assets/icons/iconBG.svg'
 import { getClubes } from '@/services/Clubes/clubes.service';
 import { Clubes } from '@/models/Clubes';
+import { addClub } from '@/redux/states/club';
 
 function Login() {
   const dispatch = useDispatch();
@@ -33,16 +34,28 @@ function Login() {
       navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
     } catch (error) {
       console.error("Error de inicio de sesión:", error);
+    } 
+  };
+
+  const handleClub = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    setIdClub(selectedValue);
+    const id = parseInt(selectedValue, 10);
+    const targetClub = clubes.find(club => club.idClub === id);
+    if (targetClub) {
+      const { idClub, nameClub, address } = targetClub;
+      const data = { idClub, nameClub, address };
+      dispatch(addClub({ ...data }));
+    } else {
+      console.log('No se encontró ningún club para el ID seleccionado');
     }
   };
+  
 
    const obtainClubes = async () => {
     try{
       const {data} = await getClubes();
       setClubes(data);
-      console.log(data)
-      //persistLocalStorage("user", data);
-      //console.log(localStorage.getItem(key));
     } catch (error) {
       console.error("Error:", error);
     }
@@ -94,7 +107,7 @@ function Login() {
                 type="password"
                 required
                 onChange={(e) => setPassword(e.target.value)}
-                className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring- ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -109,7 +122,7 @@ function Login() {
                 name="idClub"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 value={idClub}
-                onChange={(e) => setIdClub(e.target.value)}
+                onChange={handleClub}
               >
                 <option value="">Selecciona una sucursal.</option>
                 {clubes.map(club => (

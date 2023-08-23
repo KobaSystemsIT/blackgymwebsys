@@ -6,4 +6,5 @@ export interface UserInfo {
   userType: string;
   token: string;
   rol:Roles;
+  idClub:number;
 }

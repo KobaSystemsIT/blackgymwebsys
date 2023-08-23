@@ -1,13 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { UserInfo } from '../models';
 import userSliceReducer from './states/user';
+import  clubSliceReducer  from './states/club';
+import { Clubes } from '@/models/Clubes';
 
 export interface AppStore {
   user: UserInfo;
+  club: Clubes;
 }
 
 export default configureStore<AppStore>({
   reducer: {
-    user: userSliceReducer
+    user: userSliceReducer,
+    club: clubSliceReducer
   }
 });

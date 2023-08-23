@@ -1,4 +1,4 @@
-const baseUrl = 'http://accessdb.blackgymfitclub.com/api/';
+const baseUrl = 'https://accessdb.blackgymfitclub.com/api/';
 const loginUrl = baseUrl + 'login';
 
 export const initLogin = (username: string, password: string, idClub: string) => {

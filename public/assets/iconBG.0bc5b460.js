@@ -1,0 +1,1 @@
+import{R as e,f as u,g as c}from"./index.88977a72.js";function n(t=e){const o=t===e?u:c(t);return function(){const{store:s}=o();return s}}const a=n();function i(t=e){const o=t===e?a:n(t);return function(){return o().dispatch}}const x=i(),p="/assets/iconBG.f1eba91a.svg";export{p as l,x as u};

@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Roles, UserInfo } from '../../models';
-import { clearLocalStorage, persistLocalStorage } from '../../utilities';
+import { Roles, UserInfo } from '@/models';
+import { clearLocalStorage, persistLocalStorage } from '@/utilities';
 
 export const EmptyUserState: UserInfo = {
   idUser: 0,
   username: '',
   userType: '',
   token: '',
-  rol: Roles.USER
+  rol: Roles.USER,
+  idClub: 0
 };
 
 export const UserKey = 'user';

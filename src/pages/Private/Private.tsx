@@ -8,36 +8,42 @@ import { GestionSucursal } from './GestionSucursal';
 import { CantAccess } from '@/common/CantAccess';
 import { Navbar } from '@/components/Navbar';
 import { Sidebar } from '@/components/Sidebar';
+import { PuntoVenta } from './PuntoVenta';
+import { GestionFinanciera } from './GestionFinanciera';
+import { PanelAdmin } from './PanelAdmin';
 
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
-const Home = lazy(() => import('./Home/Home'));
 
 function Private() {
   return (
-    <div className="flex p-4 max-h-screen overflow-y-hidden text-xs">
-      <Sidebar/>
+    <div className="flex p-4 max-h-screen overflow-hidden text-sm">
+      <Sidebar />
       {/* Main Content */}
-      <div className="flex-grow p-4">
-        <div className="flex flex-col min-h-screen">
+      <div className="flex-grow">
+        <div className="flex flex-col h-screen p-4">
           <Navbar />
-          <div className="flex-grow overflow-hidden"> {/* Utiliza 'overflow-hidden' para evitar el scroll en este nivel */}
-            <div style={{ maxHeight: 'calc(100vh - 5rem)', overflowY: 'auto' }} className='p-4'> {/* Establece una altura máxima */}
-              <RoutesWithNotFound>
-                <Route path="/" element={<Navigate to={PrivateRoutes.DASHBOARD} />} />
-                <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
-                <Route path={PrivateRoutes.CANTACCESS} element={<CantAccess />} />
-                <Route element={<RoleGuard rol={Roles.ADMIN} />}>
-                  <Route path={PrivateRoutes.SUCADMIN} element={<GestionSucursales />} />
-                </Route>
-                <Route element={<RoleGuard rol={Roles.USER && Roles.ADMIN} />}>
-                  <Route path={PrivateRoutes.SUCSTAFF} element={<GestionSucursal />} />
-                </Route>
-              </RoutesWithNotFound>
-            </div>
+          <div className="flex-grow overflow-auto p-4">
+            {/* Contenido de la página */}
+            <RoutesWithNotFound>
+              <Route path="/" element={<Navigate to={PrivateRoutes.DASHBOARD} />} />
+              <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
+              <Route path={PrivateRoutes.CANTACCESS} element={<CantAccess />} />
+              <Route path={PrivateRoutes.SUCSTAFF} element={<GestionSucursal />} />
+              <Route path={PrivateRoutes.PDV} element={<PuntoVenta />} />
+
+              {/*rutas de administrador*/}
+              <Route element={<RoleGuard rol={Roles.ADMIN} />}>
+                <Route path={PrivateRoutes.SUCADMIN} element={<GestionSucursales />} />
+                <Route path={PrivateRoutes.FINANZAS} element={<GestionFinanciera />} />
+                <Route path={PrivateRoutes.ADMIN} element={<PanelAdmin />} />
+              </Route>
+            </RoutesWithNotFound>
           </div>
         </div>
       </div>
     </div>
+
+
 
 
   );

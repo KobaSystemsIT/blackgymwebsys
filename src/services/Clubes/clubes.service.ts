@@ -1,4 +1,4 @@
-import baseUrl from "../Login/auth.service";
+import baseUrl from "@/services/Login/auth.service";
 const clubesUrl = baseUrl + 'getClubes';
 
 export const getClubes = () => {
