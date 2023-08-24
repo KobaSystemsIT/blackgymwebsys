@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCartShopping, faArrowRightToBracket, faBars, faCity, faShop, faChartPie } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faCartShopping, faArrowRightToBracket, faBars, faCity, faShop, faChartPie, faWarehouse, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Logout } from '../Logout';
 import './Sidebar.css'
 import logo from '@/assets/icons/iconBG.svg'
@@ -39,15 +39,15 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 	};
 
 	return (
-		<div className={`relative border-r bg-black rounded-lg md:overflow-y-auto md:overflow-x-hidden ${showMenu ? 'w-48' : '-left-4'}`}>
-			<button onClick={toggleMenu} className={`${showMenu ? 'fixed lg:block top-[1.8rem] left-44': 'fixed lg:block top-[3.9rem] left-10 z-14'}`}>
+		<div className={`relative border-r bg-black rounded-lg md:overflow-y-auto md:overflow-x-hidden ${showMenu ? 'lg:w-[18%] md:w-[30%] sidebar-transition' : '-left-4 sidebar-transition'}`}>
+			<button onClick={toggleMenu} className={`${showMenu ? 'fixed lg:block top-[3.9rem] left-10 z-14 menu-button-transition' : 'fixed lg:block top-[3.9rem] left-10 z-14 menu-button-transition'}`}>
 				<FontAwesomeIcon icon={faBars} className={`h-5 ${showMenu ? 'rounded-lg text-white' : 'rounded-lg text-dark'}`} />
 			</button>
-			<div className={`w-48 pt-16 rounded-lg ${showMenu ? 'block' : 'hidden'} transition-all duration-300`}>
+			<div className={`pt-16 rounded-lg ${showMenu ? 'block' : 'hidden'} menu-content-transition`}>
 				<div className="flex flex-col items-center">
 					<div className="flex flex-col pt-6 justify-center">
-						<img src={logo} className={`h-8 ${showMenu ? 'relative' : 'relative -left-11'} transition-all duration-700`} alt="Logo" />
-						<h1 className={`text-sm font-medium bottom-0 text-center text-white bg-dark ${showMenu ? 'block' : 'hidden'}`}>
+						<img src={logo} className={`h-8 ${showMenu ? 'relative' : 'relative -left-11'} menu-content-transition`} alt="Logo" />
+						<h1 className={`text-sm font-medium bottom-0 text-center text-white bg-dark ${showMenu ? 'block' : 'hidden'} menu-content-transition`}>
 							Black Gym Club
 						</h1>
 					</div>
@@ -63,6 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								<h1 className={`${showMenu ? 'block' : ' hidden'}`}>Inicio</h1>
 							</a>
 						</li>
+						{!isAdmin && (
 						<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 							<a
 								href={PrivateRoutes.SUCSTAFF}
@@ -78,10 +79,11 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								</h1>
 							</a>
 						</li>
+						)}
 						{isAdmin && (
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
-									href={PrivateRoutes.SUCADMIN}
+									href="GestionSucursal/"
 									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
 										}`}
 								>
@@ -96,24 +98,56 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 							</li>
 						)}
 						{!isAdmin && (
-						<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
-							<a
-								href={PrivateRoutes.PDV}
-								className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
-									}`}
-							>
-								<FontAwesomeIcon
-									icon={faCartShopping}
-									className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
-								/>
-								<h1 className={`${showMenu ? 'block' : ' hidden'}`}>Punto de Venta</h1>
-							</a>
-						</li>
+							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
+								<a
+									href={PrivateRoutes.PDV}
+									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
+										}`}
+								>
+									<FontAwesomeIcon
+										icon={faCartShopping}
+										className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+									/>
+									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>Punto de Venta</h1>
+								</a>
+							</li>
+						)}
+						{!isAdmin && (
+							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
+								<a
+									href={PrivateRoutes.PDV}
+									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
+										}`}
+								>
+									<FontAwesomeIcon
+										icon={faWarehouse}
+										className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+									/>
+									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>Inventario</h1>
+								</a>
+							</li>
 						)}
 						{isAdmin && (
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
-									href={PrivateRoutes.SUCADMIN}
+									href={PrivateRoutes.GESTINV}
+									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
+										}`}
+								>
+									<FontAwesomeIcon
+										icon={faWarehouse}
+										className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+									/>
+									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>
+										Gestión de Inventarios
+									</h1>
+								</a>
+							</li>
+						)}
+						{isAdmin && (
+							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
+								<a
+									href={PrivateRoutes.FINANZAS}
 									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
 										}`}
 								>
@@ -123,6 +157,24 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 									/>
 									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>
 										Gestión Financiera
+									</h1>
+								</a>
+							</li>
+						)}
+						
+						{isAdmin && (
+							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
+								<a
+									href={PrivateRoutes.ADMIN}
+									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
+										}`}
+								>
+									<FontAwesomeIcon
+										icon={faUsers}
+										className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+									/>
+									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>
+										Administración
 									</h1>
 								</a>
 							</li>
