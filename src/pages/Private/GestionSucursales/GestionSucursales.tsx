@@ -13,14 +13,9 @@ const GestionSucursales: React.FC<GestionSucursalesProps>  = ({}) => {
 	const idClub = ('' + clubState.idClub + '');
 	const navigate = useNavigate();
 
-  const handleNavigateToGestionSucursal = (idClub: string) => {
-    navigate(`/Dashboard/GestionSucursal/${idClub}`);
-  };
 	return <>
 	<div>
-	<button onClick={() => handleNavigateToGestionSucursal(idClub)}>Ir a Sucursal 123</button>
-		<br />
-		<hr />
+	<a href={`/Dashboard/Gestion_de_Sucursal/${idClub}`}>Sucursal</a>
 	</div>
 	</>;
 };

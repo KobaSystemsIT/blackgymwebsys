@@ -16,6 +16,7 @@ import { Inventario } from './Inventario';
 import { GestionSubscripciones } from './GestionSubscripciones';
 import { RegistroUsuarios } from './RegistroUsuarios';
 import { FinanzasXSucursal } from './FinanzasXSucursal';
+import { GestionClubes } from './GestionClubes';
 
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
@@ -31,19 +32,23 @@ function Private() {
               <Route path="/" element={<Navigate to={PrivateRoutes.DASHBOARD} />} />
               <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
               <Route path={PrivateRoutes.CANTACCESS} element={<CantAccess />} />                      
-              <Route path='GestionSucursal/:idClub' element={<GestionSucursal/>}></Route>
+              <Route path='Gestion_de_Sucursal/:idClub' element={<GestionSucursal/>}></Route>
+              <Route path='Finanzas_Por_Sucursal/:idClub' element={<FinanzasXSucursal/>}></Route>
 
-              <Route path={PrivateRoutes.PDV} element={<PuntoVenta />} />
-              <Route path={PrivateRoutes.INVENTARIO} element={<Inventario />} />
-              <Route path={PrivateRoutes.SUBSCRIPCION} element={<GestionSubscripciones />} />
-              <Route path={PrivateRoutes.REGISTROUSER} element={<RegistroUsuarios />} />
+              <Route path='Punto_de_Venta/:idClub' element={<PuntoVenta />} />
+              <Route path='Inventario/:idClub' element={<Inventario />} />
+              <Route path="Gestion_de_Subscripciones/:idClub" element={<GestionSubscripciones />} />
+              <Route path="Registro_de_Usuarios/:idClub" element={<RegistroUsuarios />} />
+              <Route path='Registro_de_Productos/:idClub'></Route>
+              <Route path='Gestion_de_Inventario/:idClub'></Route>
 
               {/*rutas de administrador*/}
               <Route element={<RoleGuard rol={Roles.ADMIN} />}>
-                <Route path="GestionSucursales/" element={<GestionSucursales />} />
-                <Route path={PrivateRoutes.FINANZAS} element={<GestionFinanciera />} />
-                <Route path={PrivateRoutes.ADMIN} element={<PanelAdmin />} />
-                <Route path={PrivateRoutes.GESTINV} element={<GestionInventarios />} />
+                <Route path="Gestion_de_Sucursales/" element={<GestionSucursales />} />
+                <Route path="Gestion_Financiera/" element={<GestionFinanciera />} />
+                <Route path="Panel_de_Administrador" element={<PanelAdmin />} />
+                <Route path="Gestion_de_Inventarios/" element={<GestionInventarios />} />
+                <Route path="Gestion_de_Clubes/" element={<GestionClubes/>}></Route>
               </Route>
             </RoutesWithNotFound>
           </div>

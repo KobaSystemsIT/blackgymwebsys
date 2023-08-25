@@ -14,6 +14,7 @@ export type SidebarProps = {
 const Sidebar: React.FC<SidebarProps> = ({ }) => {
 	const [showMenu, setShowMenu] = useState(false);
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+	const clubState = useSelector((store: AppStore) => store.club); 
 
 	const userState = useSelector((store: AppStore) => store.user);
 
@@ -66,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 						{!isAdmin && (
 						<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 							<a
-								href={PrivateRoutes.SUCSTAFF}
+								href=""
 								className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
 									}`}
 							>
@@ -83,7 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 						{isAdmin && (
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
-									href="GestionSucursal/"
+									href={`/Dashboard/Gestion_de_Sucursales/`}
 									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
 										}`}
 								>
@@ -100,7 +101,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 						{!isAdmin && (
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
-									href={PrivateRoutes.PDV}
+									href={`/Dashboard/Punto_de_Venta/${clubState.idClub}`}
 									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
 										}`}
 								>
@@ -115,7 +116,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 						{!isAdmin && (
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
-									href={PrivateRoutes.PDV}
+									href={`/Dashboard/Inventario/${clubState.idClub}`}
 									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
 										}`}
 								>
@@ -130,7 +131,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 						{isAdmin && (
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
-									href={PrivateRoutes.GESTINV}
+									href={`/Dashboard/Gestion_de_Inventarios/`}
 									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
 										}`}
 								>
@@ -147,7 +148,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 						{isAdmin && (
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
-									href={PrivateRoutes.FINANZAS}
+									href={`/Dashboard/Gestion_Financiera/`}
 									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
 										}`}
 								>
@@ -165,7 +166,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 						{isAdmin && (
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
-									href={PrivateRoutes.ADMIN}
+									href={`/Dashboard/Panel_de_Administrador/`}
 									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
 										}`}
 								>

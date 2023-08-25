@@ -21,20 +21,20 @@ function Dashboard() {
         <br />
         <div className="inline-grid md:grid-cols-2 lg:grid-flow-col gap-4">
           {isAdmin && (
-            <a href="GestionSucursales/" className="p-2 bg-slate-100 shadow-md rounded-lg">
+            <a href="Gestion_de_Sucursales/" className="p-2 bg-slate-100 shadow-md rounded-lg">
               <div className="card-body flex-row items-center">
                 <FontAwesomeIcon icon={faCity} />
                 <h1>Gestión de sucursales</h1>
               </div>
             </a>
           )}
-          <a href={`GestionSucursal/${clubState.idClub}`}  className="p-2 bg-slate-100 shadow-md rounded-lg">
+          <a href={`Gestion_de_Sucursal/${clubState.idClub}`}  className="p-2 bg-slate-100 shadow-md rounded-lg">
             <div className="card-body flex-row items-center">
               <FontAwesomeIcon icon={faShop} />
               <h1>Gestión de sucursal</h1>
             </div>
           </a>
-          <a href={PrivateRoutes.PDV} className="p-2 bg-slate-100 shadow-md rounded-lg">
+          <a href={`Punto_de_Venta/${clubState.idClub}`}className="p-2 bg-slate-100 shadow-md rounded-lg">
             <div className="card-body flex-row items-center">
               <FontAwesomeIcon icon={faCartShopping} />
               <h1>Punto de Venta</h1>

@@ -27,14 +27,14 @@ function Login() {
   }, []);
 
   const login = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault(); 
+    event.preventDefault();
     try {
       const result = await initLogin(username, password, idClub);
       dispatch(createUser({ ...result }));
       navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
     } catch (error) {
       console.error("Error de inicio de sesión:", error);
-    } 
+    }
   };
 
   const handleClub = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -50,16 +50,16 @@ function Login() {
       console.log('No se encontró ningún club para el ID seleccionado');
     }
   };
-  
 
-   const obtainClubes = async () => {
-    try{
-      const {data} = await getClubes();
+
+  const obtainClubes = async () => {
+    try {
+      const { data } = await getClubes();
       setClubes(data);
     } catch (error) {
       console.error("Error:", error);
     }
-   }
+  }
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8" onLoad={obtainClubes}>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -94,10 +94,9 @@ function Login() {
 
           <div>
             <div className="flex items-center justify-between">
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                Contraseña
-              </label>
+              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
               <div className="text-sm">
+                <a href={PublicRoutes.FORGOTPASS} className="text-gray-900 text-sm hover:text-indigo-500 hover:border-b">Olvidaste tu contraseña?</a>
               </div>
             </div>
             <div className="mt-2">
