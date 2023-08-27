@@ -17,8 +17,11 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [idClub, setIdClub] = useState('1');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [clubes, setClubes] = useState<Clubes[]>([]);
+
+  const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
 
   useEffect(() => {
     clearLocalStorage(UserKey);
@@ -28,12 +31,19 @@ function Login() {
 
   const login = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+
+    if (!username || !password || !idClub) {
+      setShowEmptyFieldsAlert(true);
+      return;
+    }
+
     try {
       const result = await initLogin(username, password, idClub);
       dispatch(createUser({ ...result }));
       navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error de inicio de sesión:", error);
+      setErrorMessage(error.response);
     }
   };
 
@@ -51,7 +61,6 @@ function Login() {
     }
   };
 
-
   const obtainClubes = async () => {
     try {
       const { data } = await getClubes();
@@ -60,6 +69,7 @@ function Login() {
       console.error("Error:", error);
     }
   }
+
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8" onLoad={obtainClubes}>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -68,7 +78,7 @@ function Login() {
           src={logo}
           alt="Your Company"
         />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
           Bienvenido
         </h2>
       </div>
@@ -76,27 +86,27 @@ function Login() {
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6">
           <div>
-            <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="username" className="block text-sm font-medium leading-6 text-white">
               Usuario
             </label>
             <div className="mt-2">
               <input
-                id="useranme"
+                id="username"
                 name="username"
-                type="username"
+                type="text"
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full px-2 py-1.5 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
 
           <div>
             <div className="flex items-center justify-between">
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">Password</label>
               <div className="text-sm">
-                <a href={PublicRoutes.FORGOTPASS} className="text-gray-900 text-sm hover:text-indigo-500 hover:border-b">Olvidaste tu contraseña?</a>
+                <a href={PublicRoutes.FORGOTPASS} className="text-white text-sm hover:text-indigo-500 hover:border-b">Olvidaste tu contraseña?</a>
               </div>
             </div>
             <div className="mt-2">
@@ -106,13 +116,13 @@ function Login() {
                 type="password"
                 required
                 onChange={(e) => setPassword(e.target.value)}
-                className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full px-2 py-1.5 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="idClub" className="block text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="idClub" className="block text-sm font-medium leading-6 text-white">
               Club
             </label>
             <div className="mt-2">
@@ -131,10 +141,22 @@ function Login() {
             </div>
           </div>
 
+          {showEmptyFieldsAlert && (
+            <div className="text-red-600">
+              Por favor, complete todos los campos.
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className="text-red-600">
+              {errorMessage}
+            </div>
+          )}
+
           <div>
             <button
               onClick={login}
-              className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="flex w-full justify-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-dark shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Ingresar
             </button>
@@ -144,4 +166,5 @@ function Login() {
     </div>
   );
 }
+
 export default Login;

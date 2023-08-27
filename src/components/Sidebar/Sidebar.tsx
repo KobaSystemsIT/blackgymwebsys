@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCartShopping, faArrowRightToBracket, faBars, faCity, faShop, faChartPie, faWarehouse, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faCartShopping, faArrowRightToBracket, faBars, faCity, faShop, faChartPie, faWarehouse, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Logout } from '../Logout';
 import './Sidebar.css'
 import logo from '@/assets/icons/iconBG.svg'
@@ -40,15 +40,15 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 	};
 
 	return (
-		<div className={`relative border-r bg-black rounded-lg md:overflow-y-auto md:overflow-x-hidden ${showMenu ? 'lg:w-[18%] md:w-[30%] sidebar-transition' : '-left-4 sidebar-transition'}`}>
-			<button onClick={toggleMenu} className={`${showMenu ? 'fixed lg:block top-[3.9rem] left-10 z-14 menu-button-transition' : 'fixed lg:block top-[3.9rem] left-10 z-14 menu-button-transition'}`}>
+		<div className={`relative bg-black md:overflow-y-auto md:overflow-x-hidden ${showMenu ? 'lg:w-[18%] md:w-[30%] sidebar-transition' : '-left-4 sidebar-transition'}`}>
+			<button onClick={toggleMenu} className={`${showMenu ? 'fixed lg:block top-[3.9rem] left-10 z-14 menu-button-transition' : 'fixed lg:block lg:top-[3.7rem] md:top-[3.9rem] md:left-10 top-[3.4rem] left-10 z-14 menu-button-transition'}`}>
 				<FontAwesomeIcon icon={faBars} className={`h-5 ${showMenu ? 'rounded-lg text-white' : 'rounded-lg text-dark'}`} />
 			</button>
-			<div className={`pt-16 rounded-lg ${showMenu ? 'block' : 'hidden'} menu-content-transition`}>
+			<div className={`pt-20 ${showMenu ? 'block' : 'hidden'} menu-content-transition`}>
 				<div className="flex flex-col items-center">
 					<div className="flex flex-col pt-6 justify-center">
-						<img src={logo} className={`h-8 ${showMenu ? 'relative' : 'relative -left-11'} menu-content-transition`} alt="Logo" />
-						<h1 className={`text-sm font-medium bottom-0 text-center text-white bg-dark ${showMenu ? 'block' : 'hidden'} menu-content-transition`}>
+						<img src={logo} className={` h-12 ${showMenu ? 'relative' : 'relative -left-11'} menu-content-transition`} alt="Logo" />
+						<h1 className={`text-lg mt-2  font-medium bottom-0 text-center text-white bg-dark ${showMenu ? 'block' : 'hidden'} menu-content-transition`}>
 							Black Gym Club
 						</h1>
 					</div>
@@ -56,26 +56,25 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 				<div className="pt-5">
 					<ul className="py-2 px-3 text-white text-sm">
 						<li className="m-5 hover:bg-white rounded-md hover:text-black">
-							<a href="/" className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'}`}>
+							<a href="/" className="flex items-center">
 								<FontAwesomeIcon
 									icon={faHome}
-									className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+									className="m-3 h-3"
 								/>
-								<h1 className={`${showMenu ? 'block' : ' hidden'}`}>Inicio</h1>
+								<h1>Inicio</h1>
 							</a>
 						</li>
 						{!isAdmin && (
 						<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 							<a
-								href=""
-								className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
-									}`}
+								href={`/Dashboard/Gestion_de_Sucursal/${clubState.idClub}`}
+								className="flex items-center"
 							>
 								<FontAwesomeIcon
 									icon={faShop}
-									className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+									className="m-3 h-3"
 								/>
-								<h1 className={`${showMenu ? 'block' : ' hidden'}`}>
+								<h1>
 									Gestión de Sucursal
 								</h1>
 							</a>
@@ -85,14 +84,13 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Gestion_de_Sucursales/`}
-									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
-										}`}
+									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faCity}
-										className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+										className="m-3 h-3"
 									/>
-									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>
+									<h1>
 										Gestión de Sucursales
 									</h1>
 								</a>
@@ -102,14 +100,13 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Punto_de_Venta/${clubState.idClub}`}
-									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
-										}`}
+									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faCartShopping}
-										className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+										className="m-3 h-3"
 									/>
-									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>Punto de Venta</h1>
+									<h1>Punto de Venta</h1>
 								</a>
 							</li>
 						)}
@@ -117,14 +114,13 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Inventario/${clubState.idClub}`}
-									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
-										}`}
+									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faWarehouse}
-										className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+										className="m-3 h-3"
 									/>
-									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>Inventario</h1>
+									<h1>Inventario</h1>
 								</a>
 							</li>
 						)}
@@ -132,14 +128,13 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Gestion_de_Inventarios/`}
-									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
-										}`}
+									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faWarehouse}
-										className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+										className="m-3 h-3"
 									/>
-									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>
+									<h1>
 										Gestión de Inventarios
 									</h1>
 								</a>
@@ -149,14 +144,13 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Gestion_Financiera/`}
-									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
-										}`}
+									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faChartPie}
-										className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+										className="m-3 h-3"
 									/>
-									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>
+									<h1>
 										Gestión Financiera
 									</h1>
 								</a>
@@ -167,14 +161,13 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 							<li className="m-5 mt-7 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Panel_de_Administrador/`}
-									className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
-										}`}
+									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faUsers}
-										className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+										className="m-3 h-3"
 									/>
-									<h1 className={`${showMenu ? 'block' : ' hidden'}`}>
+									<h1>
 										Administración
 									</h1>
 								</a>
@@ -183,14 +176,13 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 						<li className="m-5 ml-5 mt-7 hover:bg-white rounded-md hover:text-black">
 							<a
 								href="/login"
-								className={`${showMenu ? 'flex items-center' : 'relative items-center left-1'
-									}`}
+								className="flex items-center"
 							>
 								<FontAwesomeIcon
 									icon={faArrowRightToBracket}
-									className={`${showMenu ? ' m-3 h-3' : 'h-5'}`}
+									className="m-3 h-3"
 								/>
-								<h1 className={`${showMenu ? 'block' : ' hidden'}`}>
+								<h1>
 									<Logout></Logout>
 								</h1>
 							</a>

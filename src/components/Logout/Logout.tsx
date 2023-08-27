@@ -10,7 +10,7 @@ function Logout() {
   const logOut = () => {
     clearLocalStorage(UserKey);
     dispatch(resetUser());
-    navigate(PublicRoutes.LOGIN, { replace: true });
+    navigate("/login", { replace: true });
   };
   return <button onClick={logOut} className='text-sm'>Salir</button>;
 }

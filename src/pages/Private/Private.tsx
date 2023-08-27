@@ -22,12 +22,12 @@ const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
 function Private() {
   return (
-    <div className="flex p-4 max-h-screen overflow-hidden text-sm">
+    <div className="flex text-sm bg-black h-screen">
       <Sidebar />
-      <div className="flex-grow">
-        <div className="flex flex-col h-screen p-4">
+      <div className="flex-grow overflow-auto max-h-screen p-4 lg:m-4 md:m-4 m-2 bg-white rounded-xl">
+        <div className="flex flex-col">
           <Navbar />
-          <div className="flex-grow overflow-auto p-4">
+          <div className="flex-grow p-4">
             <RoutesWithNotFound>
               <Route path="/" element={<Navigate to={PrivateRoutes.DASHBOARD} />} />
               <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />

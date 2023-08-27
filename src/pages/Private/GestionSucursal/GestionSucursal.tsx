@@ -1,5 +1,4 @@
 import React from 'react';
-import './GestionSucursal.css';
 import { useParams } from 'react-router-dom';
 
 export type GestionSucursalProps = {
@@ -7,10 +6,15 @@ export type GestionSucursalProps = {
 
 const GestionSucursal: React.FC<GestionSucursalProps>  = ({}) => {
 	const { idClub } = useParams<{ idClub: string }>();
-	return <div>
-	<h1>Detalles de la sucursal {idClub}</h1>
-	{/* Renderiza los detalles y datos de la sucursal */}
-  </div>;
+	return <>
+	<div className='container'>
+		<div className='card'>
+			<div className=' card-body'>
+				<h1>Sucursal {idClub}</h1>
+			</div>
+		</div>
+	</div>
+	</>
 };
 
 export default GestionSucursal;
