@@ -41,9 +41,9 @@ function Login() {
       const result = await initLogin(username, password, idClub);
       dispatch(createUser({ ...result }));
       navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
-    } catch (error: any) {
-      console.error("Error de inicio de sesión:", error);
-      setErrorMessage(error.response);
+    } catch (error:any) {
+      console.error('Error de inicio de sesión:', error);
+      setErrorMessage(error.message);
     }
   };
 

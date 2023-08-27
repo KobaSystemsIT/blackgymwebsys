@@ -17,11 +17,18 @@ export const initLogin = (username: string, password: string, idClub: string) =>
   };
 
   return fetch(loginUrl, requestOptions)
-    .then((res) => {
+    .then(async (res) => {
       if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
+        const errorResponse = await res.json(); // Parsea el cuerpo del mensaje como JSON
+        throw new Error(errorResponse.message);
       }
       return res.json();
+    })
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.message || 'Error desconocido');
+      }
+      return data;
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -30,3 +37,4 @@ export const initLogin = (username: string, password: string, idClub: string) =>
 };
 
 export default baseUrl;
+
