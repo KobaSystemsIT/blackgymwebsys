@@ -26,22 +26,15 @@ const Navbar: React.FC<NavbarProps> = ({ }) => {
 
   return (
     <div className="navbar p-4 border-b">
-      <div className="relative flex-1 lg:left-6 left-7 ">
-        <div className="text-sm breadcrumbs hidden md:block lg:block">
+      <div className="relative flex-1">
+        <div className="lg:text-sm text-xs breadcrumbs">
           <ul className=''>
             {breadcrumbItems}
           </ul>
         </div>
-        <div className="text-sm breadcrumbs block md:hidden lg:hidden">
-          <ul className=''>
-            <Link to={`${PrivateRoutes.DASHBOARD}`}>
-              <FontAwesomeIcon icon={faHome} />
-            </Link>
-          </ul>
-        </div>
       </div>
       <div className="flex-none">
-        <ul className="menu menu-horizontal px-4">
+        <ul className="menu menu-horizontal px-0">
           <li>
             <details>
               <summary className="text-xs">

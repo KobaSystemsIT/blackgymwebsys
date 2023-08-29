@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { AppStore } from "@/redux/store";
-import { PrivateRoutes, Roles } from "@/models";
+import { Roles } from "@/models";
 import { faCartShopping, faCity, faShop, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
