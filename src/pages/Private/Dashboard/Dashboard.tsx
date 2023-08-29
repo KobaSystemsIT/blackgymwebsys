@@ -10,12 +10,11 @@ function Dashboard() {
 
   const isAdmin = userState.rol === Roles.ADMIN;
   return <div className="container">
-      <div>
+      <div className=" mt-[2%]">
         <h1 className=" font-medium text-2xl">Bienvenido <span className=" font-normal uppercase">{userState.username}</span></h1>
         <h1 className=" text-lg font-medium"> Sucursal:  <span className=" font-normal">{clubState.nameClub}</span></h1>
       </div>
-      <br />
-      <div className="text-center p-2">
+      <div className="text-center p-2 mt-[10%]">
         <h1>Accesos rápidos</h1>
         <br />
         <div className="inline-grid md:grid-cols-2 sm:grid-cols-2 lg:grid-flow-col gap-4">

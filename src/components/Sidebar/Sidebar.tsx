@@ -12,43 +12,20 @@ export type SidebarProps = {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ }) => {
-	const [showMenu, setShowMenu] = useState(false);
-	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 	const clubState = useSelector((store: AppStore) => store.club); 
-
 	const userState = useSelector((store: AppStore) => store.user);
-
 	const isAdmin = userState.rol === Roles.ADMIN;
 
-	const handleResize = () => {
-		setWindowWidth(window.innerWidth);
-		if (window.innerWidth > 768) {
-			setShowMenu(true); // Mostrar el menú completo en pantallas grandes
-		}
-	};
 
-	useEffect(() => {
-		window.addEventListener('resize', handleResize);
-		handleResize(); // Asegurarse de que el estado se inicialice correctamente
-		return () => {
-			window.removeEventListener('resize', handleResize);
-		};
-	}, []);
 
-	const toggleMenu = () => {
-		setShowMenu(!showMenu);
-	};
 
 	return (
-		<div className={`relative bg-black md:overflow-y-auto md:overflow-x-hidden ${showMenu ? 'lg:w-[18%] md:w-[30%] sidebar-transition' : '-left-4 sidebar-transition'}`}>
-			<button onClick={toggleMenu} className={`${showMenu ? 'fixed lg:block top-[3.9rem] left-10 z-14 menu-button-transition' : 'fixed lg:block lg:top-[3.7rem] md:top-[3.9rem] md:left-10 top-[3.4rem] left-10 z-14 menu-button-transition'}`}>
-				<FontAwesomeIcon icon={faBars} className={`h-5 ${showMenu ? 'rounded-lg text-white' : 'rounded-lg text-dark'}`} />
-			</button>
-			<div className={`pt-20 ${showMenu ? 'block' : 'hidden'} menu-content-transition`}>
+		<div className="h-full md:overflow-y-auto md:overflow-x-hidden bg-black">
+			<div className="pt-20">
 				<div className="flex flex-col items-center">
 					<div className="flex flex-col pt-6 justify-center">
-						<img src={logo} className={` h-12 ${showMenu ? 'relative' : 'relative -left-11'} menu-content-transition`} alt="Logo" />
-						<h1 className={`text-lg mt-2  font-medium bottom-0 text-center text-white bg-dark ${showMenu ? 'block' : 'hidden'} menu-content-transition`}>
+						<img src={logo} className="h-10" alt="Logo" />
+						<h1 className="text-lg mt-2  font-medium bottom-0 text-center text-white">
 							Black Gym Club
 						</h1>
 					</div>
