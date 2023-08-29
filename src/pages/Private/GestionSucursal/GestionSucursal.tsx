@@ -5,6 +5,7 @@ export type GestionSucursalProps = {
 }
 
 const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
+	
 	const params = useParams();
 	return <>
 		<div className='grid p-2 gap-8 items-center'>
@@ -61,11 +62,14 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 						</tbody>
 					</table>
 				</div>
+				<div>
+
+				</div>
 			</div>
 			<div className=' overflow-hidden'>
 				<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
-					<h1 className='text-black text-sm'>Clientes registrados</h1>
-					<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'>Nuevo cliente</button>
+					<h1 className='text-black text-sm'>Miembros del Staf</h1>
+					<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'>Nuevo staff</button>
 				</div>
 				<div className='overflow-auto p-2'>
 					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5'>
