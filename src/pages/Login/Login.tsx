@@ -1,0 +1,170 @@
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { PrivateRoutes, PublicRoutes, Roles } from '@/models';
+import { createUser, resetUser, UserKey } from '@/redux/states/user';
+import { initLogin } from '@/services';
+import { clearLocalStorage, persistLocalStorage } from '@/utilities';
+import logo from '@/assets/icons/iconBG.svg'
+import { getClubes } from '@/services/Clubes/clubes.service';
+import { Clubes } from '@/models/Clubes';
+import { addClub } from '@/redux/states/club';
+
+function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [idClub, setIdClub] = useState('1');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const [clubes, setClubes] = useState<Clubes[]>([]);
+
+  const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
+
+  useEffect(() => {
+    clearLocalStorage(UserKey);
+    dispatch(resetUser());
+    navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
+  }, []);
+
+  const login = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    if (!username || !password || !idClub) {
+      setShowEmptyFieldsAlert(true);
+      return;
+    }
+
+    try {
+      const result = await initLogin(username, password, idClub);
+      dispatch(createUser({ ...result }));
+      navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
+    } catch (error:any) {
+      console.error('Error de inicio de sesión:', error);
+      setErrorMessage(error.message);
+    }
+  };
+
+  const handleClub = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    setIdClub(selectedValue);
+    const id = parseInt(selectedValue, 10);
+    const targetClub = clubes.find(club => club.idClub === id);
+    if (targetClub) {
+      const { idClub, nameClub, address } = targetClub;
+      const data = { idClub, nameClub, address };
+      dispatch(addClub({ ...data }));
+    } else {
+      console.log('No se encontró ningún club para el ID seleccionado');
+    }
+  };
+
+  const obtainClubes = async () => {
+    try {
+      const { data } = await getClubes();
+      setClubes(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  return (
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8" onLoad={obtainClubes}>
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <img
+          className="mx-auto h-16 w-auto"
+          src={logo}
+          alt="Your Company"
+        />
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
+          Bienvenido
+        </h2>
+      </div>
+
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form className="space-y-6">
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium leading-6 text-white">
+              Usuario
+            </label>
+            <div className="mt-2">
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="block w-full px-2 py-1.5 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between">
+              <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">Password</label>
+              <div className="text-sm">
+                <a href={PublicRoutes.FORGOTPASS} className="text-white text-sm hover:text-indigo-500 hover:border-b">Olvidaste tu contraseña?</a>
+              </div>
+            </div>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                onChange={(e) => setPassword(e.target.value)}
+                className="block w-full px-2 py-1.5 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="idClub" className="block text-sm font-medium leading-6 text-white">
+              Club
+            </label>
+            <div className="mt-2">
+              <select
+                id="idClub"
+                name="idClub"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                value={idClub}
+                onChange={handleClub}
+              >
+                <option value="">Selecciona una sucursal.</option>
+                {clubes.map(club => (
+                  <option key={club.idClub} value={club.idClub}>{club.nameClub}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {showEmptyFieldsAlert && (
+            <div className="text-red-600">
+              Por favor, complete todos los campos.
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className="text-red-600">
+              {errorMessage}
+            </div>
+          )}
+
+          <div>
+            <button
+              onClick={login}
+              className="flex w-full justify-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-dark shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Ingresar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default Login;

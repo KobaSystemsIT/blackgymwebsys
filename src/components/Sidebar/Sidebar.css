@@ -1,0 +1,17 @@
+.sidebar-transition {
+  transition-property: width, left, opacity;
+  transition-duration: 2s;
+  transition-timing-function: ease-in-out;
+}
+
+.menu-button-transition {
+  transition-property: left, color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}
+
+.menu-content-transition {
+  transition-property: opacity, visibility;
+  transition-duration: 2s;
+  transition-timing-function: ease-in-out;
+}

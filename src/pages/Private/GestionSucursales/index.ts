@@ -1,0 +1,1 @@
+export { default as GestionSucursales } from './GestionSucursales';

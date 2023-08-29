@@ -1,15 +1,18 @@
-import './App.css'
-import { Rutas } from './routes/Routes'
+import { Suspense, useEffect } from 'react';
+import { Provider } from 'react-redux';
+import './App.css';
+import store from './redux/store';
+import Rutas from './routes/routes';
+import { Loading } from './common/Loading';
 
 function App() {
-
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="flex-grow flex items-center justify-center">
-        <Rutas />
-      </div>
-    </div>
-  )
+      <Suspense fallback={<><Loading/></>}>
+        <Provider store={store}>
+          <Rutas></Rutas>
+        </Provider>
+      </Suspense>
+  );
 }
 
-export default App
+export default App;
