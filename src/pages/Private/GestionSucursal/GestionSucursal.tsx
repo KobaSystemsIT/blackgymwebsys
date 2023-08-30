@@ -1,7 +1,8 @@
 
 import { Clients } from '@/models/clients';
+import { Staff } from '@/models/staff/staff';
 import { AppStore } from '@/redux/store';
-import { viewClientsData } from '@/services/Clients/clients.service';
+import { viewClientsData, viewStaffData } from '@/services/Clients/clients.service';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -14,6 +15,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const token = userState.token;
 
 	const [clients, setClients] = useState<Clients[]>([]);
+	const [staff, setStaff] = useState<Staff[]>([]);
 	const params: any = useParams();
 	const obtainClients = async () => {
 		try {
@@ -24,8 +26,18 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 		}
 	}
 
+	const obtainStaff = async () => {
+		try{	
+			const { data } = await viewStaffData(params.idClub, token);
+			setStaff(data);
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 	useEffect(() => {
 		obtainClients();
+		obtainStaff();
 	}, []);
 	return <>
 		<div className='grid p-2 gap-8 items-center'>
@@ -34,7 +46,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 					<h1 className='text-black text-sm'>Clientes registrados</h1>
 					<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'>Nuevo cliente</button>
 				</div>
-				<div className='overflow-auto p-2'>
+				<div className='overflow-auto m-2'>
 					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5'>
 						<thead>
 							<tr>
@@ -42,6 +54,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								<th>Usuario</th>
 								<th>Apellido</th>
 								<th>Contacto de Emergencia</th>
+								<th>Número del contacto</th>
 								<th>Tipo de Suscripción</th>
 								<th>Activo</th>
 								<th>Inicio de Subscripción</th>
@@ -55,6 +68,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 									<td>{client.username}</td>
 									<td>{client.lastName}</td>
 									<td>{client.nameEmergencyContact}</td>
+									<td>{client.emergencyContact}</td>
 									<td>{client.nameSubscriptionType}</td>
 									<td>{client.isActive}</td>
 									<td>{client.startDate.toString().split('T')[0]}</td>
@@ -67,56 +81,37 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 				<div>
 				</div>
 			</div>
-			<div className=' overflow-hidden'>
+			<div className='overflow-hidden mt-10'>
 				<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
 					<h1 className='text-black text-sm'>Miembros del Staf</h1>
 					<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'>Nuevo staff</button>
 				</div>
 				<div className='overflow-auto p-2'>
 					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5'>
-						<thead>
+					<thead>
 							<tr>
-								<td></td>
-								<td>Nombre</td>
-								<td>Apellidos</td>
-								<td>C. Emergencia</td>
-								<td>Numero</td>
-								<td>Subscripcion</td>
-								<td>Inicio</td>
-								<td>Vencimiento</td>
+								<th>Usuario</th>
+								<th>Número de Teléfono</th>
+								<th>Contacto de Emergencia</th>
+								<th>Número del Contacto</th>
+								<th>Activo</th>
+								<th>Inicio de Subscripción</th>
+								<th>Vencimiento</th>
 							</tr>
 						</thead>
-						<tbody className=' bg-white'>
-							<tr>
-								<td>1</td>
-								<td>Alfredo</td>
-								<td>Bautista</td>
-								<td>Martha</td>
-								<td>9612451155</td>
-								<td>Black Plus</td>
-								<td>14/07/2023</td>
-								<td>14/08/2023</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>Alfredo</td>
-								<td>Bautista</td>
-								<td>Martha</td>
-								<td>9612451155</td>
-								<td>Black Plus</td>
-								<td>14/07/2023</td>
-								<td>14/08/2023</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>Alfredo</td>
-								<td>Bautista</td>
-								<td>Martha</td>
-								<td>9612451155</td>
-								<td>Black Plus</td>
-								<td>14/07/2023</td>
-								<td>14/08/2023</td>
-							</tr>
+						<tbody>
+							{/* {staff.map((staff) => (
+								<tr key={staff.idUser}>
+									<td>{staff.idUser}</td>
+									<td>{staff.username}</td>
+									<td>{staff.lastName}</td>
+									<td>{staff.nameEmergencyContact}</td>
+									<td>{staff.nameSubscriptionType}</td>
+									<td>{staff.isActive}</td>
+									<td>{staff.startDate.toString().split('T')[0]}</td>
+									<td>{staff.endDate.toString().split('T')[0]}</td>
+								</tr>
+							))} */}
 						</tbody>
 					</table>
 				</div>
