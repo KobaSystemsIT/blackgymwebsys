@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Clubes } from '@/models/Clubes';
+import { Clubes } from '@/models/clubes';
 import { clearLocalStorage, persistLocalStorage } from '@/utilities';
 
 export const EmptyClubState: Clubes = {

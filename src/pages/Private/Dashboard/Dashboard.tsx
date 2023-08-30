@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function Dashboard() {
   const userState = useSelector((store: AppStore) => store.user);
   const clubState = useSelector((store: AppStore) => store.club);
+  let idClub:number = clubState.idClub;
 
   const isAdmin = userState.rol === Roles.ADMIN;
   return <div className="container">
@@ -26,7 +27,7 @@ function Dashboard() {
               </div>
             </a>
           )}
-          <a href={`Gestion_de_Sucursal/${clubState.idClub}`} className="p-2 bg-black shadow-md rounded-lg text-white">
+          <a href={`Gestion_de_Sucursal/${idClub}`} className="p-2 bg-black shadow-md rounded-lg text-white">
             <div className="card-body flex-row items-center">
               <FontAwesomeIcon icon={faShop} />
               <h1>Gestión de sucursal</h1>

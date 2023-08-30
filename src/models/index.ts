@@ -1,4 +1,4 @@
-export * from './Clubes';
+export * from './clubes';
 export * from './Sidebar/sidebar';
 export * from './User/user.model';
 export * from './index';
