@@ -1,8 +1,11 @@
 
+import { Roles } from '@/models';
 import { Clients } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
 import { AppStore } from '@/redux/store';
 import { viewClientsData, viewStaffData } from '@/services/Clients/clients.service';
+import { faPlus, faUserPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -17,6 +20,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const [clients, setClients] = useState<Clients[]>([]);
 	const [staff, setStaff] = useState<Staff[]>([]);
 	const params: any = useParams();
+	const isAdmin = userState.rol === Roles.ADMIN;
+	
 	const obtainClients = async () => {
 		try {
 			const { data } = await viewClientsData(params.idClub, token);
@@ -27,7 +32,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	}
 
 	const obtainStaff = async () => {
-		try{	
+		try {
 			const { data } = await viewStaffData(params.idClub, token);
 			setStaff(data);
 		} catch (error) {
@@ -46,8 +51,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 					<h1 className='text-black text-sm'>Clientes registrados</h1>
 					<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'>Nuevo cliente</button>
 				</div>
-				<div className='overflow-auto m-2'>
-					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5'>
+				<div className='max-h-48 overflow-auto m-2'>
+					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
 						<thead>
 							<tr>
 								<th>ID</th>
@@ -59,6 +64,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								<th>Activo</th>
 								<th>Inicio de Subscripción</th>
 								<th>Vencimiento</th>
+								<th>Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -71,8 +77,14 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 									<td>{client.emergencyContact}</td>
 									<td>{client.nameSubscriptionType}</td>
 									<td>{client.isActive}</td>
-									<td>{client.startDate.toString().split('T')[0]}</td>
-									<td>{client.endDate.toString().split('T')[0]}</td>
+									<td>{client.startDate ? client.startDate.toString().split('T')[0] : "N/A"}</td>
+									<td>{client.endDate ? client.endDate.toString().split('T')[0] : "N/A"}</td>
+									<td>
+										<div className='grid grid-flow-col gap-2'>
+											<button title='Editar Usuario'><FontAwesomeIcon icon={faUserPen} className='h-4'/></button>
+											<button title='Gestionar Subscripción'><FontAwesomeIcon icon={faPlus} className='h-4'/></button>
+										</div>
+									</td>
 								</tr>
 							))}
 						</tbody>
@@ -84,39 +96,43 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 			<div className='overflow-hidden mt-10'>
 				<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
 					<h1 className='text-black text-sm'>Miembros del Staf</h1>
-					<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'>Nuevo staff</button>
+					{isAdmin && (
+						<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'>Nuevo staff</button>
+					)}
 				</div>
-				<div className='overflow-auto p-2'>
-					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5'>
-					<thead>
+				<div className='max-h-48 overflow-auto p-2'>
+					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+						<thead>
 							<tr>
-								<th>Usuario</th>
+								<th>ID</th>
+								<th>Staff</th>
 								<th>Número de Teléfono</th>
 								<th>Contacto de Emergencia</th>
 								<th>Número del Contacto</th>
-								<th>Activo</th>
-								<th>Inicio de Subscripción</th>
-								<th>Vencimiento</th>
+								<th>Última entrada</th>
+								<th>Última salida</th>
+								<th>Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
-							{/* {staff.map((staff) => (
+							{staff.map((staff) => (
 								<tr key={staff.idUser}>
 									<td>{staff.idUser}</td>
 									<td>{staff.username}</td>
-									<td>{staff.lastName}</td>
+									<td>{staff.phoneNumber}</td>
 									<td>{staff.nameEmergencyContact}</td>
-									<td>{staff.nameSubscriptionType}</td>
-									<td>{staff.isActive}</td>
-									<td>{staff.startDate.toString().split('T')[0]}</td>
-									<td>{staff.endDate.toString().split('T')[0]}</td>
+									<td>{staff.emergencyContact}</td>
+									<td>
+										{staff.arrivalHour ? staff.arrivalHour.toString().split('T')[0] : "N/A"}
+									</td>
+
+									<td>{staff.exitHour ? staff.exitHour.toString().split('T')[0] : "N/A"}</td>
 								</tr>
-							))} */}
+							))}
 						</tbody>
 					</table>
 				</div>
 			</div>
-
 		</div>
 	</>
 };
