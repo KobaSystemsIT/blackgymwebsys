@@ -3,7 +3,12 @@ import './Inventario.css';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { AppStore } from "@/redux/store";
-import { viewClientsData } from "@/services/Inventario/dbaccess"; // Importa la función que obtiene los datos del inventario
+import baseUrl from "@/services/Login/auth.service";
+import {viewInventoryData} from "@/services";
+import {viewClientsData} from "@/services/Clients/clients.service";
+
+const getInventoryUrl = baseUrl + 'getInventory';
+
 
 export type InventarioProps = {}
 
@@ -18,7 +23,7 @@ const Inventario: React.FC<InventarioProps> = () => {
 		// Define la función para obtener el inventario
 		const getInventory = async () => {
 			try {
-				const response = await viewClientsData('1', token); // Reemplaza '1' con el ID de tu club
+				const response = await viewInventoryData('1', token); // Reemplaza '1' con el ID de tu club
 
 				if (response.error) {
 					// La solicitud no fue exitosa, maneja el error según corresponda
@@ -39,9 +44,20 @@ const Inventario: React.FC<InventarioProps> = () => {
 
 	return (
 		<div>
+			<div className='grid p-2 gap-8 items-center'>
+				<div className=' overflow-hidden'>
+					<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
+						<h1 className='text-black text-sm'>Inventario</h1>
+						<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'>Nuevo producto</button>\
+					</div>
+				</div>
+			</div>
+		</div>
+			// Hacer el map de inventoryData aquí usando map
 			{error && <p>{error}</p>}
 			<div className='inventory'>Inventory</div>
 			{/* Renderiza la tabla de inventario utilizando inventoryData en tu JSX */}
+
 		</div>
 	);
 }
