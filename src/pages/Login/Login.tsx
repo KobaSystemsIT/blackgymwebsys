@@ -7,7 +7,7 @@ import { initLogin } from '@/services';
 import { clearLocalStorage, persistLocalStorage } from '@/utilities';
 import logo from '@/assets/icons/iconBG.svg'
 import { getClubes } from '@/services/Clubes/clubes.service';
-import { Clubes } from '@/models/Clubes';
+import { Clubes } from '@/models/clubes';
 import { addClub } from '@/redux/states/club';
 
 function Login() {

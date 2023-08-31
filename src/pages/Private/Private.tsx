@@ -34,7 +34,7 @@ function Private() {
       <button onClick={() => dispatch(toggleOpen())} className='transition-all duration-300'>
         <FontAwesomeIcon icon={faBars} className="absolute bottom-5 right-6 p-4 m-0 hover:bg-black hover:text-white hover:rounded-xl transition-all duration-300 lg:hidden" />
       </button>
-      <div className={`lg:block ${open ? " w-72" : "hidden"}  transition-all duration-500`}>
+      <div className={`lg:block relative ${open ? " lg:w-72 block" : "hidden"}  transition-all duration-500`}>
         <Sidebar />
       </div>
       <div className="flex-grow overflow-x-hidden max-h-screen p-4 bg-white rounded-xl m-2">
