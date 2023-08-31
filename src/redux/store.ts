@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { OpenState, UserInfo } from '../models';
 import userSliceReducer from './states/user';
 import  clubSliceReducer  from './states/club';
-import { Clubes } from '@/models/Clubes';
+import { Clubes } from '@/models/clubes';
 import openReducer from './states/sidebar'
 
 export interface AppStore {

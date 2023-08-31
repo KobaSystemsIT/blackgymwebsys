@@ -12,14 +12,16 @@ const PublicValidationFragment = <Navigate replace to={PrivateRoutes.PRIVATE} />
 
 export const AuthGuard = ({ privateValidation }: Props) => {
   const userState = useSelector((store: AppStore) => store.user);
-  return userState.token ? (
+  const tokenInlocalStorage = localStorage.getItem('user');
+  const redirect = !userState.token || !tokenInlocalStorage;
+  return redirect ? (
+    <Navigate replace to={PublicRoutes.LOGIN} />
+  ) : (
     privateValidation ? (
       PrivateValidationFragment
     ) : (
       PublicValidationFragment
     )
-  ) : (
-    <Navigate replace to={PublicRoutes.LOGIN} />
   );
 };
 

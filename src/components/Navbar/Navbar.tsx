@@ -1,10 +1,9 @@
 import React from 'react';
 import './Navbar.css';
 import { Link, useLocation } from 'react-router-dom';
-import { faArrowRightToBracket, faHome, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightToBracket, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Logout } from '../Logout';
-import { PrivateRoutes } from '@/models';
 
 export type NavbarProps = {};
 
