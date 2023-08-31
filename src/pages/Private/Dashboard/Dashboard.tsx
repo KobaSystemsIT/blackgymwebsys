@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function Dashboard() {
   const userState = useSelector((store: AppStore) => store.user);
   const clubState = useSelector((store: AppStore) => store.club);
-  let idClub: number = clubState.idClub;
+  let idClub: number = userState.idClub;
 
   const isAdmin = userState.rol === Roles.ADMIN;
   return <div className="container">
