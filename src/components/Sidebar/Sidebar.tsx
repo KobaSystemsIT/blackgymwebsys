@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faCartShopping, faArrowRightToBracket, faBars, faCity, faShop, faChartPie, faWarehouse, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Logout } from '../Logout';
 import './Sidebar.css'
 import logo from '@/assets/icons/iconBG.svg'
-import { PrivateRoutes, Roles } from '@/models';
+import { Roles } from '@/models';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
 
@@ -16,29 +15,26 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 	const userState = useSelector((store: AppStore) => store.user);
 	const isAdmin = userState.rol === Roles.ADMIN;
 
-
-
-
 	return (
-		<div className="h-full md:overflow-y-auto md:overflow-x-hidden bg-black">
+		<div className="h-full md:overflow-y-auto md:overflow-x-hidden bg-black lg:rounded-2xl md:rounded-none rounded-2xl">
 			<div className="pt-20">
 				<div className="flex flex-col items-center">
 					<div className="flex flex-col pt-6 justify-center">
-						<img src={logo} className="h-10" alt="Logo" />
-						<h1 className="text-lg mt-2  font-medium bottom-0 text-center text-white">
+						<img src={logo} className="h-14" alt="Logo" />
+						<h1 className="lg:text-2xl md:text-lg text-base mt-5 font-medium bottom-0 text-center text-white ">
 							Black Gym Club
 						</h1>
 					</div>
 				</div>
-				<div className="pt-5">
-					<ul className="py-2 px-3 text-white text-sm">
+				<div className="pt-8">
+					<ul className="py-5 lg:px-10 md:px-5 text-white lg:text-base md:text-sm text-xs">
 						<li className="m-5 hover:bg-white rounded-md hover:text-black">
 							<a href="/" className="flex items-center">
 								<FontAwesomeIcon
 									icon={faHome}
-									className="m-3 h-3"
+									className="lg:m-3 lg:h-4 m-3 md:h-4 h-6"
 								/>
-								<h1>Inicio</h1>
+								<h1 className='lg:block md:block hidden'>Inicio</h1>
 							</a>
 						</li>
 						{!isAdmin && (
@@ -49,9 +45,9 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 							>
 								<FontAwesomeIcon
 									icon={faShop}
-									className="m-3 h-3"
+									className="lg:m-3 lg:h-4 m-3 md:h-4 h-6"
 								/>
-								<h1>
+								<h1 className='lg:block md:block hidden'>
 									Gestión de Sucursal
 								</h1>
 							</a>
@@ -65,9 +61,9 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								>
 									<FontAwesomeIcon
 										icon={faCity}
-										className="m-3 h-3"
+										className="lg:m-3 lg:h-4 m-3 md:h-4 h-6"
 									/>
-									<h1>
+									<h1 className='lg:block md:block hidden'>
 										Gestión de Sucursales
 									</h1>
 								</a>
@@ -81,9 +77,9 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								>
 									<FontAwesomeIcon
 										icon={faCartShopping}
-										className="m-3 h-3"
+										className="lg:m-3 lg:h-4 m-3 md:h-4 h-6"
 									/>
-									<h1>Punto de Venta</h1>
+									<h1 className='lg:block md:block hidden'>Punto de Venta</h1>
 								</a>
 							</li>
 						)}
@@ -95,9 +91,9 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								>
 									<FontAwesomeIcon
 										icon={faWarehouse}
-										className="m-3 h-3"
+										className="lg:m-3 lg:h-4 m-3 md:h-4 h-6"
 									/>
-									<h1>Inventario</h1>
+									<h1 className='lg:block md:block hidden'>Inventario</h1>
 								</a>
 							</li>
 						)}
@@ -109,9 +105,9 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								>
 									<FontAwesomeIcon
 										icon={faWarehouse}
-										className="m-3 h-3"
+										className="lg:m-3 lg:h-4 m-3 md:h-4 h-6"
 									/>
-									<h1>
+									<h1 className='lg:block md:block hidden'>
 										Gestión de Inventarios
 									</h1>
 								</a>
@@ -125,9 +121,9 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								>
 									<FontAwesomeIcon
 										icon={faChartPie}
-										className="m-3 h-3"
+										className="lg:m-3 lg:h-4 m-3 md:h-4 h-6"
 									/>
-									<h1>
+									<h1 className='lg:block md:block hidden'>
 										Gestión Financiera
 									</h1>
 								</a>
@@ -142,9 +138,9 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								>
 									<FontAwesomeIcon
 										icon={faUsers}
-										className="m-3 h-3"
+										className="lg:m-3 lg:h-4 m-3 md:h-4 h-6"
 									/>
-									<h1>
+									<h1 className='lg:block md:block hidden'>
 										Administración
 									</h1>
 								</a>
@@ -157,9 +153,9 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 							>
 								<FontAwesomeIcon
 									icon={faArrowRightToBracket}
-									className="m-3 h-3"
+									className="lg:m-3 lg:h-4 m-3 md:h-4 h-6"
 								/>
-								<h1>
+								<h1 className='lg:block md:block hidden'>
 									<Logout></Logout>
 								</h1>
 							</a>

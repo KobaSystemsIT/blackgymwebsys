@@ -30,14 +30,11 @@ function Private() {
   const dispatch = useDispatch();
 
   return (
-    <div className="flex h-screen overflow-hidden text-lg">
-      <button onClick={() => dispatch(toggleOpen())} className='transition-all duration-300'>
-        <FontAwesomeIcon icon={faBars} className="absolute bottom-5 right-6 p-4 m-0 hover:bg-black hover:text-white hover:rounded-xl transition-all duration-300 lg:hidden" />
-      </button>
-      <div className={`lg:block relative ${open ? " lg:w-72 block" : "hidden"}  transition-all duration-500`}>
+    <div className="flex h-screen overflow-hidden text-lg relative">
+      <div className={`lg:block lg:p-4 md:p-0 p-4 lg:w-[18%] w-[30%] relative ${open ? "lg:w-[18%] w-[30%]  block" : "hidden"}  transition-all duration-500`}>
         <Sidebar />
       </div>
-      <div className="flex-grow overflow-x-hidden max-h-screen p-4 bg-white rounded-xl m-2">
+      <div className="flex-grow overflow-hidden max-h-screen p-4 rounded-xl lg:m-6 md:m-4 m-0">
         <Navbar />
         <div className="p-6 overflow-y-auto">
           <RoutesWithNotFound>
@@ -65,6 +62,9 @@ function Private() {
           </RoutesWithNotFound>
         </div>
       </div>
+      <button onClick={() => dispatch(toggleOpen())} className=' absolute bottom-0.5 right-4  lg:hidden transition-all duration-300'>
+        <FontAwesomeIcon icon={faBars} className="p-4" />
+      </button>
     </div>
   );
 }
