@@ -1,9 +1,10 @@
 import React from 'react';
 import './Navbar.css';
-import { Link, useLocation } from 'react-router-dom';
-import { faArrowRightToBracket, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Logout } from '../Logout';
+import { PrivateRoutes } from '@/models';
 
 export type NavbarProps = {};
 
@@ -23,11 +24,18 @@ const Navbar: React.FC<NavbarProps> = ({ }) => {
     );
   });
 
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(`${PrivateRoutes.DASHBOARD}`, { replace: true });// Navega hacia atrás en la pila de rutas
+    window.location.reload(); // Recarga la página
+  };
+
   return (
     <div className="navbar p-4 border-b">
       <div className="relative flex-1">
-        <div className="lg:text-sm text-xs breadcrumbs">
-          <ul className=''>
+        <div className={`lg:text-sm text-xs breadcrumbs`}>
+          <ul className='' onClick={handleGoBack}>
             {breadcrumbItems}
           </ul>
         </div>
@@ -43,3 +51,4 @@ const Navbar: React.FC<NavbarProps> = ({ }) => {
 };
 
 export default Navbar;
+

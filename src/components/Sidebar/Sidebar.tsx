@@ -11,23 +11,21 @@ export type SidebarProps = {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ }) => {
-	const clubState = useSelector((store: AppStore) => store.club); 
+	const clubState = useSelector((store: AppStore) => store.club);
 	const userState = useSelector((store: AppStore) => store.user);
 	const isAdmin = userState.rol === Roles.ADMIN;
 
 	return (
-		<div className="h-full md:overflow-y-auto md:overflow-x-hidden bg-black">
-			<div className="pt-24">
-				<div className="flex flex-col items-center">
-					<div className="flex flex-col pt-6 justify-center">
-						<img src={logo} className="lg:h-14 md:h-12 h-10" alt="Logo" />
-						<h1 className="lg:text-2xl lg:block md:text-2xl md:block text-lg mt-7 hidden font-medium bottom-0 text-center text-white ">
-							Black Gym Club
-						</h1>
-					</div>
-				</div>
-				<div className="pt-10">
-					<ul className="py-5 lg:px-10 md:px-5 px-5 text-white lg:text-base md:text-sm text-xs">
+		<div className="h-screen md:overflow-y-auto md:overflow-x-hidden bg-black">
+			<div className="flex flex-col h-full justify-center items-center">
+				<div className="flex flex-col pt-6 justify-center items-center">
+					<img src={logo} className="lg:h-14 md:h-12 h-10" alt="Logo" />
+					<h1 className="lg:text-2xl lg:block md:text-2xl md:block text-lg mt-7 hidden font-medium bottom-0 text-center text-white">
+						Black Gym Club
+					</h1>
+				</div>s
+				<div className='mt-16'>
+					<ul className="lg:px-10 md:px-5 px-5 text-white text-sm">
 						<li className="m-5 hover:bg-white rounded-md hover:text-black">
 							<a href="/" className="flex items-center">
 								<FontAwesomeIcon
@@ -38,20 +36,20 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 							</a>
 						</li>
 						{!isAdmin && (
-						<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
-							<a
-								href={`/Dashboard/Gestion_de_Sucursal/${clubState.idClub}`}
-								className="flex items-center"
-							>
-								<FontAwesomeIcon
-									icon={faShop}
-									className="h-5 m-2"
-								/>
-								<h1 className='lg:block md:hidden hidden'>
-									Gestión de Sucursal
-								</h1>
-							</a>
-						</li>
+							<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
+								<a
+									href={`/Dashboard/Gestion_de_Sucursal/${clubState.idClub}`}
+									className="flex items-center"
+								>
+									<FontAwesomeIcon
+										icon={faShop}
+										className="h-5 m-2"
+									/>
+									<h1 className='lg:block md:hidden hidden'>
+										Gestión de Sucursal
+									</h1>
+								</a>
+							</li>
 						)}
 						{isAdmin && (
 							<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
@@ -129,7 +127,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								</a>
 							</li>
 						)}
-						
+
 						{isAdmin && (
 							<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
 								<a
@@ -162,6 +160,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 					</ul>
 				</div>
 			</div>
+
 		</div>
 	);
 };

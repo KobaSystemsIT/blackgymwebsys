@@ -1,4 +1,4 @@
-import { lazy, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { Navigate, Route } from 'react-router-dom';
 import { PrivateRoutes, Roles } from '../../models';
 import { RoutesWithNotFound } from '../../utilities';
