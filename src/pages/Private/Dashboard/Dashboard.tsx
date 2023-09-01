@@ -12,8 +12,8 @@ function Dashboard() {
   const isAdmin = userState.rol === Roles.ADMIN;
   return <div className="container">
     <div className=" mt-[2%]">
-      <h1 className=" font-medium text-4xl md:text-2xl">Bienvenido <span className=" font-normal uppercase">{userState.username}</span></h1>
-      <h1 className=" text-lg font-medium"> Sucursal:  <span className=" font-normal">{clubState.nameClub}</span></h1>
+      <h1 className=" font-semibold lg:text-4xl md:text-3xl text-2xl">Bienvenido <span className=" font-normal uppercase">{userState.username}</span></h1>
+      <h1 className=" text-lg font-semibold mt-4"> Sucursal:  <span className=" font-normal">{clubState.nameClub}</span></h1>
     </div>
     <div className="mt-[10%]">
       <h1>Accesos rápidos</h1>

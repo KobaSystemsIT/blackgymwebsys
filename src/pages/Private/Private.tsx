@@ -26,12 +26,12 @@ import { toggleOpen } from '@/redux/states/sidebar';
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
 function Private() {
-  const open = useSelector((store: AppStore) => store.open.open!);
+  const open = useSelector((store: AppStore) => store.open.open);
   const dispatch = useDispatch();
 
   return (
     <div className="flex h-screen overflow-hidden text-lg relative">
-      <div className={`lg:block lg:p-4 md:p-2 p-4 lg:w-[18%] md:w-[16%] w-[30%] h-screen ${open ? "lg:w-[18%] md:w-[16%] w-[30%] block absolute z-50" : "hidden"}  transition-all duration-500`}>
+      <div className={`lg:block lg:w-72 md:w-72 w-[25%] h-screen ${open ? "lg:w-72 md:w-72 w-[30%] absolute z-50" : "hidden"}  transition-all duration-500`}>
         <Sidebar />
       </div>
       <div className="flex-grow overflow-x-hidden min-h-screen p-4 rounded-xl lg:m-6 md:m-4 m-0">
