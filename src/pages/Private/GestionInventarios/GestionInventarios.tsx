@@ -33,7 +33,7 @@ const GestionInventarios: React.FC<GestionInventariosProps> = ({}) => {
             <h2>{sucursal.nombre}</h2>
             <p>Total de productos: {sucursal.totalProductos}</p>
             <p>Total de inversión: {sucursal.inversion}</p>
-            <a href={`/Gestion_de_Inventario/${sucursal.idClub}`}>Ver inventario</a>
+            <a href={`/Dashboard/Gestion_de_Inventario/${sucursal.idClub}`}>Ver inventario</a>
           </div>
         ))}
       </div>
