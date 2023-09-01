@@ -31,12 +31,12 @@ function Private() {
 
   return (
     <div className="flex h-screen overflow-hidden text-lg relative">
-      <div className={`lg:block lg:p-4 md:p-0 p-4 lg:w-[18%] w-[30%] relative ${open ? "lg:w-[18%] w-[30%]  block" : "hidden"}  transition-all duration-500`}>
+      <div className={`lg:block lg:p-4 md:p-2 p-4 lg:w-[18%] md:w-[16%] w-[30%] h-screen ${open ? "lg:w-[18%] md:w-[16%] w-[30%] block absolute z-50" : "hidden"}  transition-all duration-500`}>
         <Sidebar />
       </div>
-      <div className="flex-grow overflow-hidden max-h-screen p-4 rounded-xl lg:m-6 md:m-4 m-0">
+      <div className="flex-grow overflow-x-hidden min-h-screen p-4 rounded-xl lg:m-6 md:m-4 m-0">
         <Navbar />
-        <div className="p-6 overflow-y-auto">
+        <div className="p-6 overflow-y-auto relative z-0">
           <RoutesWithNotFound>
             <Route path="/" element={<Navigate to={PrivateRoutes.DASHBOARD} />} />
             <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
@@ -62,9 +62,9 @@ function Private() {
           </RoutesWithNotFound>
         </div>
       </div>
-      <button onClick={() => dispatch(toggleOpen())} className=' absolute bottom-0.5 right-4  lg:hidden transition-all duration-300'>
+      <a onClick={() => dispatch(toggleOpen())} className='fixed bottom-4 right-4 lg:hidden z-10'>
         <FontAwesomeIcon icon={faBars} className="p-4" />
-      </button>
+      </a>
     </div>
   );
 }

@@ -33,29 +33,10 @@ const Navbar: React.FC<NavbarProps> = ({ }) => {
         </div>
       </div>
       <div className="flex-none">
-        <ul className="menu menu-horizontal px-0">
-          <li>
-            <details>
-              <summary className="text-xs">
-                <h1>Más</h1>
-              </summary>
-              <ul className="text-xs">
-                <li>
-                  <div>
-                    <FontAwesomeIcon icon={faPenToSquare} className="h-2" />
-                    <h1>Editar perfil</h1>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <FontAwesomeIcon icon={faArrowRightToBracket} className="h-2" />
-                    <Logout />
-                  </div>
-                </li>
-              </ul>
-            </details>
-          </li>
-        </ul>
+        <div className='flex items-center'>
+          <FontAwesomeIcon icon={faArrowRightToBracket} className="h-3 m-2" />
+          <Logout />
+        </div>
       </div>
     </div>
   );
