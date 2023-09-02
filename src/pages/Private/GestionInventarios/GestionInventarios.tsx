@@ -1,39 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './GestionInventarios.css';
+import { getClubes } from '@/services/Clubes/clubes.service';
+import { Clubes } from '@/models/clubes';
 
 export type GestionInventariosProps = {
 }
 
-type Sucursal = {
-  idClub: string;
-  nombre: string;
-  totalProductos: number;
-  inversion: number;
-};
-
-const data: Record<string, Sucursal> = {
-  item1: { idClub: "1", nombre: "Sucursal 1", totalProductos: 100, inversion: 2000 },
-  item2: { idClub: "2", nombre: "Sucursal 2", totalProductos: 150, inversion: 3000 },
-  item3: { idClub: "3", nombre: "Sucursal 2", totalProductos: 150, inversion: 3000 },
-  item4: { idClub: "4", nombre: "Sucursal 2", totalProductos: 150, inversion: 3000 },
-  item5: { idClub: "5", nombre: "Sucursal 2", totalProductos: 150, inversion: 3000 },
-  item6: { idClub: "6", nombre: "Sucursal 2", totalProductos: 150, inversion: 3000 },
-};
-
 const GestionInventarios: React.FC<GestionInventariosProps> = ({}) => {
-  const sucursales = Object.keys(data).map(key => ({
-    ...data[key]
-  }));
+  const [clubes, setClubes] = useState<Clubes[]>([]);
+
+  const obtainClubes = async () => {
+    try {
+      const { data } = await getClubes();
+      setClubes(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  useEffect(() => {
+    obtainClubes();
+  }, []);
 
   return (
     <div className='gestioninventarios'>
       <div className="grid-container">
-        {sucursales.map((sucursal, index) => (
-          <div className="grid-item" key={index}>
-            <h2>{sucursal.nombre}</h2>
-            <p>Total de productos: {sucursal.totalProductos}</p>
-            <p>Total de inversión: {sucursal.inversion}</p>
-            <a href={`/Dashboard/Gestion_de_Inventario/${sucursal.idClub}`}>Ver inventario</a>
+        {clubes.map((club) => (
+          <div className="card bordered" key={club.idClub}>
+            <div className="flex flex-col h-full">
+              <div className="flex flex-row items-start">
+                <figure className="flex-none">
+                  <img className="object-cover w-32 h-32" src="https://via.placeholder.com/150" alt="Fachada del club" />
+                </figure>
+                <div className="card-body flex-grow">
+                  <h2 className="card-title">{club.nameClub}</h2>
+                  <p>{club.addressClub}</p>
+                </div>
+              </div>
+              <div className="flex justify-end items-end mt-auto">
+                <a href={`/Gestion_de_Inventario/${club.idClub}`} className="btn btn-primary">Ver inventario</a>
+              </div>
+            </div>
           </div>
         ))}
       </div>
