@@ -38,7 +38,7 @@ const GestionInventarios: React.FC<GestionInventariosProps> = ({}) => {
                 </div>
               </div>
               <div className="flex justify-end items-end mt-auto">
-                <a href={`/Gestion_de_Inventario/${club.idClub}`} className="btn btn-primary">Ver inventario</a>
+                <a href={`/Dashboard/Gestion_de_Inventario/${club.idClub}`} className="btn btn-primary">Ver inventario</a>
               </div>
             </div>
           </div>
