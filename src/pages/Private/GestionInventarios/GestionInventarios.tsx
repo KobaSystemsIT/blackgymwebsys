@@ -26,7 +26,7 @@ const GestionInventarios: React.FC<GestionInventariosProps> = ({}) => {
     <div className='gestioninventarios'>
       <div className="grid-container">
         {clubes.map((club) => (
-          <div className="card bordered" key={club.idClub}>
+          <a href={`/Dashboard/Gestion_de_Inventarios/${club.idClub}`} className="card bordered" key={club.idClub}>
             <div className="flex flex-col h-full">
               <div className="flex flex-row items-start">
                 <figure className="flex-none">
@@ -38,10 +38,9 @@ const GestionInventarios: React.FC<GestionInventariosProps> = ({}) => {
                 </div>
               </div>
               <div className="flex justify-end items-end mt-auto">
-                <a href={`/Dashboard/Gestion_de_Inventarios/${club.idClub}`} className="btn btn-primary">Ver inventario</a>
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
