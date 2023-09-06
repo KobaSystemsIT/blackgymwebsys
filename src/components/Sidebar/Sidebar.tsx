@@ -16,14 +16,8 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 	const userState = useSelector((store: AppStore) => store.user);
 	const isAdmin = userState.rol === Roles.ADMIN;
 
-	const open = useSelector((store: AppStore) => store.open.open);
-	const dispatch = useDispatch();
-
 	return (
-		<div className="h-screen md:overflow-y-auto md:overflow-x-hidden bg-black rounded-lg">
-			<a onClick={() => dispatch(toggleOpen())} className='absolute top-10 left-5 lg:hidden md:block hidden z-10'>
-				<FontAwesomeIcon icon={faBars} className="p-4 text-white" />
-			</a>
+		<div className="h-screen md:overflow-y-auto md:overflow-x-hidden bg-black">
 			<div className="flex flex-col h-full justify-center items-center">
 				<div className="flex flex-col pt-6 justify-center items-center">
 					<img src={logo} className="lg:h-16 lg:block md:hidden hidden" alt="Logo" />
@@ -31,7 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 						Black Gym Club
 					</h1> */}
 				</div>
-				<div className='mt-12'>
+				<div className='mt-10'>
 					<ul className="lg:px-10 md:px-0 px-5 text-white lg:text-sm md:text-xs text-sm">
 						<li className="m-5 hover:bg-white rounded-md hover:text-black">
 							<a href="/" className="flex items-center">

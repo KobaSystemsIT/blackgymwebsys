@@ -19,6 +19,7 @@ import { FinanzasXSucursal } from './FinanzasXSucursal';
 import { GestionClubes } from './GestionClubes';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
+import BottonNavigate from '@/components/BottomNavigate/BottomNavigate';
 
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
@@ -27,7 +28,7 @@ function Private() {
 
   return (
     <div className="flex h-screen overflow-hidden relative">
-      <div className={`lg:block lg:w-72 p-2 md:w-48 w-[25%] h-screen ${open ? "lg:w-72 md:w-48 w-[25%] absolute z-50 p-2" : "hidden"}  transition-all duration-500`}>
+      <div className={`lg:block lg:w-64 h-screen ${open ? "lg:w-64 absolute z-50 p-2" : "hidden"}  transition-all duration-500`}>
         <Sidebar />
       </div>
       <div className="flex-grow overflow-x-hidden min-h-screen p-4 rounded-xl lg:m-2 md:m-4 m-0">
@@ -57,6 +58,9 @@ function Private() {
             </Route>
           </RoutesWithNotFound>
         </div>
+      </div>
+      <div className='lg:hidden'>
+        <BottonNavigate/>
       </div>
     </div>
   );
