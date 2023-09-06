@@ -34,7 +34,7 @@ const GestionInventarios: React.FC<GestionInventariosProps> = ({}) => {
                 </figure>
                 <div className="card-body flex-grow">
                   <h2 className="card-title">{club.nameClub}</h2>
-                  <p>{club.addressClub}</p>
+                  <p>{club.address}</p>
                 </div>
               </div>
               <div className="flex justify-end items-end mt-auto">

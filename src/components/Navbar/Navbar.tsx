@@ -39,11 +39,11 @@ const Navbar: React.FC<NavbarProps> = ({ }) => {
 
   return (
     <div className="navbar p-4 border-b">
-      <a onClick={() => dispatch(toggleOpen())} className='lg:hidden md:static hidden absolute md:left-12 left-10 z-10'>
+      <a onClick={() => dispatch(toggleOpen())} className='md:block absolute left-12 z-10'>
         <FontAwesomeIcon icon={faBars} className="p-4text-black" />
       </a>
       <div className="relative flex-1">
-        <div className="lg:text-sm text-xs breadcrumbs lg:ml-0 md:ml-10">
+        <div className="lg:text-sm text-xs breadcrumbs lg:ml-0 ml-8">
           <ul onClick={handleGoBack}>
             {breadcrumbItems}
           </ul>

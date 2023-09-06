@@ -1,7 +1,4 @@
-import { AppStore } from "@/redux/store";
 import baseUrl from "@/services/Login/auth.service";
-import { useSelector } from "react-redux";
-import { json } from "stream/consumers";
 const dbaccess = baseUrl + 'dbaccess/';
 
 export const viewClientsData = (idClub: string, token: any) => {

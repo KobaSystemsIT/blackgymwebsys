@@ -26,13 +26,13 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 			</a>
 			<div className="flex flex-col h-full justify-center items-center">
 				<div className="flex flex-col pt-6 justify-center items-center">
-					<img src={logo} className="lg:h-14 lg:block md:hidden hidden" alt="Logo" />
-					<h1 className="lg:text-2xl lg:block md:hidden text-lg mt-7 hidden font-medium bottom-0 text-center text-white">
+					<img src={logo} className="lg:h-16 lg:block md:hidden hidden" alt="Logo" />
+					{/* <h1 className="lg:text-xl lg:block md:hidden text-lg mt-7 hidden font-medium bottom-0 text-center text-white">
 						Black Gym Club
-					</h1>
+					</h1> */}
 				</div>
-				<div className='lg:mt-16'>
-					<ul className="lg:px-10 md:px-0 px-5 text-white md:text-xs text-sm">
+				<div className='mt-12'>
+					<ul className="lg:px-10 md:px-0 px-5 text-white lg:text-sm md:text-xs text-sm">
 						<li className="m-5 hover:bg-white rounded-md hover:text-black">
 							<a href="/" className="flex items-center">
 								<FontAwesomeIcon
