@@ -1,10 +1,13 @@
 import React from 'react';
 import './Navbar.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightToBracket, faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Logout } from '../Logout';
 import { PrivateRoutes } from '@/models';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppStore } from '@/redux/store';
+import { toggleOpen } from '@/redux/states/sidebar';
 
 export type NavbarProps = {};
 
@@ -31,11 +34,17 @@ const Navbar: React.FC<NavbarProps> = ({ }) => {
     window.location.reload(); // Recarga la página
   };
 
+  const open = useSelector((store: AppStore) => store.open.open);
+  const dispatch = useDispatch();
+
   return (
     <div className="navbar p-4 border-b">
+      <a onClick={() => dispatch(toggleOpen())} className='lg:hidden md:static hidden absolute md:left-12 left-10 z-10'>
+        <FontAwesomeIcon icon={faBars} className="p-4text-black" />
+      </a>
       <div className="relative flex-1">
-        <div className={`lg:text-sm text-xs breadcrumbs`}>
-          <ul className='' onClick={handleGoBack}>
+        <div className="lg:text-sm text-xs breadcrumbs lg:ml-0 md:ml-10">
+          <ul onClick={handleGoBack}>
             {breadcrumbItems}
           </ul>
         </div>
