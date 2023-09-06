@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { PrivateRoutes, PublicRoutes, Roles } from '@/models';
+import { PrivateRoutes, PublicRoutes } from '@/models';
 import { createUser, resetUser, UserKey } from '@/redux/states/user';
 import { initLogin } from '@/services';
-import { clearLocalStorage, persistLocalStorage } from '@/utilities';
-import logo from '@/assets/icons/iconBG.svg'
+import { clearLocalStorage } from '@/utilities';
+import logo from '@/assets/icons/iconBG.svg';
 import { getClubes } from '@/services/Clubes/clubes.service';
 import { Clubes } from '@/models/clubes';
 import { addClub } from '@/redux/states/club';
@@ -18,10 +18,10 @@ function Login() {
   const [password, setPassword] = useState('');
   const [idClub, setIdClub] = useState('1');
   const [errorMessage, setErrorMessage] = useState('');
-
-  const [clubes, setClubes] = useState<Clubes[]>([]);
-
   const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
+  const [clubes, setClubes] = useState<Clubes[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     clearLocalStorage(UserKey);
@@ -38,11 +38,21 @@ function Login() {
     }
 
     try {
+      setShowModal(true);
+      setIsLoading(true);
+
       const result = await initLogin(username, password, idClub);
-      dispatch(createUser({ ...result }));
-      navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
+
+      setTimeout(() => {
+        setIsLoading(false);
+        setShowModal(false);
+        dispatch(createUser({ ...result }));
+        navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
+      }, 2000);
     } catch (error: any) {
       console.error('Error de inicio de sesión:', error);
+      setIsLoading(false);
+      setShowModal(false);
       setErrorMessage(error.message);
     }
   };
@@ -51,7 +61,7 @@ function Login() {
     const selectedValue = e.target.value;
     setIdClub(selectedValue);
     const id = parseInt(selectedValue, 10);
-    const targetClub = clubes.find(club => club.idClub === id);
+    const targetClub = clubes.find((club) => club.idClub === id);
     if (targetClub) {
       const { idClub, nameClub, address } = targetClub;
       const data = { idClub, nameClub, address };
@@ -66,9 +76,9 @@ function Login() {
       const { data } = await getClubes();
       setClubes(data);
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
-  }
+  };
 
   return (
     <div className="h-screen bg-gray-100 flex flex-col justify-center sm:py-12" onLoad={obtainClubes}>
@@ -136,14 +146,28 @@ function Login() {
                     Ingresar
                   </button>
                 </div>
-                <div className="relative">
+                {/* <div className="relative">
                   <a href={PublicRoutes.FORGOTPASS} className="absolute left-4 -top-1 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm hover:text-indigo-500 hover:border-b">Olvidaste tu contraseña?</a>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
         </div>
       </div>
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="">
+            {isLoading ? (
+              <div className="flex flex-col bg-white p-4 rounded-lg shadow-md items-center">
+                <span className="loading loading-lg text-black"></span>
+                <span>Por favor espere...</span>
+              </div>
+            ) : (
+              <p>Por favor espere...</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -15,7 +15,7 @@ const GestionSucursales: React.FC<GestionSucursalesProps>  = ({}) => {
 
 	return <>
 	<div>
-	<a href={`/Dashboard/Gestion_de_Sucursal/${idClub}`}>Sucursal</a>
+	<a href={`/Dashboard/Gestion_de_Sucursal/${idClub}`}>Sucursal {idClub}</a>
 	</div>
 	</>;
 };

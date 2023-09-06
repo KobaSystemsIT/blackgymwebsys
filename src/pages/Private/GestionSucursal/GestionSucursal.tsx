@@ -125,8 +125,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 									<td>
 										{staff.arrivalHour ? staff.arrivalHour.toString().split('T')[0] : "N/A"}
 									</td>
-
 									<td>{staff.exitHour ? staff.exitHour.toString().split('T')[0] : "N/A"}</td>
+									<td><button title='Editar Usuario'><FontAwesomeIcon icon={faUserPen} className='h-4'/></button></td>
 								</tr>
 							))}
 						</tbody>

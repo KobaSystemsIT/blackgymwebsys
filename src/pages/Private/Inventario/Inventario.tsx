@@ -18,6 +18,18 @@ const Inventario: React.FC<InventarioProps> = () => {
     const getInventory = async () => {
       try {
         const response = await viewInventoryData('1', token); // Reemplaza '1' con el ID de tu club
+				if (response.error) {
+					// La solicitud no fue exitosa, maneja el error según corresponda
+					setError(`Error: ${response.error}`);
+				} else {
+					// La solicitud fue exitosa, establece los datos del inventario
+					setInventoryData(response.data);
+				}
+			} catch (error) {
+				// Maneja los errores de red u otros errores aquí
+				setError(`Error de red: ${error}`);
+			}
+		};
 
         if (response.error) {
           // La solicitud no fue exitosa, maneja el error según corresponda
@@ -31,7 +43,7 @@ const Inventario: React.FC<InventarioProps> = () => {
         setError(`Error de red: ${error}`);
       }
     };
-
+  
     // Llama a la función para obtener el inventario
     getInventory();
   }, [token]); // Asegúrate de incluir el token como dependencia para que se actualice cuando cambie

@@ -1,4 +1,4 @@
-import { lazy, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { Navigate, Route } from 'react-router-dom';
 import { PrivateRoutes, Roles } from '../../models';
 import { RoutesWithNotFound } from '../../utilities';
@@ -26,20 +26,17 @@ import { toggleOpen } from '@/redux/states/sidebar';
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
 function Private() {
-  const open = useSelector((store: AppStore) => store.open.open!);
+  const open = useSelector((store: AppStore) => store.open.open);
   const dispatch = useDispatch();
 
   return (
-    <div className="flex h-screen overflow-hidden text-lg">
-      <button onClick={() => dispatch(toggleOpen())} className='transition-all duration-300'>
-        <FontAwesomeIcon icon={faBars} className="absolute bottom-5 right-6 p-4 m-0 hover:bg-black hover:text-white hover:rounded-xl transition-all duration-300 lg:hidden" />
-      </button>
-      <div className={`lg:block relative ${open ? " lg:w-72 block" : "hidden"}  transition-all duration-500`}>
+    <div className="flex h-screen overflow-hidden text-lg relative">
+      <div className={`lg:block lg:w-72 md:w-72 w-[25%] h-screen ${open ? "lg:w-72 md:w-72 w-[30%] absolute z-50" : "hidden"}  transition-all duration-500`}>
         <Sidebar />
       </div>
-      <div className="flex-grow overflow-x-hidden max-h-screen p-4 bg-white rounded-xl m-2">
+      <div className="flex-grow overflow-x-hidden min-h-screen p-4 rounded-xl lg:m-6 md:m-4 m-0">
         <Navbar />
-        <div className="p-6 overflow-y-auto">
+        <div className="p-6 overflow-y-auto relative z-0">
           <RoutesWithNotFound>
             <Route path="/" element={<Navigate to={PrivateRoutes.DASHBOARD} />} />
             <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
@@ -65,6 +62,9 @@ function Private() {
           </RoutesWithNotFound>
         </div>
       </div>
+      <a onClick={() => dispatch(toggleOpen())} className='fixed bottom-4 right-4 lg:hidden z-10'>
+        <FontAwesomeIcon icon={faBars} className="p-4" />
+      </a>
     </div>
   );
 }
