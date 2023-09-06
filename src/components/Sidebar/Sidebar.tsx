@@ -154,7 +154,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 					>
 						<FontAwesomeIcon
 							icon={faArrowRightToBracket}
-							className="md:h-3 h-5 m-2"
+							className="h-4 m-2"
 						/>
 						<h1 className='lg:block md:block hidden'>
 							<Logout></Logout>
