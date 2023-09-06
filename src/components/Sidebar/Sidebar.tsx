@@ -18,15 +18,15 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 
 	return (
 		<div className="h-screen md:overflow-y-auto md:overflow-x-hidden bg-black">
-			<div className="flex flex-col h-full justify-center items-center">
+			<div className="flex flex-col h-full justify-between items-center">
 				<div className="flex flex-col pt-6 justify-center items-center">
-					<img src={logo} className="lg:h-16 lg:block md:hidden hidden" alt="Logo" />
-					{/* <h1 className="lg:text-xl lg:block md:hidden text-lg mt-7 hidden font-medium bottom-0 text-center text-white">
+					<img src={logo} className="lg:h-16 md:h-10" alt="Logo" />
+					<h1 className="lg:text-xl lg:block md:hidden text-lg mt-7 font-medium bottom-0 text-center text-white">
 						Black Gym Club
-					</h1> */}
+					</h1>
 				</div>
-				<div className='mt-10'>
-					<ul className="lg:px-10 md:px-0 px-5 text-white lg:text-sm md:text-xs text-sm">
+				<div>
+					<ul className="lg:px-5 text-white lg:text-sm md:text-xs">
 						<li className="m-5 hover:bg-white rounded-md hover:text-black">
 							<a href="/" className="flex items-center">
 								<FontAwesomeIcon
@@ -145,20 +145,21 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								</a>
 							</li>
 						)}
-						<li className="m-5 ml-5 lg:mt-10 hover:bg-white rounded-md hover:text-black">
-							<a
-								className="flex items-center"
-							>
-								<FontAwesomeIcon
-									icon={faArrowRightToBracket}
-									className="md:h-3 h-5 m-2"
-								/>
-								<h1 className='lg:block md:block hidden'>
-									<Logout></Logout>
-								</h1>
-							</a>
-						</li>
+
 					</ul>
+				</div>
+				<div className='p-4 text-white '>
+					<a
+						className="flex items-center hover:bg-white rounded-md hover:text-black"
+					>
+						<FontAwesomeIcon
+							icon={faArrowRightToBracket}
+							className="md:h-3 h-5 m-2"
+						/>
+						<h1 className='lg:block md:block hidden'>
+							<Logout></Logout>
+						</h1>
+					</a>
 				</div>
 			</div>
 		</div>
