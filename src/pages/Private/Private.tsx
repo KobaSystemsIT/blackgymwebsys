@@ -23,6 +23,12 @@ import BottonNavigate from '@/components/BottomNavigate/BottomNavigate';
 
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
+declare global {
+	interface Window {
+		modalUsers: HTMLDialogElement;
+	}
+}
+
 function Private() {
   const open = useSelector((store: AppStore) => store.open.open);
 
