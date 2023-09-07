@@ -1,6 +1,6 @@
 export interface Inventory {
-    inventoryID: string,
+    inventoryID: number,
     productName: string,
-    currentStock: string,
+    currentStock: number,
     dateReorder: string,
 }

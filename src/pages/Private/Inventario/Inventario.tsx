@@ -20,16 +20,17 @@ const Inventario: React.FC<InventarioProps> = () => {
 
   const obtainInventoryData = async () => {
     try {
-      const { data } = await viewInventoryData(params.idClub, token);
-      setInventoryData(data);
+      const {inventory} = await viewInventoryData(params.idClub, token);
       console.log(inventory)
+      setInventoryData(inventory);
     } catch (error) {
       console.error(error);
     }
   }
+
   useEffect(() => {
-    obtainInventoryData();
-  })
+		obtainInventoryData();
+	}, []);
   
   return (
     <div>
@@ -42,17 +43,30 @@ const Inventario: React.FC<InventarioProps> = () => {
         </div>
       </div>
       <div className='max-h-48 overflow-auto m-2'>
-					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+      <table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
 						<thead>
 							<tr>
 								<th>ID</th>
 								<th>Producto</th>
 								<th>Stock</th>
-								<th>Fecha de registro</th>
+								<th>Fecha</th>
 							</tr>
 						</thead>
 						<tbody>
-							
+							{inventory.map((data) => (
+								<tr key={data.inventoryID}>
+									<td>{data.inventoryID}</td>
+									<td>{data.productName}</td>
+									<td>{data.currentStock}</td>
+									<td>{data.dateReorder ? data.dateReorder.toString().split('T')[0] : "N/A"}</td>
+									<td>
+										<div className='grid grid-flow-col gap-2'>
+											<button title='Editar Usuario'><FontAwesomeIcon icon={faUserPen} className='h-4'/></button>
+											<button title='Gestionar Subscripción'><FontAwesomeIcon icon={faPlus} className='h-4'/></button>
+										</div>
+									</td>
+								</tr>
+							))}
 						</tbody>
 					</table>
 				</div>
