@@ -146,9 +146,9 @@ function Login() {
                     Ingresar
                   </button>
                 </div>
-                {/* <div className="relative">
+                <div className="relative">
                   <a href={PublicRoutes.FORGOTPASS} className="absolute left-4 -top-1 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm hover:text-indigo-500 hover:border-b">Olvidaste tu contraseña?</a>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>

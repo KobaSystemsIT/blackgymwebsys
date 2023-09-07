@@ -18,7 +18,6 @@ export type InventarioProps = {};
 // Defino el componente Inventario.
 // Define the Inventario component.
 const Inventario: React.FC<InventarioProps> = () => {
-  
   // Obtengo el estado del usuario desde Redux.
   // Get the user state from Redux.
   const userState = useSelector((store: AppStore) => store.user);

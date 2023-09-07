@@ -4,8 +4,9 @@ import { Logout } from '../Logout';
 import './Sidebar.css'
 import logo from '@/assets/icons/iconBG.svg'
 import { Roles } from '@/models';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
+import { toggleOpen } from '@/redux/states/sidebar';
 
 export type SidebarProps = {
 }
@@ -17,111 +18,111 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 
 	return (
 		<div className="h-screen md:overflow-y-auto md:overflow-x-hidden bg-black">
-			<div className="flex flex-col h-full justify-center items-center">
-				<div className="flex flex-col pt-6 justify-center items-center">
-					<img src={logo} className="lg:h-14 md:h-12 h-10" alt="Logo" />
-					<h1 className="lg:text-2xl lg:block md:text-2xl md:block text-lg mt-7 hidden font-medium bottom-0 text-center text-white">
+			<div className="flex flex-col h-full justify-between items-center">
+				<div className="flex flex-col pt-10 justify-center items-center">
+					<img src={logo} className="lg:h-16 md:h-10" alt="Logo" />
+					<h1 className="lg:text-xl lg:block md:hidden text-lg mt-7 font-medium bottom-0 text-center text-white">
 						Black Gym Club
 					</h1>
-				</div>s
-				<div className='mt-16'>
-					<ul className="lg:px-10 md:px-5 px-5 text-white text-sm">
+				</div>
+				<div>
+					<ul className="lg:px-5 text-white lg:text-sm md:text-xs">
 						<li className="m-5 hover:bg-white rounded-md hover:text-black">
 							<a href="/" className="flex items-center">
 								<FontAwesomeIcon
 									icon={faHome}
-									className="h-5 m-2"
+									className="md:h-3 h-5 m-2"
 								/>
 								<h1 className='lg:block md:block hidden'>Inicio</h1>
 							</a>
 						</li>
 						{!isAdmin && (
-							<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
+							<li className="m-5 lg:mt-10 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Gestion_de_Sucursal/${clubState.idClub}`}
 									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faShop}
-										className="h-5 m-2"
+										className="md:h-3 h-5 m-2"
 									/>
-									<h1 className='lg:block md:hidden hidden'>
+									<h1 className='lg:block md:block hidden'>
 										Gestión de Sucursal
 									</h1>
 								</a>
 							</li>
 						)}
 						{isAdmin && (
-							<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
+							<li className="m-5 lg:mt-10 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Gestion_de_Sucursales/`}
 									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faCity}
-										className="h-5 m-2"
+										className="md:h-3 h-5 m-2"
 									/>
-									<h1 className='lg:block md:hidden hidden'>
+									<h1 className='lg:block md:block hidden'>
 										Gestión de Sucursales
 									</h1>
 								</a>
 							</li>
 						)}
 						{!isAdmin && (
-							<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
+							<li className="m-5 lg:mt-10 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Punto_de_Venta/${clubState.idClub}`}
 									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faCartShopping}
-										className="h-5 m-2"
+										className="md:h-3 h-5 m-2"
 									/>
-									<h1 className='lg:block md:hidden hidden'>Punto de Venta</h1>
+									<h1 className='lg:block md:block hidden'>Punto de Venta</h1>
 								</a>
 							</li>
 						)}
 						{!isAdmin && (
-							<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
+							<li className="m-5 lg:mt-10 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Inventario/${clubState.idClub}`}
 									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faWarehouse}
-										className="h-5 m-2"
+										className="md:h-3 h-5 m-2"
 									/>
-									<h1 className='lg:block md:hidden hidden'>Inventario</h1>
+									<h1 className='lg:block md:block hidden'>Inventario</h1>
 								</a>
 							</li>
 						)}
 						{isAdmin && (
-							<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
+							<li className="m-5 lg:mt-10 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Gestion_de_Inventarios/`}
 									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faWarehouse}
-										className="h-5 m-2"
+										className="md:h-3 h-5 m-2"
 									/>
-									<h1 className='lg:block md:hidden hidden'>
+									<h1 className='lg:block md:block hidden'>
 										Gestión de Inventarios
 									</h1>
 								</a>
 							</li>
 						)}
 						{isAdmin && (
-							<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
+							<li className="m-5 lg:mt-10 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Gestion_Financiera/`}
 									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faChartPie}
-										className="h-5 m-2"
+										className="md:h-3 h-5 m-2"
 									/>
-									<h1 className='lg:block md:hidden hidden'>
+									<h1 className='lg:block md:block hidden'>
 										Gestión Financiera
 									</h1>
 								</a>
@@ -129,38 +130,38 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 						)}
 
 						{isAdmin && (
-							<li className="m-5 mt-10 hover:bg-white rounded-md hover:text-black">
+							<li className="m-5 lg:mt-10 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Panel_de_Administrador/`}
 									className="flex items-center"
 								>
 									<FontAwesomeIcon
 										icon={faUsers}
-										className="h-5 m-2"
+										className="md:h-3 h-5 m-2"
 									/>
-									<h1 className='lg:block md:hidden hidden'>
+									<h1 className='lg:block md:block hidden'>
 										Administración
 									</h1>
 								</a>
 							</li>
 						)}
-						<li className="m-5 ml-5 mt-10 hover:bg-white rounded-md hover:text-black">
-							<a
-								className="flex items-center"
-							>
-								<FontAwesomeIcon
-									icon={faArrowRightToBracket}
-									className="h-5 m-2"
-								/>
-								<h1 className='lg:block md:hidden hidden'>
-									<Logout></Logout>
-								</h1>
-							</a>
-						</li>
+
 					</ul>
 				</div>
+				<div className='p-4 text-white '>
+					<a
+						className="flex items-center hover:bg-white rounded-md hover:text-black"
+					>
+						<FontAwesomeIcon
+							icon={faArrowRightToBracket}
+							className="h-4 m-2"
+						/>
+						<h1 className='lg:block md:block hidden'>
+							<Logout></Logout>
+						</h1>
+					</a>
+				</div>
 			</div>
-
 		</div>
 	);
 };

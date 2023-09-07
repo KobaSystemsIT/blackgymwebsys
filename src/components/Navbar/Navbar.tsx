@@ -5,7 +5,6 @@ import { faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Logout } from '../Logout';
 import { PrivateRoutes } from '@/models';
-
 export type NavbarProps = {};
 
 const Navbar: React.FC<NavbarProps> = ({ }) => {
@@ -31,11 +30,12 @@ const Navbar: React.FC<NavbarProps> = ({ }) => {
     window.location.reload(); // Recarga la página
   };
 
+
   return (
     <div className="navbar p-4 border-b">
       <div className="relative flex-1">
-        <div className={`lg:text-sm text-xs breadcrumbs`}>
-          <ul className='' onClick={handleGoBack}>
+        <div className="lg:text-sm text-xs breadcrumbs lg:ml-0 md:ml-8">
+          <ul onClick={handleGoBack}>
             {breadcrumbItems}
           </ul>
         </div>

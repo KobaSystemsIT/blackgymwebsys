@@ -17,24 +17,27 @@ import { GestionSubscripciones } from './GestionSubscripciones';
 import { RegistroUsuarios } from './RegistroUsuarios';
 import { FinanzasXSucursal } from './FinanzasXSucursal';
 import { GestionClubes } from './GestionClubes';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
-import { toggleOpen } from '@/redux/states/sidebar';
+import BottonNavigate from '@/components/BottomNavigate/BottomNavigate';
 
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
+declare global {
+	interface Window {
+		modalUsers: HTMLDialogElement;
+	}
+}
+
 function Private() {
   const open = useSelector((store: AppStore) => store.open.open);
-  const dispatch = useDispatch();
 
   return (
-    <div className="flex h-screen overflow-hidden text-lg relative">
-      <div className={`lg:block lg:w-72 md:w-72 w-[25%] h-screen ${open ? "lg:w-72 md:w-72 w-[30%] absolute z-50" : "hidden"}  transition-all duration-500`}>
+    <div className="flex h-screen overflow-hidden relative">
+      <div className={`lg:block lg:w-64 h-screen ${open ? "lg:w-64 absolute z-50 p-2" : "hidden"}  transition-all duration-500`}>
         <Sidebar />
       </div>
-      <div className="flex-grow overflow-x-hidden min-h-screen p-4 rounded-xl lg:m-6 md:m-4 m-0">
+      <div className="flex-grow overflow-x-hidden min-h-screen p-4 rounded-xl lg:m-2 md:m-4 m-0">
         <Navbar />
         <div className="p-6 overflow-y-auto relative z-0">
           <RoutesWithNotFound>
@@ -62,9 +65,9 @@ function Private() {
           </RoutesWithNotFound>
         </div>
       </div>
-      <a onClick={() => dispatch(toggleOpen())} className='fixed bottom-4 right-4 lg:hidden z-10'>
-        <FontAwesomeIcon icon={faBars} className="p-4" />
-      </a>
+      <div className='lg:hidden'>
+        <BottonNavigate/>
+      </div>
     </div>
   );
 }

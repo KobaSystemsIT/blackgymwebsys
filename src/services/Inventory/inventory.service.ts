@@ -1,11 +1,8 @@
-import axios from 'axios';
 import baseUrl from "@/services/Login/auth.service";
 
-const getInvetoryUrl = baseUrl + 'dbaccess/getInventory';
+const dbaccess = baseUrl + 'dbaccess/';
 
-// Función para obtener el inventario
-
-export const viewInventoryData = async (idClub:string, token:any) => {
+export const viewInventoryData = async (idClub: string, token: any) => {
     const body = {
         idClub: idClub
     }
@@ -18,7 +15,7 @@ export const viewInventoryData = async (idClub:string, token:any) => {
         body: JSON.stringify(body),
     };
 
-    return fetch(getInvetoryUrl, requestOptions)
+    return fetch(dbaccess + 'getInventory', requestOptions)
         .then(async (res) => {
             if (!res.ok) {
                 const errorResponse = await res.json(); // Parsea el cuerpo del mensaje como JSON

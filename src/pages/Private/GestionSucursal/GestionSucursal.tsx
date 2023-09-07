@@ -1,4 +1,5 @@
 
+import { ModalUsers } from '@/components/ModalUsers';
 import { Roles } from '@/models';
 import { Clients } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
@@ -49,7 +50,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 			<div className=' overflow-hidden'>
 				<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
 					<h1 className='text-black text-sm'>Clientes registrados</h1>
-					<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'>Nuevo cliente</button>
+					<ModalUsers idUserType={1}></ModalUsers>
 				</div>
 				<div className='max-h-48 overflow-auto m-2'>
 					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>

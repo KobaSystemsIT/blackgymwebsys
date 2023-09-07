@@ -18,25 +18,25 @@ function Dashboard() {
     <div className="mt-[10%]">
       <h1>Accesos rápidos</h1>
       <br />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-center text-white">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-center text-white text-sm">
         {isAdmin ? (
           <>
             <a href="Gestion_de_Sucursales/" className="card bg-black shadow-md rounded-lg">
               <div className="card-body">
                 <FontAwesomeIcon icon={faCity} />
-                <h1 className=" text-sm md:text-base">Gestión de <br /> sucursales</h1>
+                <h1>Gestión de <br /> sucursales</h1>
               </div>
             </a>
             <a href="Gestion_de_Inventarios/" className="card bg-black shadow-md rounded-lg">
               <div className="card-body">
                 <FontAwesomeIcon icon={faWarehouse} />
-                <h1 className=" text-sm md:text-base">Gestión de <br /> Inventarios</h1>
+                <h1>Gestión de <br /> Inventarios</h1>
               </div>
             </a>
             <a href="Gestion_Financiera/" className="card bg-black shadow-md rounded-lg">
               <div className="card-body">
                 <FontAwesomeIcon icon={faChartPie} className=""/>
-                <h1 className=" text-sm md:text-base">Gestión <br /> Financiera</h1>
+                <h1>Gestión <br /> Financiera</h1>
               </div>
             </a>
           </>
@@ -45,19 +45,19 @@ function Dashboard() {
             <a href={`Gestion_de_Sucursal/${idClub}`} className="card bg-black shadow-md rounded-lg">
               <div className="card-body">
                 <FontAwesomeIcon icon={faShop} />
-                <h1 className=" text-sm md:text-base">Gestión de <br /> sucursal</h1>
+                <h1>Gestión de <br /> sucursal</h1>
               </div>
             </a>
             <a href={`Punto_de_Venta/${clubState.idClub}`} className="card bg-black shadow-md rounded-lg">
               <div className="card-body">
                 <FontAwesomeIcon icon={faCartShopping} />
-                <h1 className=" text-sm md:text-base">Punto de <br /> Venta</h1>
+                <h1>Punto de <br /> Venta</h1>
               </div>
             </a>
             <a href={`Inventario/${clubState.idClub}`} className="card bg-black shadow-md rounded-lg">
               <div className="card-body">
                 <FontAwesomeIcon icon={faWarehouse} />
-                <h1 className=" text-sm md:text-base">Gestión de <br /> Inventario</h1>
+                <h1>Gestión de <br /> Inventario</h1>
               </div>
             </a>
           </>
