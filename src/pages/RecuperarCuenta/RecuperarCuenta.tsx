@@ -34,14 +34,14 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 			setIsLoading(true);
 
 			const result = await changePassword(username, password);
-			if(result) {
+			if (result) {
 				setMessage(result.message);
 				setShowAlert(true);
 
-				 setTimeout(() => {
+				setTimeout(() => {
 					setShowAlert(false);
 					navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
-				 }, 2000)
+				}, 2000)
 			}
 		} catch (error: any) {
 			console.error('Error de inicio de sesión:', error);
@@ -52,16 +52,15 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 
 		useEffect(() => {
 			if (showAlert) {
-			  // Ocultar la alerta después de 2 segundos
-			  const timeoutId = setTimeout(() => {
-				setShowAlert(false);
-			  }, 2000);
-		
-			  return () => {
-				clearTimeout(timeoutId); // Limpiar el temporizador si el componente se desmonta antes.
-			  };
+				const timeoutId = setTimeout(() => {
+					setShowAlert(false);
+				}, 2000);
+
+				return () => {
+					clearTimeout(timeoutId);
+				};
 			}
-		  }, [showAlert]);
+		}, [showAlert]);
 	}
 
 	return <div className="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
@@ -121,19 +120,19 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 			</div>
 		</div>
 		{showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="">
-            {isLoading ? (
-              <div className="flex flex-col bg-white p-4 rounded-lg shadow-md items-center">
-                <span className="loading loading-lg text-black"></span>
-                <span>Por favor espere...</span>
-              </div>
-            ) : (
-              <p>Por favor espere...</p>
-            )}
-          </div>
-        </div>
-      )}
+			<div className="fixed inset-0 flex items-center justify-center z-50">
+				<div className="">
+					{isLoading ? (
+						<div className="flex flex-col bg-white p-4 rounded-lg shadow-md items-center">
+							<span className="loading loading-lg text-black"></span>
+							<span>Por favor espere...</span>
+						</div>
+					) : (
+						<p>Por favor espere...</p>
+					)}
+				</div>
+			</div>
+		)}
 	</div>
 };
 
