@@ -11,7 +11,6 @@ import { faPencilSquare, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Inventory } from "@/models/inventory/inventory";
 import { ModalInventory } from "@/components/ModalInventory";
-import { Inventory } from '@/models/inventory/inventory';
 
 // Defino el tipo de props para el componente Inventario.
 // Define the props type for the Inventario component.
@@ -31,6 +30,8 @@ const Inventario: React.FC<InventarioProps> = () => {
     // Define state for inventory data.
     const [inventory, setInventoryData] = useState<Inventory[]>([]);
     const params: any = useParams(); // Obtengo los parámetros de la URL.
+    // Defino data para el modal.
+    // Define data for the modal.
 
 
     // Función para obtener los datos del inventario.
@@ -40,21 +41,21 @@ const Inventario: React.FC<InventarioProps> = () => {
             // Realizo la llamada a la API para obtener los datos del inventario.
             // Make the API call to get inventory data.
             const { inventory } = await viewInventoryData(params.idClub, token);
-            //console.log(inventory); // Registro los datos del inventario en la consola.
+            console.log(inventory); // Registro los datos del inventario en la consola.
             setInventoryData(inventory); // Actualizo el estado con los datos del inventario.
         } catch (error) {
             console.error(error); // Manejo de errores en caso de problemas con la llamada a la API.
         }
     };
 
-    const updateInventoryData = async (data: Inventory) => {
+    const updateInventoryData = async () => {
         const cantProductos = data.currentStock;
         const productID = data.inventoryID;
         const idClub = params.idClub;
-        const fecha = data.dateReorder;
+        const fecha = dateReorder;
         try {
-            const { inventory } = await updateInventory(cantProductos, productID, idClub, fecha);
-            setInventoryData(inventory);
+            const { inventory } = await updateInventory(cantProductos, productID, idClub, fecha, token);
+            console.log(inventory);
         } catch (error) {
             console.error(error);
         }
@@ -64,7 +65,7 @@ const Inventario: React.FC<InventarioProps> = () => {
     // Effect to load inventory data when the component mounts.
     useEffect(() => {
         obtainInventoryData();
-        updateInventoryData(Inventory); // Llama a la función para actualizar los datos del inventario.
+        updateInventoryData(); // Llama a la función para actualizar los datos del inventario.
     }, []);
 
     // Renderizo la interfaz de usuario.

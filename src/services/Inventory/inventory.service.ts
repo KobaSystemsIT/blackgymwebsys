@@ -43,7 +43,7 @@ export const viewInventoryData = async (idClub: string, token: any) => {
 };
 
 // Define una función asincrónica llamada 'addOrUpdateInventory'
-export const updateInventory = async (cantProductos, productID, idClub, fecha) => {
+export const updateInventory = async (cantProductos, productID, idClub, fecha, token) => {
     // Crea un objeto 'body' que contiene el ID del club y los datos de inventario
     const body = {
         idClub: idClub,
