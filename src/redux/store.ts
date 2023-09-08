@@ -11,10 +11,14 @@ export interface AppStore {
   open: OpenState;
 }
 
+
+
 export default configureStore<AppStore>({
   reducer: {
     user: userSliceReducer,
     club: clubSliceReducer,
     open: openReducer,
   }
-});
+}
+
+);

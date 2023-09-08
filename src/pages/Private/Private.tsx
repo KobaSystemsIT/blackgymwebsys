@@ -26,6 +26,7 @@ const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 declare global {
 	interface Window {
 		modalUsers: HTMLDialogElement;
+    modalInventory: HTMLDialogElement;
 	}
 }
 
