@@ -1,12 +1,33 @@
 .slide-in {
-    animation: slideInRight 0.2s forwards;
+  animation: slideInRight 0.2s forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
   }
-  
-  @keyframes slideInRight {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+
+  to {
+    transform: translateX(0);
   }
+}
+
+/* .slide-in {
+  animation: slideInOut 2s ease-in-out forwards;
+  position: absolute;
+  right: 0;
+  transform: translateX(100%);
+}
+
+@keyframes slideInOut {
+  0% {
+    transform: translateX(100%);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+} */

@@ -40,7 +40,7 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 
 				 setTimeout(() => {
 					setShowAlert(false);
-					//navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
+					navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
 				 }, 2000)
 			}
 		} catch (error: any) {
