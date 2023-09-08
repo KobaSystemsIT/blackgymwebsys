@@ -33,7 +33,7 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
                         <label className='label'>
                             <span className='label-text'>Cantidad:</span>
                         </label>
-                        <input type="number" id="currentStock" name="currentStock" min={1} defaultValue={0} required className='input input-bordered w-full max-w-xs' />
+                        <input type="number" id="currentStock" name="currentStock" min={0} defaultValue={0} required className='input input-bordered w-full max-w-xs' />
                     </div>
                     <input type="hidden" id="inventoryID" name="inventoryID" value={inventoryID} />
                     <input type="hidden" id="created_at" name="created_at" value={new Date().toISOString()} />

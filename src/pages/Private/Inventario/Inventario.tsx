@@ -54,12 +54,13 @@ const Inventario: React.FC<InventarioProps> = () => {
         const idClub = params.idClub;
         const fecha = dateReorder;
         try {
-            const { inventory } = await updateInventory(cantProductos, productID, idClub, fecha, token);
+            const data = await updateInventory(cantProductos, productID, idClub, fecha, token);
             console.log(inventory);
         } catch (error) {
             console.error(error);
         }
     };
+
     
     // Efecto para cargar los datos del inventario cuando se monta el componente.
     // Effect to load inventory data when the component mounts.
