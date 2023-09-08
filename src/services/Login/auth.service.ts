@@ -43,7 +43,7 @@ export const changePassword = (username:string, password:string) => {
   };
 
   const requestOptions = {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
