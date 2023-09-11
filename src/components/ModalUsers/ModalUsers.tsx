@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ModalUsers.css';
 import { useParams } from 'react-router-dom';
-import { newUserOrStaff } from '@/services/users/users';
+import { newUserOrStaff } from '@/services/users/users.service';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
 import { AlertComponent } from '../AlertComponent';

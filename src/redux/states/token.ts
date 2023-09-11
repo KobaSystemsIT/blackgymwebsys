@@ -4,7 +4,6 @@ import { clearLocalStorage, persistLocalStorage } from '@/utilities';
 
 const initialState: Token = {
   token: '',
-  dateRestart: '',
 };
 export const TokenID = 'token';
 

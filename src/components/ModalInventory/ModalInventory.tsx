@@ -8,15 +8,17 @@ export type ModalInventoryProps = {
 
 const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
     const params: any = useParams();
-    const openModal = () => {
-        window.modalInventory.showModal();
-    }
+    // const openModal = () => {
+    //     window.modalInventory.showModal();
+    // }
 
-    const closeModal = () => {
-        window.modalInventory.close();
-    }
+    // const closeModal = () => {
+    //     window.modalInventory.close();
+    // }
     return <>
-        <button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent' onClick={openModal}>
+        <button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent' 
+        // onClick={openModal}
+        >
             <h1>Nuevo Producto</h1>
         </button>
         <dialog id="modalInventory" className="modal-box">
@@ -74,7 +76,9 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
                     <input type="hidden" id="inventoryID" name="inventoryID" value={inventoryID} />
                     <input type="hidden" id="created_at" name="created_at" value={new Date().toISOString()} />
                     <button className=' btn-success btn-sm font-normal'>Registrar</button>
-                    <button type="button" className='btn btn-sm font-normal' onClick={closeModal}>
+                    <button type="button" className='btn btn-sm font-normal' 
+                    // onClick={closeModal}
+                    >
                         Cerrar
                     </button>
                 </form>
@@ -83,4 +87,4 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
     </>
 };
 
-export default modalInventory;
+export default ModalInventory;

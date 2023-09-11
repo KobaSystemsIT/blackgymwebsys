@@ -1,12 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCartShopping, faArrowRightToBracket, faBars, faCity, faShop, faChartPie, faWarehouse, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faCartShopping, faArrowRightToBracket, faCity, faShop, faChartPie, faWarehouse, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Logout } from '../Logout';
 import './Sidebar.css'
 import logo from '@/assets/icons/iconBG.svg'
 import { Roles } from '@/models';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
-import { toggleOpen } from '@/redux/states/token';
 
 export type SidebarProps = {
 }

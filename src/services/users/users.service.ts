@@ -1,5 +1,5 @@
 import baseUrl from "@/services/Login/auth.service";
-const dbaccess = 'http://localhost:3001/api/' + 'dbaccess/';
+const dbaccess = baseUrl + 'dbaccess/';
 
 export const newUserOrStaff = (username: string, lastname: string, phone: string, email: string, nameEmergency: string, phoneEmergency: string, idUserType: string, idClub: string, fecha: string, token: any) => {
     const body = {
