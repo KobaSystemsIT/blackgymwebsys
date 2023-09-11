@@ -9,6 +9,8 @@ import logo from '@/assets/icons/iconBG.svg';
 import { getClubes } from '@/services/Clubes/clubes.service';
 import { Clubes } from '@/models/clubes';
 import { addClub } from '@/redux/states/club';
+import { deleteToken, saveToken } from '@/redux/states/token';
+import { authToken } from '@/services';
 
 function Login() {
   const dispatch = useDispatch();
@@ -26,6 +28,7 @@ function Login() {
   useEffect(() => {
     clearLocalStorage(UserKey);
     dispatch(resetUser());
+    dispatch(deleteToken());
     navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
   }, []);
 
@@ -42,10 +45,12 @@ function Login() {
       setIsLoading(true);
 
       const result = await initLogin(username, password, idClub);
-
+      console.log(result);
       setTimeout(() => {
         setIsLoading(false);
         setShowModal(false);
+        const tokenData = { token: authToken }; 
+        dispatch(saveToken({... tokenData}));
         dispatch(createUser({ ...result }));
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
       }, 2000);

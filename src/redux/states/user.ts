@@ -6,7 +6,6 @@ export const EmptyUserState: UserInfo = {
   idUser: 0,
   username: '',
   userType: '',
-  token: '',
   rol: Roles.USER,
   idClub: 0
 };

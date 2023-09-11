@@ -22,8 +22,8 @@ export type InventarioProps = {};
 const Inventario: React.FC<InventarioProps> = () => {
     // Obtengo el estado del usuario desde Redux.
     // Get the user state from Redux.
-    const userState = useSelector((store: AppStore) => store.user);
-    const token = userState.token;
+    const tokenState = useSelector((store: AppStore) => store.token);
+    const token = tokenState.token;
 
     // Defino el estado para los datos del inventario.
     // Define state for inventory data.

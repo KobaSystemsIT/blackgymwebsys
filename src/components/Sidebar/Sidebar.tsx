@@ -6,7 +6,7 @@ import logo from '@/assets/icons/iconBG.svg'
 import { Roles } from '@/models';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
-import { toggleOpen } from '@/redux/states/sidebar';
+import { toggleOpen } from '@/redux/states/token';
 
 export type SidebarProps = {
 }

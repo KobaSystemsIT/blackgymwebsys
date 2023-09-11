@@ -16,7 +16,8 @@ export type GestionSucursalProps = {
 
 const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const userState = useSelector((store: AppStore) => store.user);
-	const token = userState.token;
+	const tokenState = useSelector((store: AppStore) => store.token);
+    const token = tokenState.token;
 
 	const [clients, setClients] = useState<Clients[]>([]);
 	const [staff, setStaff] = useState<Staff[]>([]);
