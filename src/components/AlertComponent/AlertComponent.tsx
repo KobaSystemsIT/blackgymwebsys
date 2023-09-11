@@ -17,15 +17,19 @@ const AlertComponent: React.FC<AlertComponentProps> = ({ message }) => {
 			timer: 3000,
 			timerProgressBar: true,
 			didOpen: (toast) => {
-			  toast.addEventListener('mouseenter', Swal.stopTimer)
-			  toast.addEventListener('mouseleave', Swal.resumeTimer)
-			}
-		  })
-		  
-		  Toast.fire({
+				toast.addEventListener('mouseenter', Swal.stopTimer)
+				toast.addEventListener('mouseleave', Swal.resumeTimer)
+			},
+			customClass: {
+				container: 'custom-toast-container',
+				title: 'custom-toast-title',
+			},
+		})
+
+		Toast.fire({
 			icon: 'success',
 			title: data
-		  })
+		})
 	}, [data]);
 
 	return null;

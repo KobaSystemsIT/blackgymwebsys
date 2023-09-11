@@ -43,9 +43,7 @@ function Login() {
     try {
       setShowModal(true);
       setIsLoading(true);
-
       const result = await initLogin(username, password, idClub);
-      console.log(result);
       setTimeout(() => {
         setIsLoading(false);
         setShowModal(false);

@@ -20,6 +20,7 @@ const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 declare global {
 	interface Window {
 		modalUsers: HTMLDialogElement;
+    modalStaff: HTMLDialogElement;
 	}
 }
 
@@ -29,7 +30,7 @@ function Private() {
       <div className="lg:block lg:w-64 md:hidden hidden h-screen  transition-all duration-500">
         <Sidebar />
       </div>
-      <div className="flex-grow overflow-x-hidden min-h-screen p-4 rounded-xl lg:m-2 md:m-4 m-0">
+      <div className="flex-grow overflow-x-hidden min-h-screen p-4 rounded-xl lg:m-2 md:m-4 m-0 pb-4">
         <Navbar />
         <div className="p-6 overflow-y-auto relative z-0">
           <RoutesWithNotFound>
@@ -50,6 +51,7 @@ function Private() {
           </RoutesWithNotFound>
         </div>
       </div>
+      <br />
       <div className='lg:hidden'>
         <BottonNavigate/>
       </div>
