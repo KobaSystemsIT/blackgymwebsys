@@ -33,7 +33,6 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 		try {
 			setShowModal(true);
 			setIsLoading(true);
-
 			const result = await changePassword(username, password);
 			if (result) {
 				setIcon(true);

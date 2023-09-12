@@ -28,9 +28,11 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	const [showAlert, setShowAlert] = useState(false);
 	const [message, setMessage] = useState('');
 	const [icon, setIcon] = useState(false);
+	const [showLoading, setLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const openModal = () => {
-		if(idUserTypeInt === '3') {
+		if (idUserTypeInt === '3') {
 			window.modalUsers.showModal();
 		} else {
 			window.modalStaff.showModal();
@@ -46,7 +48,7 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 		setPhoneEmergency('');
 		setShowAlert(false);
 		setMessage('');
-		if(idUserTypeInt === '3') {
+		if (idUserTypeInt === '3') {
 			window.modalUsers.close();
 		} else {
 			window.modalStaff.close();
@@ -69,19 +71,22 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 			try {
 				const idClub = (params.idClub);
 				const idUserType = (idUserTypeInt);
+				setLoading(true);
+				setIsLoading(true);
 				const result = await newUserOrStaff(username, lastname, phone, email, nameEmergency, phoneEmergency, idUserType, idClub, fecha, token);
 				if (result) {
+					setIsLoading(false);
+					setLoading(false);
 					setMessage(result.mensaje);
 					setShowAlert(true);
 					setIcon(true);
 					setTimeout(() => {
 						setShowAlert(false);
 						closeModal();
-
 					}, 3000)
-				} 
+				}
 			} catch (error: any) {
-				setMessage(error);
+				setMessage('Hubo un error al procesar la solicitud');
 				setShowAlert(true);
 				setTimeout(() => {
 					setShowAlert(false);
@@ -148,8 +153,8 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 						</label>
 						<input value={phoneEmergency} onChange={(e) => setPhoneEmergency(e.target.value)} type="number" id="emergencynumbercontact" name="emergencynumbercontact" required className='input input-bordered w-full max-w-xs' />
 					</div>
-					<button className=' btn-success btn-sm font-normal' onClick={newUser}>Registrar</button>
-					<button type="button" className='btn btn-sm font-normal' onClick={closeModal}>
+					<button className='btn-success btn-sm font-normal' onClick={newUser}>Registrar</button>
+					<button type="button" className='btn btn-warning btn-sm font-normal' onClick={closeModal}>
 						Cerrar
 					</button>
 				</form>
@@ -161,6 +166,20 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 				)}
 			</div>
 		</dialog>
+		{showLoading && (
+			<div className="fixed inset-0 flex items-center justify-center z-50">
+				<div className="">
+					{isLoading ? (
+						<div className="flex flex-col bg-white p-4 rounded-lg shadow-md items-center">
+							<span className="loading loading-lg text-black"></span>
+							<span>Por favor espere...</span>
+						</div>
+					) : (
+						<p>Por favor espere...</p>
+					)}
+				</div>
+			</div>
+		)}
 	</>
 };
 
