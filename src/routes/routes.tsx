@@ -5,6 +5,7 @@ import { AuthGuard } from "../guards";
 import { lazy } from "react";
 import { RecuperarCuenta } from "@/pages/RecuperarCuenta";
 
+
 const Login = lazy(() => import('@/pages/Login/Login'));
 const Private = lazy(() => import('@/pages/Private/Private'));
 

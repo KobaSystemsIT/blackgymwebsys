@@ -19,7 +19,6 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 	const [showModal, setShowModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [icon, setIcon] = useState(false);
 	const [message, setMessage] = useState('');
 	const [errorMessage, seErrorMessage] = useState('');
 
@@ -33,9 +32,9 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 		try {
 			setShowModal(true);
 			setIsLoading(true);
+
 			const result = await changePassword(username, password);
 			if (result) {
-				setIcon(true);
 				setMessage(result.message);
 				setShowAlert(true);
 
@@ -66,7 +65,7 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 
 	return <div className="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
 		{showAlert && (
-			<AlertComponent message={message} type={icon}></AlertComponent>
+			<AlertComponent message={message}></AlertComponent>
 		)}
 		<div className="relative py-3 sm:max-w-xl sm:mx-auto">
 			<div

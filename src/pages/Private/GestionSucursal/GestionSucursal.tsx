@@ -5,7 +5,7 @@ import { Clients } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
 import { AppStore } from '@/redux/store';
 import { viewClientsData, viewStaffData } from '@/services/Clients/clients.service';
-import { faPlus, faRotate, faUserPen } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -16,8 +16,7 @@ export type GestionSucursalProps = {
 
 const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const userState = useSelector((store: AppStore) => store.user);
-	const tokenState = useSelector((store: AppStore) => store.token);
-    const token = tokenState.token;
+	const token = userState.token;
 
 	const [clients, setClients] = useState<Clients[]>([]);
 	const [staff, setStaff] = useState<Staff[]>([]);
@@ -48,10 +47,10 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	}, []);
 	return <>
 		<div className='grid p-2 gap-8 items-center'>
-			<div className='overflow-hidden'>				
+			<div className=' overflow-hidden'>
 				<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
 					<h1 className='text-black text-sm'>Clientes registrados</h1>
-					<ModalUsers idUserTypeInt={'3'}></ModalUsers>					
+					<ModalUsers idUserType={1}></ModalUsers>
 				</div>
 				<div className='max-h-48 overflow-auto m-2'>
 					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
@@ -62,6 +61,10 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								<th>Apellido</th>
 								<th>Contacto de Emergencia</th>
 								<th>Número del contacto</th>
+								<th>Tipo de Suscripción</th>
+								<th>Activo</th>
+								<th>Inicio de Subscripción</th>
+								<th>Vencimiento</th>
 								<th>Acciones</th>
 							</tr>
 						</thead>
@@ -73,6 +76,10 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 									<td>{client.lastName}</td>
 									<td>{client.nameEmergencyContact}</td>
 									<td>{client.emergencyContact}</td>
+									<td>{client.nameSubscriptionType}</td>
+									<td>{client.isActive}</td>
+									<td>{client.startDate ? client.startDate.toString().split('T')[0] : "N/A"}</td>
+									<td>{client.endDate ? client.endDate.toString().split('T')[0] : "N/A"}</td>
 									<td>
 										<div className='grid grid-flow-col gap-2'>
 											<button title='Editar Usuario'><FontAwesomeIcon icon={faUserPen} className='h-4'/></button>
@@ -91,7 +98,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 				<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
 					<h1 className='text-black text-sm'>Miembros del Staf</h1>
 					{isAdmin && (
-						<ModalUsers idUserTypeInt={'2'}></ModalUsers>
+						<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'>Nuevo staff</button>
 					)}
 				</div>
 				<div className='max-h-48 overflow-auto p-2'>

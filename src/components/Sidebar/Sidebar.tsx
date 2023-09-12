@@ -1,11 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCartShopping, faArrowRightToBracket, faCity, faShop, faChartPie, faWarehouse, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faCartShopping, faArrowRightToBracket, faBars, faCity, faShop, faChartPie, faWarehouse, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Logout } from '../Logout';
 import './Sidebar.css'
 import logo from '@/assets/icons/iconBG.svg'
 import { Roles } from '@/models';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
+import { toggleOpen } from '@/redux/states/sidebar';
 
 export type SidebarProps = {
 }
@@ -19,10 +20,10 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 		<div className="h-screen md:overflow-y-auto md:overflow-x-hidden bg-black">
 			<div className="flex flex-col h-full justify-between items-center">
 				<div className="flex flex-col pt-10 justify-center items-center">
-					{/* <img src={logo} className="lg:h-16 md:h-10" alt="Logo" /> */}
-					<h1 className="lg:text-xl lg:block md:hidden text-lg mt-7 font-bold bottom-0 text-center text-white">
+					<img src={logo} className="lg:h-16 md:h-10" alt="Logo" />
+					<h1 className="lg:text-xl lg:block md:hidden text-lg mt-7 font-medium bottom-0 text-center text-white">
 						Black Gym Club
-					</h1>				
+					</h1>
 				</div>
 				<div>
 					<ul className="lg:px-5 text-white lg:text-sm md:text-xs">

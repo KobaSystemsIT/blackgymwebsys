@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
+const MySwal = withReactContent(Swal);
 export type AlertComponentProps = {
 	message: string
-	type: boolean
 }
 
-const AlertComponent: React.FC<AlertComponentProps> = ({ message, type }) => {
+const AlertComponent: React.FC<AlertComponentProps> = ({ message }) => {
 	const data = message;
 	useEffect(() => {
 		const Toast = Swal.mixin({
@@ -16,27 +17,16 @@ const AlertComponent: React.FC<AlertComponentProps> = ({ message, type }) => {
 			timer: 3000,
 			timerProgressBar: true,
 			didOpen: (toast) => {
-				toast.addEventListener('mouseenter', Swal.stopTimer)
-				toast.addEventListener('mouseleave', Swal.resumeTimer)
-			},
-			customClass: {
-				container: 'custom-toast-container',
-				title: 'custom-toast-title',
-			},
-		})
-
-		if(type){
-			Toast.fire({
-				icon: 'success',
-				title: data
-			})
-		}else {
-			Toast.fire({
-				icon: 'error',
-				title: data
-			})
-		}
-	}, [data, type]);
+			  toast.addEventListener('mouseenter', Swal.stopTimer)
+			  toast.addEventListener('mouseleave', Swal.resumeTimer)
+			}
+		  })
+		  
+		  Toast.fire({
+			icon: 'success',
+			title: data
+		  })
+	}, [data]);
 
 	return null;
 };

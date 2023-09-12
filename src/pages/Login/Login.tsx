@@ -9,8 +9,6 @@ import logo from '@/assets/icons/iconBG.svg';
 import { getClubes } from '@/services/Clubes/clubes.service';
 import { Clubes } from '@/models/clubes';
 import { addClub } from '@/redux/states/club';
-import { deleteToken, saveToken } from '@/redux/states/token';
-import { authToken } from '@/services';
 
 function Login() {
   const dispatch = useDispatch();
@@ -28,7 +26,6 @@ function Login() {
   useEffect(() => {
     clearLocalStorage(UserKey);
     dispatch(resetUser());
-    dispatch(deleteToken());
     navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
   }, []);
 
@@ -43,12 +40,12 @@ function Login() {
     try {
       setShowModal(true);
       setIsLoading(true);
+
       const result = await initLogin(username, password, idClub);
+
       setTimeout(() => {
         setIsLoading(false);
         setShowModal(false);
-        const tokenData = { token: authToken }; 
-        dispatch(saveToken({... tokenData}));
         dispatch(createUser({ ...result }));
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
       }, 2000);
@@ -84,7 +81,7 @@ function Login() {
   };
 
   return (
-    <div className="bg-gray-100 flex flex-col justify-center sm:py-12 overflow-hidden h-screen" onLoad={obtainClubes}>
+    <div className="max-h-screen bg-gray-100 flex flex-col justify-center sm:py-12 overflow-hidden" onLoad={obtainClubes}>
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
         <div
           className="absolute inset-0 bg-gradient-to-r from-black to-white shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl">

@@ -1,7 +1,5 @@
 const baseUrl = 'https://accessdb.blackgymfitclub.com/api/';
-//const baseUrl = 'http://localhost:3001/api/';
 const loginUrl = baseUrl + 'login';
-export let authToken = '';
 
 export const initLogin = (username: string, password: string, idClub: string) => {
   const body = {
@@ -24,12 +22,13 @@ export const initLogin = (username: string, password: string, idClub: string) =>
         const errorResponse = await res.json(); // Parsea el cuerpo del mensaje como JSON
         throw new Error(errorResponse.message);
       }
-      const authorizationHeader = res.headers.get('Authorization');
-      if (authorizationHeader !== null) {
-        authToken = authorizationHeader;
-      }
-
       return res.json();
+    })
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.message || 'Error desconocido');
+      }
+      return data;
     })
     .catch((error) => {
       console.error('Error:', error);
