@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './RecuperarCuenta.css';
 import logo from '@/assets/icons/iconBG.svg'
 import { PublicRoutes } from '@/models';
 import { useNavigate } from 'react-router-dom';
 import { changePassword } from '@/services';
+import { AlertComponent } from '@/components/AlertComponent';
 
 export type RecuperarCuentaProps = {
 }
@@ -16,36 +17,57 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 	const [password, setPassword] = useState('');
 	const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
 	const [showModal, setShowModal] = useState(false);
+	const [showAlert, setShowAlert] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [errorMessage, setErrorMessage] = useState('');
+	const [icon, setIcon] = useState(false);
+	const [message, setMessage] = useState('');
+	const [errorMessage, seErrorMessage] = useState('');
 
 	const setNewPassword = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 		if (!username || !password) {
 			setShowEmptyFieldsAlert(true);
+			return;
 		};
 
 		try {
 			setShowModal(true);
 			setIsLoading(true);
-
 			const result = await changePassword(username, password);
-			setTimeout(() => {
-				setIsLoading(false);
-				setShowModal(false);
-				if(result){
+			if (result) {
+				setIcon(true);
+				setMessage(result.message);
+				setShowAlert(true);
+
+				setTimeout(() => {
+					setShowAlert(false);
 					navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
-				}
-			}, 2000);
+				}, 2000)
+			}
 		} catch (error: any) {
 			console.error('Error de inicio de sesión:', error);
 			setIsLoading(false);
 			setShowModal(false);
-			setErrorMessage(error.message);
+			seErrorMessage(error.message);
 		}
+
+		useEffect(() => {
+			if (showAlert) {
+				const timeoutId = setTimeout(() => {
+					setShowAlert(false);
+				}, 2000);
+
+				return () => {
+					clearTimeout(timeoutId);
+				};
+			}
+		}, [showAlert]);
 	}
 
 	return <div className="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
+		{showAlert && (
+			<AlertComponent message={message} type={icon}></AlertComponent>
+		)}
 		<div className="relative py-3 sm:max-w-xl sm:mx-auto">
 			<div
 				className="absolute inset-0 bg-gradient-to-r from-black to-white shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl">
@@ -99,19 +121,19 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 			</div>
 		</div>
 		{showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="">
-            {isLoading ? (
-              <div className="flex flex-col bg-white p-4 rounded-lg shadow-md items-center">
-                <span className="loading loading-lg text-black"></span>
-                <span>Por favor espere...</span>
-              </div>
-            ) : (
-              <p>Por favor espere...</p>
-            )}
-          </div>
-        </div>
-      )}
+			<div className="fixed inset-0 flex items-center justify-center z-50">
+				<div className="">
+					{isLoading ? (
+						<div className="flex flex-col bg-white p-4 rounded-lg shadow-md items-center">
+							<span className="loading loading-lg text-black"></span>
+							<span>Por favor espere...</span>
+						</div>
+					) : (
+						<p>Por favor espere...</p>
+					)}
+				</div>
+			</div>
+		)}
 	</div>
 };
 
