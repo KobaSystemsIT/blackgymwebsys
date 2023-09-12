@@ -22,19 +22,19 @@ function Dashboard() {
         {isAdmin ? (
           <>
             <a href="Gestion_de_Sucursales/" className="card bg-black shadow-md rounded-lg">
-              <div className="card-body">
+              <div>
                 <FontAwesomeIcon icon={faCity} />
                 <h1>Gestión de <br /> sucursales</h1>
               </div>
             </a>
             <a href="Gestion_de_Inventarios/" className="card bg-black shadow-md rounded-lg">
-              <div className="card-body">
+              <div>
                 <FontAwesomeIcon icon={faWarehouse} />
                 <h1>Gestión de <br /> Inventarios</h1>
               </div>
             </a>
             <a href="Gestion_Financiera/" className="card bg-black shadow-md rounded-lg">
-              <div className="card-body">
+              <div>
                 <FontAwesomeIcon icon={faChartPie} className=""/>
                 <h1>Gestión <br /> Financiera</h1>
               </div>
