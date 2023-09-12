@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 
-const MySwal = withReactContent(Swal);
 export type AlertComponentProps = {
 	message: string
+	type: boolean
 }
 
-const AlertComponent: React.FC<AlertComponentProps> = ({ message }) => {
+const AlertComponent: React.FC<AlertComponentProps> = ({ message, type }) => {
 	const data = message;
 	useEffect(() => {
 		const Toast = Swal.mixin({
@@ -26,11 +25,18 @@ const AlertComponent: React.FC<AlertComponentProps> = ({ message }) => {
 			},
 		})
 
-		Toast.fire({
-			icon: 'success',
-			title: data
-		})
-	}, [data]);
+		if(type){
+			Toast.fire({
+				icon: 'success',
+				title: data
+			})
+		}else {
+			Toast.fire({
+				icon: 'error',
+				title: data
+			})
+		}
+	}, [data, type]);
 
 	return null;
 };

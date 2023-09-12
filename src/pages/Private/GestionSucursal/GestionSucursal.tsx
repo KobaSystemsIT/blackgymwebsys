@@ -90,7 +90,9 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 			<div className='overflow-hidden mt-10'>
 				<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
 					<h1 className='text-black text-sm'>Miembros del Staf</h1>
-					<ModalUsers idUserTypeInt={'2'}></ModalUsers>
+					{isAdmin && (
+						<ModalUsers idUserTypeInt={'2'}></ModalUsers>
+					)}
 				</div>
 				<div className='max-h-48 overflow-auto p-2'>
 					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>

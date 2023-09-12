@@ -25,12 +25,11 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	const [email, setEmail] = useState('');
 	const [nameEmergency, setNameEmergency] = useState('');
 	const [phoneEmergency, setPhoneEmergency] = useState('');
-	const [errorMessage, setErrorMessage] = useState('');
 	const [showAlert, setShowAlert] = useState(false);
 	const [message, setMessage] = useState('');
+	const [icon, setIcon] = useState(false);
 
 	const openModal = () => {
-		//window.modalUsers.showModal();
 		if(idUserTypeInt === '3') {
 			window.modalUsers.showModal();
 		} else {
@@ -45,7 +44,6 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 		setEmail('');
 		setNameEmergency('');
 		setPhoneEmergency('');
-		setErrorMessage('');
 		setShowAlert(false);
 		setMessage('');
 		if(idUserTypeInt === '3') {
@@ -75,15 +73,13 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 				if (result) {
 					setMessage(result.mensaje);
 					setShowAlert(true);
-
+					setIcon(true);
 					setTimeout(() => {
 						setShowAlert(false);
 						closeModal();
 
 					}, 3000)
-				} else {
-
-				}
+				} 
 			} catch (error: any) {
 				setMessage(error);
 				setShowAlert(true);
@@ -95,7 +91,7 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	}
 	return <>
 		{showAlert && (
-			<AlertComponent message={message}></AlertComponent>
+			<AlertComponent message={message} type={icon}></AlertComponent>
 		)}
 		<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent' onClick={openModal}>
 			<h1>{idUserTypeInt === '3' ? "Nuevo Cliente" : "Nuevo Staff"}</h1>
