@@ -21,6 +21,7 @@ declare global {
 	interface Window {
 		modalUsers: HTMLDialogElement;
     modalStaff: HTMLDialogElement;
+    modalInventory: HTMLDialogElement;
 	}
 }
 

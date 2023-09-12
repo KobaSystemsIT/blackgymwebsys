@@ -12,10 +12,14 @@ export interface AppStore {
   token: Token;
 }
 
+
+
 export default configureStore<AppStore>({
   reducer: {
     user: userSliceReducer,
     club: clubSliceReducer,
     token: openReducer,
   }
-});
+}
+
+);
