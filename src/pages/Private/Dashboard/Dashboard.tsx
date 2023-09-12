@@ -8,6 +8,7 @@ function Dashboard() {
   const userState = useSelector((store: AppStore) => store.user);
   const clubState = useSelector((store: AppStore) => store.club);
   let idClub: number = userState.idClub;
+  console.log(clubState.nameClub);
 
   const isAdmin = userState.rol === Roles.ADMIN;
   return <div className="container">
@@ -22,19 +23,19 @@ function Dashboard() {
         {isAdmin ? (
           <>
             <a href="Gestion_de_Sucursales/" className="card bg-black shadow-md rounded-lg">
-              <div>
+              <div className="card-body justify-center">
                 <FontAwesomeIcon icon={faCity} />
                 <h1>Gestión de <br /> sucursales</h1>
               </div>
             </a>
             <a href="Gestion_de_Inventarios/" className="card bg-black shadow-md rounded-lg">
-              <div>
+              <div className="card-body justify-center">
                 <FontAwesomeIcon icon={faWarehouse} />
                 <h1>Gestión de <br /> Inventarios</h1>
               </div>
             </a>
             <a href="Gestion_Financiera/" className="card bg-black shadow-md rounded-lg">
-              <div>
+              <div className="card-body justify-center">
                 <FontAwesomeIcon icon={faChartPie} className=""/>
                 <h1>Gestión <br /> Financiera</h1>
               </div>
@@ -43,19 +44,19 @@ function Dashboard() {
         ) : (
           <>
             <a href={`Gestion_de_Sucursal/${idClub}`} className="card bg-black shadow-md rounded-lg">
-              <div className="card-body">
+              <div className="card-body justify-center">
                 <FontAwesomeIcon icon={faShop} />
                 <h1>Gestión de <br /> sucursal</h1>
               </div>
             </a>
             <a href={`Punto_de_Venta/${clubState.idClub}`} className="card bg-black shadow-md rounded-lg">
-              <div className="card-body">
+              <div className="card-body justify-center">
                 <FontAwesomeIcon icon={faCartShopping} />
                 <h1>Punto de <br /> Venta</h1>
               </div>
             </a>
             <a href={`Inventario/${clubState.idClub}`} className="card bg-black shadow-md rounded-lg">
-              <div className="card-body">
+              <div className="card-body justify-center">
                 <FontAwesomeIcon icon={faWarehouse} />
                 <h1>Gestión de <br /> Inventario</h1>
               </div>

@@ -18,7 +18,7 @@ function Login() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [idClub, setIdClub] = useState('1');
+  const [idClub, setIdClub] = useState('0');
   const [errorMessage, setErrorMessage] = useState('');
   const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
   const [clubes, setClubes] = useState<Clubes[]>([]);
@@ -63,8 +63,9 @@ function Login() {
   const handleClub = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setIdClub(selectedValue);
-    const id = parseInt(selectedValue, 10);
+    const id = parseInt(selectedValue);
     const targetClub = clubes.find((club) => club.idClub === id);
+    console.log(targetClub);
     if (targetClub) {
       const { idClub, nameClub, address } = targetClub;
       const data = { idClub, nameClub, address };
