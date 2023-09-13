@@ -77,9 +77,9 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	}
 	return <>
 		<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={openModal}>
-			<h1>{idUserTypeInt === '3' ? "Nuevo Cliente" : "Nuevo Staff"}</h1>
+			<h1 className=' text-xs'>{idUserTypeInt === '3' ? "Nuevo Cliente" : "Nuevo Staff"}</h1>
 		</button>
-		<dialog id={idUserTypeInt === '3' ? "modalUsers" : "modalStaff"} className="modal-box z-10">
+		<dialog id={idUserTypeInt === '3' ? "modalUsers" : "modalStaff"} className="modal-box">
 			<div>
 				<h3 className="font-bold text-lg text-center m-4">Registro de Usuarios</h3>
 				<form className="grid grid-cols-2 text-black lg:text-sm text-xs gap-4">

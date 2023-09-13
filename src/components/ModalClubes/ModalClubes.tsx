@@ -67,7 +67,7 @@ const ModalClubes: React.FC<ModalClubesProps> = () => {
 
         <dialog id={"modalClubes"} className="modal-box z-10">
             <div>
-                <h3 className="font-bold text-lg text-center m-4">Registro de Clubes</h3>
+                <h3 className="font-bold text-center m-4 text-xs">Registro de Clubes</h3>
                 <form className="grid grid-cols-2 text-black lg:text-sm text-xs gap-4">
                     <div className='form-control w-full'>
                         <label className='label'>

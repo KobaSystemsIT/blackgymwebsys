@@ -1,4 +1,5 @@
 
+import { ModalDeleteUser } from '@/components/ModalDeleteUser';
 import { ModalUsers } from '@/components/ModalUsers';
 import { Roles } from '@/models';
 import { Clients, ClientsSubs } from '@/models/clients';
@@ -87,8 +88,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 										<td>{client.emergencyContact}</td>
 										<td>
 											<div className='grid grid-flow-col gap-2'>
-												<button title='Editar Usuario'><FontAwesomeIcon icon={faUserPen} className='h-4' /></button>
-												<button title='Gestionar Subscripción'><FontAwesomeIcon icon={faPlus} className='h-4' /></button>
+												<ModalDeleteUser typeAction={1}></ModalDeleteUser>
+												<ModalDeleteUser typeAction={2}></ModalDeleteUser>
 											</div>
 										</td>
 									</tr>
