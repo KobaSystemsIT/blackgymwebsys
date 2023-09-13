@@ -11,6 +11,8 @@ import { Clubes } from '@/models/clubes';
 import { addClub } from '@/redux/states/club';
 import { deleteToken, saveToken } from '@/redux/states/token';
 import { authToken } from '@/services';
+import { Loading } from '@/components/LoadingComponent/LoadingComponent';
+import { Alert } from '@/components/AlertComponent/AlertComponent';
 
 function Login() {
   const dispatch = useDispatch();
@@ -18,12 +20,10 @@ function Login() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [idClub, setIdClub] = useState('1');
+  const [idClub, setIdClub] = useState('0');
   const [errorMessage, setErrorMessage] = useState('');
   const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
   const [clubes, setClubes] = useState<Clubes[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     clearLocalStorage(UserKey);
@@ -41,29 +41,25 @@ function Login() {
     }
 
     try {
-      setShowModal(true);
-      setIsLoading(true);
       const result = await initLogin(username, password, idClub);
+      Loading();
       setTimeout(() => {
-        setIsLoading(false);
-        setShowModal(false);
-        const tokenData = { token: authToken }; 
-        dispatch(saveToken({... tokenData}));
+        const tokenData = { token: authToken };
+        dispatch(saveToken({ ...tokenData }));
         dispatch(createUser({ ...result }));
         navigate(`/${PrivateRoutes.PRIVATE}`, { replace: true });
       }, 2000);
     } catch (error: any) {
       console.error('Error de inicio de sesión:', error);
-      setIsLoading(false);
-      setShowModal(false);
       setErrorMessage(error.message);
+      Alert(error.message, false);
     }
   };
 
   const handleClub = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setIdClub(selectedValue);
-    const id = parseInt(selectedValue, 10);
+    const id = parseInt(selectedValue);
     const targetClub = clubes.find((club) => club.idClub === id);
     if (targetClub) {
       const { idClub, nameClub, address } = targetClub;
@@ -157,20 +153,6 @@ function Login() {
           </div>
         </div>
       </div>
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="">
-            {isLoading ? (
-              <div className="flex flex-col bg-white p-4 rounded-lg shadow-md items-center">
-                <span className="loading loading-lg text-black"></span>
-                <span>Por favor espere...</span>
-              </div>
-            ) : (
-              <p>Por favor espere...</p>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

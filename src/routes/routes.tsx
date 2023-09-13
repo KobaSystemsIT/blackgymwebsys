@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, useNavigate } from "react-router-dom";
 import { RoutesWithNotFound } from "../utilities";
 import { PrivateRoutes, PublicRoutes } from "../models";
 import { AuthGuard } from "../guards";
@@ -15,7 +15,7 @@ export default function Rutas() {
             <RoutesWithNotFound>
                 <Route path="/" element={<Navigate to={PrivateRoutes.PRIVATE} />} />
                 <Route path={PublicRoutes.LOGIN} element={<Login />} />
-                <Route path={PublicRoutes.FORGOTPASS} element={<RecuperarCuenta/>}></Route>
+                <Route path={PublicRoutes.FORGOTPASS} element={<RecuperarCuenta />}></Route>
                 <Route element={<AuthGuard privateValidation={true} />}>
                     <Route path={`${PrivateRoutes.PRIVATE}/*`} element={<Private />} />
                 </Route>

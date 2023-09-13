@@ -1,6 +1,6 @@
 import { lazy, useEffect, useState } from 'react';
-import { Navigate, Route } from 'react-router-dom';
-import { PrivateRoutes, Roles } from '../../models';
+import { Navigate, Route, useNavigate } from 'react-router-dom';
+import { PrivateRoutes, PublicRoutes, Roles } from '../../models';
 import { RoutesWithNotFound } from '../../utilities';
 import { GestionSucursales } from './GestionSucursales';
 import { RoleGuard } from '@/guards';
@@ -14,12 +14,17 @@ import { PanelAdmin } from './PanelAdmin';
 import { GestionInventarios } from './GestionInventarios';
 import { Inventario } from './Inventario';
 import BottonNavigate from '@/components/BottomNavigate/BottomNavigate';
+import { getClubes } from '@/services/Clubes/clubes.service';
+import { tokenExpired } from '@/components/AlertToken/AlertToken';
+import { viewClientsSubs } from '@/services/Clients/clients.service';
+import { useSelector } from 'react-redux';
+import { AppStore } from '@/redux/store';
 
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
 declare global {
-	interface Window {
-		modalUsers: HTMLDialogElement;
+  interface Window {
+    modalUsers: HTMLDialogElement;
     modalStaff: HTMLDialogElement;
     modalInventory: HTMLDialogElement;
     modalClubes: HTMLDialogElement;
@@ -27,6 +32,26 @@ declare global {
 }
 
 function Private() {
+  const tokenState = useSelector((store: AppStore) => store.token);
+  const token = tokenState.token;
+
+  const tokenIsActive = async () => {
+    try {
+      const { data } = await viewClientsSubs('1', token);
+      if (data) {
+        console.log('Token Valido');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      tokenExpired();
+    }
+  };
+
+  useEffect(() => {
+    tokenIsActive();
+  });
+
+
   return (
     <div className="flex h-screen overflow-hidden relative">
       <div className="lg:block lg:w-64 md:hidden hidden h-screen  transition-all duration-500">
@@ -55,7 +80,7 @@ function Private() {
       </div>
       <br />
       <div className='lg:hidden'>
-        <BottonNavigate/>
+        <BottonNavigate />
       </div>
     </div>
   );

@@ -43,45 +43,45 @@ export const viewInventoryData = async (idClub: string, token: any) => {
 };
 
 // Define una función asincrónica llamada 'addOrUpdateInventory'
-export const updateInventory = async (cantProductos, productID, idClub, fecha, token) => {
-    // Crea un objeto 'body' que contiene el ID del club y los datos de inventario
-    const body = {
-        idClub: idClub,
-        cantProductos: cantProductos,
-        productID: productID,
-        fecha: fecha
-    }
+// export const updateInventory = async (cantProductos, productID, idClub, fecha, token) => {
+//     // Crea un objeto 'body' que contiene el ID del club y los datos de inventario
+//     const body = {
+//         idClub: idClub,
+//         cantProductos: cantProductos,
+//         productID: productID,
+//         fecha: fecha
+//     }
 
-    // Configura las opciones para la solicitud HTTP, incluyendo el método, las cabeceras y el cuerpo en formato JSON
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Authorization': token,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-    };
+//     // Configura las opciones para la solicitud HTTP, incluyendo el método, las cabeceras y el cuerpo en formato JSON
+//     const requestOptions = {
+//         method: 'POST',
+//         headers: {
+//             'Authorization': token,
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(body),
+//     };
 
-    // Realiza una solicitud HTTP a la URL del servicio de base (que incluye la ruta 'dbaccess/addOrUpdateInventory') utilizando las opciones definidas anteriormente
-    return fetch(baseUrl + 'dbaccess/addOrUpdateInventory', requestOptions)
-    .then(async (res) => {
-        if (!res.ok) {
-            const errorResponse = await res.json();
-            // Comentario descriptivo: Manejo de errores de la respuesta HTTP
-            throw new Error(errorResponse.message);
-        }
-        return res.json();
-    })
-    .then((data) => {
-        if (data.error) {
-            // Comentario descriptivo: Manejo de errores en los datos de respuesta
-            throw new Error(data.message || 'Error desconocido');
-        }
-        return data;
-    })
-    .catch((error) => {
-        // Comentario descriptivo: Manejo de errores generales
-        console.error('Error:', error);
-        throw error;
-    });
-};
+//     // Realiza una solicitud HTTP a la URL del servicio de base (que incluye la ruta 'dbaccess/addOrUpdateInventory') utilizando las opciones definidas anteriormente
+//     return fetch(baseUrl + 'dbaccess/addOrUpdateInventory', requestOptions)
+//     .then(async (res) => {
+//         if (!res.ok) {
+//             const errorResponse = await res.json();
+//             // Comentario descriptivo: Manejo de errores de la respuesta HTTP
+//             throw new Error(errorResponse.message);
+//         }
+//         return res.json();
+//     })
+//     .then((data) => {
+//         if (data.error) {
+//             // Comentario descriptivo: Manejo de errores en los datos de respuesta
+//             throw new Error(data.message || 'Error desconocido');
+//         }
+//         return data;
+//     })
+//     .catch((error) => {
+//         // Comentario descriptivo: Manejo de errores generales
+//         console.error('Error:', error);
+//         throw error;
+//     });
+// };
