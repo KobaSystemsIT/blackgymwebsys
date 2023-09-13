@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 import { newClub } from '@/services/Clubes/clubes.service';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
-import { AlertComponent } from '../AlertComponent';
 import { format } from 'date-fns-tz';
+import { Loading } from '../LoadingComponent/LoadingComponent';
+import { Alert } from '../AlertComponent/AlertComponent';
 
 export type ModalClubesProps = {
 }
@@ -18,11 +19,6 @@ const ModalClubes: React.FC<ModalClubesProps> = () => {
 
     const [nameClub, setNameClub] = useState('');
     const [addressClub, setAddressClub] = useState('');
-    const [showAlert, setShowAlert] = useState(false);
-    const [message, setMessage] = useState('');
-    const [icon, setIcon] = useState(false);
-    const [showLoading, setLoading] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
 
     const openModal = () => {
         window.modalClubes.showModal();
@@ -31,8 +27,6 @@ const ModalClubes: React.FC<ModalClubesProps> = () => {
     const closeModal = () => {
         setNameClub('');
         setAddressClub('');
-        setShowAlert(false);
-        setMessage('');
         window.modalClubes.close();
         setShowEmptyFieldsAlert(false);
     }
@@ -47,37 +41,26 @@ const ModalClubes: React.FC<ModalClubesProps> = () => {
             const timeZone = 'America/Mexico_City';
 
             const currentDate = new Date();
-            const fecha = (format(currentDate, 'yyyy-MM-dd HH:mm:ss', { timeZone }));
-
+            //const fecha = (format(currentDate, 'yyyy-MM-dd HH:mm:ss', { timeZone }));
+            Loading();
             try {
-                setLoading(true);
-                setIsLoading(true);
                 const result = await newClub(nameClub, addressClub, token);
                 if (result) {
-                    setIsLoading(false);
-                    setLoading(false);
-                    setMessage(result.mensaje);
-                    setShowAlert(true);
-                    setIcon(true);
+                    Alert(result.mensaje, true);
                     setTimeout(() => {
-                        setShowAlert(false);
                         closeModal();
                     }, 3000)
                 }
             } catch (error: any) {
-                setMessage('Hubo un error al procesar la solicitud');
-                setShowAlert(true);
+                Alert(error.message, false);
                 setTimeout(() => {
-                    setShowAlert(false);
+
                 }, 3000)
             }
         }
     }
 
     return <>
-        {showAlert && (
-            <AlertComponent message={message} type={icon}></AlertComponent>
-        )}
         <button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent' onClick={openModal}>
             <h1>{"Nuevo Club"}</h1>
         </button>
@@ -111,20 +94,6 @@ const ModalClubes: React.FC<ModalClubesProps> = () => {
                 )}
             </div>
         </dialog >
-        {showLoading && (
-			<div className="fixed inset-0 flex items-center justify-center z-50">
-				<div className="">
-					{isLoading ? (
-						<div className="flex flex-col bg-white p-4 rounded-lg shadow-md items-center">
-							<span className="loading loading-lg text-black"></span>
-							<span>Por favor espere...</span>
-						</div>
-					) : (
-						<p>Por favor espere...</p>
-					)}
-				</div>
-			</div>
-		)}
     </>
 };
 

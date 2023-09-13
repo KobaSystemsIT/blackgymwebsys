@@ -1,5 +1,5 @@
 export interface Clubes {
     idClub: number,
     nameClub: string, 
-    address: string
+    addressClub: string
 }

@@ -58,7 +58,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 		obtainSubsClients();
 	}, []);
 	return <>
-		<div className='grid p-2 gap-8 items-center'>
+		<div className='grid p-2 gap-6 items-center'>
 			<div className='overflow-hidden'>
 				<div>
 					<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>

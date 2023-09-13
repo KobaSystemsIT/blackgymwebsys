@@ -8,7 +8,7 @@ import { clearLocalStorage } from '@/utilities';
 import logo from '@/assets/icons/iconBG.svg';
 import { getClubes } from '@/services/Clubes/clubes.service';
 import { Clubes } from '@/models/clubes';
-import { addClub } from '@/redux/states/club';
+import club, { addClub } from '@/redux/states/club';
 import { deleteToken, saveToken } from '@/redux/states/token';
 import { authToken } from '@/services';
 import { Loading } from '@/components/LoadingComponent/LoadingComponent';
@@ -62,8 +62,8 @@ function Login() {
     const id = parseInt(selectedValue);
     const targetClub = clubes.find((club) => club.idClub === id);
     if (targetClub) {
-      const { idClub, nameClub, address } = targetClub;
-      const data = { idClub, nameClub, address };
+      const { idClub, nameClub, addressClub } = targetClub;
+      const data = { idClub, nameClub, addressClub };
       dispatch(addClub({ ...data }));
     } else {
       console.log('No se encontró ningún club para el ID seleccionado');

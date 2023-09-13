@@ -14,13 +14,11 @@ export type PanelAdminProps = {
 }
 
 const PanelAdmin: React.FC = () => {
-	const userState = useSelector((store: AppStore) => store.user);
 	const tokenState = useSelector((store: AppStore) => store.token);
 	const token = tokenState.token;
 
 	const [clubes, setClubes] = useState<Clubes[]>([]);
 	const params: any = useParams();
-	const isAdmin = userState.rol === Roles.ADMIN;
 
 	const getClub = async () => {
 		try {
@@ -36,40 +34,40 @@ const PanelAdmin: React.FC = () => {
 	}, []);
 
 	return (
-		<>
-			<div className='grid p-2 gap-8 items-center'>
-				<div className='overflow-hidden'>
-					<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
-						<h1 className='text-black text-sm'>Clubes registrados</h1>
-						<ModalClubes></ModalClubes>
-					</div>
-				</div>
-				<div className='max-h-48 overflow-auto m-2'>
-					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Nombre</th>
-								<th>Direccion</th>
-							</tr>
-						</thead>
-						<tbody>
-							{clubes.map((club) => (
-								<tr key={club.nameClub}>
-									<td>{club.address}</td>
-									<td>
-										<div className='grid grid-flow-col gap-2'>
-											<button title='Editar Club'><FontAwesomeIcon icon={faUserPen} className='h-4' /></button>
-											<button title='Gestionar Club'><FontAwesomeIcon icon={faPlus} className='h-4' /></button>
-										</div>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
+		<div className='grid p-2 gap-4 items-center'>
+			<div className='overflow-hidden'>
+				<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
+					<h1 className='text-black text-sm'>Clubes registrados</h1>
+					<ModalClubes></ModalClubes>
 				</div>
 			</div>
-		</>
+			<div className='max-h-48 overflow-auto m-2'>
+				<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white text-center'>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Nombre</th>
+							<th>Direccion</th>
+						</tr>
+					</thead>
+					<tbody>
+						{clubes.map((club) => (
+							<tr key={club.nameClub}>
+								<td>{club.idClub}</td>
+								<td>{club.nameClub}</td>
+								<td>{club.addressClub}</td>
+								<td>
+									<div className='grid grid-flow-col gap-2'>
+										<button title='Editar Club'><FontAwesomeIcon icon={faUserPen} className='h-4' /></button>
+										<button title='Gestionar Club'><FontAwesomeIcon icon={faPlus} className='h-4' /></button>
+									</div>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	);
 };
 
