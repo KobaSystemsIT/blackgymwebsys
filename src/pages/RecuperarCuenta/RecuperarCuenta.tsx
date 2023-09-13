@@ -4,7 +4,7 @@ import logo from '@/assets/icons/iconBG.svg'
 import { PublicRoutes } from '@/models';
 import { useNavigate } from 'react-router-dom';
 import { changePassword } from '@/services';
-import { AlertComponent } from '@/components/AlertComponent';
+import { Alert } from '@/components/AlertComponent/AlertComponent';
 
 export type RecuperarCuentaProps = {
 }
@@ -17,10 +17,7 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 	const [password, setPassword] = useState('');
 	const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
 	const [showModal, setShowModal] = useState(false);
-	const [showAlert, setShowAlert] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [icon, setIcon] = useState(false);
-	const [message, setMessage] = useState('');
 	const [errorMessage, seErrorMessage] = useState('');
 
 	const setNewPassword = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -35,12 +32,8 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 			setIsLoading(true);
 			const result = await changePassword(username, password);
 			if (result) {
-				setIcon(true);
-				setMessage(result.message);
-				setShowAlert(true);
-
+				Alert(result.message, true);
 				setTimeout(() => {
-					setShowAlert(false);
 					navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
 				}, 2000)
 			}
@@ -50,24 +43,9 @@ const RecuperarCuenta: React.FC<RecuperarCuentaProps> = ({ }) => {
 			setShowModal(false);
 			seErrorMessage(error.message);
 		}
-
-		useEffect(() => {
-			if (showAlert) {
-				const timeoutId = setTimeout(() => {
-					setShowAlert(false);
-				}, 2000);
-
-				return () => {
-					clearTimeout(timeoutId);
-				};
-			}
-		}, [showAlert]);
 	}
 
 	return <div className="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
-		{showAlert && (
-			<AlertComponent message={message} type={icon}></AlertComponent>
-		)}
 		<div className="relative py-3 sm:max-w-xl sm:mx-auto">
 			<div
 				className="absolute inset-0 bg-gradient-to-r from-black to-white shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl">

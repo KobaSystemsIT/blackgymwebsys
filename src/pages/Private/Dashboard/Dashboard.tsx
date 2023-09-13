@@ -8,7 +8,6 @@ function Dashboard() {
   const userState = useSelector((store: AppStore) => store.user);
   const clubState = useSelector((store: AppStore) => store.club);
   let idClub: number = userState.idClub;
-  console.log(clubState.nameClub);
 
   const isAdmin = userState.rol === Roles.ADMIN;
   return <div className="container">

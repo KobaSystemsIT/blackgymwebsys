@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import { newUserOrStaff } from '@/services/users/users.service';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
-import { AlertComponent } from '../AlertComponent';
 import { format } from 'date-fns-tz';
+import { Alert } from '../AlertComponent/AlertComponent';
 
 export type ModalUsersProps = {
 	idUserTypeInt: string
@@ -25,11 +25,6 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	const [email, setEmail] = useState('');
 	const [nameEmergency, setNameEmergency] = useState('');
 	const [phoneEmergency, setPhoneEmergency] = useState('');
-	const [showAlert, setShowAlert] = useState(false);
-	const [message, setMessage] = useState('');
-	const [icon, setIcon] = useState(false);
-	const [showLoading, setLoading] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
 
 	const openModal = () => {
 		if (idUserTypeInt === '3') {
@@ -46,8 +41,6 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 		setEmail('');
 		setNameEmergency('');
 		setPhoneEmergency('');
-		setShowAlert(false);
-		setMessage('');
 		if (idUserTypeInt === '3') {
 			window.modalUsers.close();
 		} else {
@@ -58,47 +51,32 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 
 	const newUser = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
-
 		if (!username || !lastname || !phone || !nameEmergency || !phoneEmergency) {
 			setShowEmptyFieldsAlert(true);
 		} else {
 			setShowEmptyFieldsAlert(false);
 			const timeZone = 'America/Mexico_City';
-
 			const currentDate = new Date();
 			const fecha = (format(currentDate, 'yyyy-MM-dd HH:mm:ss', { timeZone }));
-
 			try {
 				const idClub = (params.idClub);
 				const idUserType = (idUserTypeInt);
-				setLoading(true);
-				setIsLoading(true);
 				const result = await newUserOrStaff(username, lastname, phone, email, nameEmergency, phoneEmergency, idUserType, idClub, fecha, token);
 				if (result) {
-					setIsLoading(false);
-					setLoading(false);
-					setMessage(result.mensaje);
-					setShowAlert(true);
-					setIcon(true);
-					setTimeout(() => {
-						setShowAlert(false);
+					Alert(result.mensaje, true);
+					setTimeout(() => {		
 						closeModal();
 					}, 3000)
 				}
 			} catch (error: any) {
-				setMessage('Hubo un error al procesar la solicitud');
-				setShowAlert(true);
 				setTimeout(() => {
-					setShowAlert(false);
+					Alert('Hubo un error al procesar la solicitud', false)
 				}, 3000)
 			}
 		}
 	}
 	return <>
-		{showAlert && (
-			<AlertComponent message={message} type={icon}></AlertComponent>
-		)}
-		<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent' onClick={openModal}>
+		<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={openModal}>
 			<h1>{idUserTypeInt === '3' ? "Nuevo Cliente" : "Nuevo Staff"}</h1>
 		</button>
 		<dialog id={idUserTypeInt === '3' ? "modalUsers" : "modalStaff"} className="modal-box z-10">
@@ -166,20 +144,6 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 				)}
 			</div>
 		</dialog>
-		{showLoading && (
-			<div className="fixed inset-0 flex items-center justify-center z-50">
-				<div className="">
-					{isLoading ? (
-						<div className="flex flex-col bg-white p-4 rounded-lg shadow-md items-center">
-							<span className="loading loading-lg text-black"></span>
-							<span>Por favor espere...</span>
-						</div>
-					) : (
-						<p>Por favor espere...</p>
-					)}
-				</div>
-			</div>
-		)}
 	</>
 };
 

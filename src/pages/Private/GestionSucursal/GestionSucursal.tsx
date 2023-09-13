@@ -42,7 +42,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 			console.error(error);
 		}
 	}
-``
+	``
 	const obtainSubsClients = async () => {
 		try {
 			const { data } = await viewClientsSubs(params.idClub, token);
@@ -61,8 +61,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 		<div className='grid p-2 gap-8 items-center'>
 			<div className='overflow-hidden'>
 				<div>
-					<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
-						<h1 className='text-black text-sm'>Clientes registrados</h1>
+					<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
+						<h1 className='text-white text-sm'>Clientes registrados</h1>
 						<ModalUsers idUserTypeInt={'3'}></ModalUsers>
 					</div>
 					<div className='max-h-48 overflow-auto m-2'>
@@ -98,46 +98,62 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 					</div>
 				</div>
 				<div>
-				<br />
-				<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
-					<h1 className='text-white text-sm'>Clientes con subscripción</h1>
-				</div>
-				<div className='max-h-48 overflow-auto m-2'>
-					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Usuario</th>
-								<th>Apellido</th>
-								<th>Contacto de Emergencia</th>
-								<th>Número del contacto</th>
-								<th>Acciones</th>
-							</tr>
-						</thead>
-						<tbody>
-							{clientsSubs.map((client) => (
-								<tr key={client.idUser}>
-									<td>{client.idUser}</td>
-									<td>{client.username}</td>
-									<td>{client.lastName}</td>
-									<td>{client.nameEmergencyContact}</td>
-									<td>{client.emergencyContact}</td>
-									<td>
-										<div className='grid grid-flow-col gap-2'>
-											<button title='Editar Usuario'><FontAwesomeIcon icon={faUserPen} className='h-4' /></button>
-											<button title='Gestionar Subscripción'><FontAwesomeIcon icon={faPlus} className='h-4' /></button>
-										</div>
-									</td>
+					<br />
+					<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
+						<h1 className='text-white text-sm'>Clientes con subscripción</h1>
+					</div>
+					<div className='max-h-48 overflow-auto m-2'>
+						<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Usuario</th>
+									<th>Apellido</th>
+									<th>Contacto de Emergencia</th>
+									<th>Número del contacto</th>
+									<th>Subscripción</th>
+									<th>Activa</th>
+									<th>Inicia</th>
+									<th>Vence</th>
+									{/* <th>Acciones</th> */}
 								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
+							</thead>
+							<tbody>
+								{clientsSubs.map((client) => (
+									<tr key={client.idUser}>
+										<td>{client.idUser}</td>
+										<td>{client.username}</td>
+										<td>{client.lastName}</td>
+										<td>{client.nameEmergencyContact}</td>
+										<td>{client.emergencyContact}</td>
+										<td>{client.nameSubscriptionType}</td>
+										<td>{client.isActive}</td>
+										<td>
+											{client.startDate
+												? client.startDate.toString().split("T")[0]
+												: "N/A"}
+										</td>
+										<td>
+											{client.endDate
+												? client.endDate.toString().split("T")[0]
+												: "N/A"}
+										</td>
+										{/* <td>
+											<div className='grid grid-flow-col gap-2'>
+												<button title='Editar Usuario'><FontAwesomeIcon icon={faUserPen} className='h-4' /></button>
+												<button title='Gestionar Subscripción'><FontAwesomeIcon icon={faPlus} className='h-4' /></button>
+											</div>
+										</td> */}
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 			<div className='overflow-hidden mt-10'>
-				<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
-					<h1 className='text-black text-sm'>Miembros del Staf</h1>
+				<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
+					<h1 className='text-white text-sm'>Miembros del Staf</h1>
 					{isAdmin && (
 						<ModalUsers idUserTypeInt={'2'}></ModalUsers>
 					)}

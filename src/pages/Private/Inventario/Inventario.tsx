@@ -49,12 +49,12 @@ const Inventario: React.FC<InventarioProps> = () => {
     };
 
     const updateInventoryData = async () => {
-        const cantProductos = data.currentStock;
-        const productID = data.inventoryID;
-        const idClub = params.idClub;
-        const fecha = dateReorder;
+        // const cantProductos = data.currentStock;
+        // const productID = data.inventoryID;
+        // const idClub = params.idClub;
+        // const fecha = dateReorder;
         try {
-            const data = await updateInventory(cantProductos, productID, idClub, fecha, token);
+            // const data = await updateInventory(cantProductos, productID, idClub, fecha, token);
             console.log(inventory);
         } catch (error) {
             console.error(error);
