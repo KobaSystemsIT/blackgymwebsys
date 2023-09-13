@@ -22,6 +22,7 @@ declare global {
 		modalUsers: HTMLDialogElement;
     modalStaff: HTMLDialogElement;
     modalInventory: HTMLDialogElement;
+    modalClubes: HTMLDialogElement;
 	}
 }
 
