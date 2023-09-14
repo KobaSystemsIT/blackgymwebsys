@@ -23,10 +23,13 @@ export const getClubes = () => {
         });
 };
 
-export const newClub = (nameClub: string, addressClub: string, token: any) => {
+export const crudClub = (idClub:number, nameClub: string, addressClub: string, dataIFrame:string, typeAction:number, token: any) => {
     const body = {
+        idClub: idClub,
         nameClub: nameClub,
         addressClub: addressClub,
+        dataIFrame: dataIFrame,
+        typeAction: typeAction
     }
     const requestOptions = {
         method: 'POST',
@@ -37,7 +40,7 @@ export const newClub = (nameClub: string, addressClub: string, token: any) => {
         body: JSON.stringify(body),
     };
 
-    return fetch(dbaccess + 'newClub', requestOptions)
+    return fetch(dbaccess + 'crudClub', requestOptions)
         .then(async (res) => {
             if (!res.ok) {
                 const errorResponse = await res.json();

@@ -3,7 +3,7 @@ import './Navbar.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Logout } from '../Logout';
+import { Logout } from '../../components/Logout';
 import { PrivateRoutes } from '@/models';
 export type NavbarProps = {};
 

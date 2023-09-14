@@ -5,10 +5,10 @@ import { Roles } from '@/models';
 import { Clients, ClientsSubs } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
 import { AppStore } from '@/redux/store';
-import { viewClientsData, viewClientsSubs, viewStaffData } from '@/services/Clients/clients.service';
+import {  viewDataClientsOrStaff } from '@/services/Clients/clients.service';
 import { faPlus, faRotate, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -28,35 +28,26 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 
 	const obtainClients = async () => {
 		try {
-			const { data } = await viewClientsData(params.idClub, token);
+			const { data } = await viewDataClientsOrStaff(params.idClub, 1, token);
 			setClients(data);
 		} catch (error) {
 			console.error(error);
 		}
-	}
-
-	const obtainStaff = async () => {
 		try {
-			const { data } = await viewStaffData(params.idClub, token);
+			const { data } = await viewDataClientsOrStaff(params.idClub, 2, token);
+			setClientsSubs(data);
+		} catch (error) {
+			console.error(error);
+		}
+		try {
+			const { data } = await viewDataClientsOrStaff(params.idClub, 2, token);
 			setStaff(data);
 		} catch (error) {
 			console.error(error);
 		}
 	}
-	``
-	const obtainSubsClients = async () => {
-		try {
-			const { data } = await viewClientsSubs(params.idClub, token);
-			setClientsSubs(data);
-		} catch (error) {
-			console.error(error);
-		}
-	}
-
-	useEffect(() => {
+	useLayoutEffect(() => {
 		obtainClients();
-		obtainStaff();
-		obtainSubsClients();
 	}, []);
 	return <>
 		<div className='grid p-2 gap-6 items-center'>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PrivateRoutes, PublicRoutes } from '@/models';
@@ -25,7 +25,7 @@ function Login() {
   const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
   const [clubes, setClubes] = useState<Clubes[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     clearLocalStorage(UserKey);
     dispatch(resetUser());
     dispatch(deleteToken());

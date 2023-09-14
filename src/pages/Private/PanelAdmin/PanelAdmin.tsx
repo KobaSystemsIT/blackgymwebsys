@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
-import { Roles } from '@/models';
-import { useParams } from 'react-router-dom';
 import './PanelAdmin.css';
 import { Clubes } from '@/models';
-import { getClubes } from '@/services/Clubes/clubes.service';
 import { ModalClubes } from '@/components/ModalClubes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faRotate, faUserPen } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faUserPen } from '@fortawesome/free-solid-svg-icons';
+import { crudClub } from '@/services/Clubes/clubes.service';
 
 export type PanelAdminProps = {
 }
@@ -16,20 +14,24 @@ export type PanelAdminProps = {
 const PanelAdmin: React.FC = () => {
 	const tokenState = useSelector((store: AppStore) => store.token);
 	const token = tokenState.token;
-
 	const [clubes, setClubes] = useState<Clubes[]>([]);
-	const params: any = useParams();
+
+	// lista de acciones para crudClub:
+	// 1 : crear club
+	// 2 : traer clubes
+	// 3 : editar clubes
+	// 4 : eliminar clubes
 
 	const getClub = async () => {
 		try {
-			const { data } = await getClubes();
+			const { data } = await crudClub(1, '', '', '', 2, token);
 			setClubes(data);
 		} catch (error) {
 			console.error(error);
 		}
 	}
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		getClub();
 	}, []);
 
@@ -52,7 +54,7 @@ const PanelAdmin: React.FC = () => {
 					</thead>
 					<tbody>
 						{clubes.map((club) => (
-							<tr key={club.nameClub}>
+							<tr key={club.idClub}>
 								<td>{club.idClub}</td>
 								<td>{club.nameClub}</td>
 								<td>{club.addressClub}</td>

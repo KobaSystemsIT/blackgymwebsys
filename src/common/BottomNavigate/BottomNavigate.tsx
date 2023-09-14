@@ -32,7 +32,7 @@ export default function BottonNavigate() {
                     </a>
                 </button>
             )}
-            {!isAdmin && (
+            {/* {!isAdmin && (
                 <button>
                     <a
                         href={`/Dashboard/Punto_de_Venta/${clubState.idClub}`}
@@ -44,7 +44,7 @@ export default function BottonNavigate() {
                         />
                     </a>
                 </button>
-            )}
+            )} */}
             {!isAdmin && (
                 <button>
                     <a
@@ -86,7 +86,7 @@ export default function BottonNavigate() {
                 </button>
             )}
 
-            {isAdmin && (
+            {/* {isAdmin && (
                 <button>
                     <a
                         href={`/Dashboard/Gestion_Financiera/`}
@@ -98,7 +98,7 @@ export default function BottonNavigate() {
                         />
                     </a>
                 </button>
-            )}
+            )} */}
 
             {isAdmin && (
                 <button>

@@ -6,17 +6,16 @@ import { GestionSucursales } from './GestionSucursales';
 import { RoleGuard } from '@/guards';
 import { GestionSucursal } from './GestionSucursal';
 import { CantAccess } from '@/common/CantAccess';
-import { Navbar } from '@/components/Navbar';
-import { Sidebar } from '@/components/Sidebar';
+import { Navbar } from '@/common/Navbar';
+import { Sidebar } from '@/common/Sidebar';
 import { PuntoVenta } from './PuntoVenta';
 import { GestionFinanciera } from './GestionFinanciera';
 import { PanelAdmin } from './PanelAdmin';
 import { GestionInventarios } from './GestionInventarios';
 import { Inventario } from './Inventario';
-import BottonNavigate from '@/components/BottomNavigate/BottomNavigate';
-import { getClubes } from '@/services/Clubes/clubes.service';
+import BottonNavigate from '@/common/BottomNavigate/BottomNavigate';
 import { tokenExpired } from '@/components/AlertToken/AlertToken';
-import { viewClientsSubs } from '@/services/Clients/clients.service';
+import { viewDataClientsOrStaff } from '@/services/Clients/clients.service';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
 
@@ -38,7 +37,7 @@ function Private() {
 
   const tokenIsActive = async () => {
     try {
-      const { data } = await viewClientsSubs('1', token);
+      const { data } = await viewDataClientsOrStaff('1', 1, token);
       if (data) {
         console.log('Token Valido');
       }
