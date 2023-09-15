@@ -1,1 +1,0 @@
-export { default as CantAccess } from './CantAccess';

@@ -1,1 +1,0 @@
-export { default as ModalInventory } from './ModalInventory';
