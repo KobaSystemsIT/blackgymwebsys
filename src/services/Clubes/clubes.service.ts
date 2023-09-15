@@ -23,6 +23,39 @@ export const getClubes = () => {
         });
 };
 
+export const getClubesData = (idClub: string, typeAction:number, token: any) => {
+    // const body = {
+    //     idClub: idClub,
+    //     typeAction: typeAction
+    // }
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization' : token,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    return fetch(dbaccess + 'getClubesData', requestOptions)
+    .then(async (res) => {
+      if (!res.ok) {
+        const errorResponse = await res.json(); // Parsea el cuerpo del mensaje como JSON
+        throw new Error(errorResponse.message);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.message || 'Error desconocido');
+      }
+      return data;
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      throw error;
+    });
+};
+
 export const crudClub = (idClub:number, nameClub: string, addressClub: string, dataIFrame:string, typeAction:number, token: any) => {
     const body = {
         idClub: idClub,
