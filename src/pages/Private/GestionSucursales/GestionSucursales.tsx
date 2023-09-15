@@ -1,16 +1,13 @@
-// import React, { useEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import './GestionSucursales.css';
 import { Roles } from '@/models';
 import { ClubesData } from '@/models/clubes';
-import { getClubes } from '@/services/Clubes/clubes.service';
-import { faPlus, faRotate, faUserPen } from '@fortawesome/free-solid-svg-icons';
+import { getClubesData } from '../../../services/Clubes/clubes.service';
+import { faUsers, faUser, faUsersRectangle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { getClubesData } from '../../../services/Clubes/clubes.service';
+import { Link, useParams } from 'react-router-dom';
 
 export type GestionSucursalesProps = {};
 
@@ -24,47 +21,41 @@ const GestionSucursales: React.FC<GestionSucursalesProps> = ({}) => {
   const params: any = useParams();
 	const isAdmin = userState.rol === Roles.ADMIN;
 
-
   const obtainClubes = async () => {
     try {
       const { data } = await getClubesData(params.idClub, 1, token);
       setClubesData(data);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
+
   useLayoutEffect(() =>{
     obtainClubes();
   },[]);
 
-  const sucursales = [
-    { imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOASbZNSKNuDeFv3nRAKwtPSzMwkkdX9CbrQ&usqp=CAU" },
-  ];
-
-  const img = [
-
-  ];
-
-
   return (
     <div>
-      <h1>Sucursales:</h1>
-      <div className="sucursal-container">
+      <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-2 gap-4">
         {clubesData.map((sucursal) => (
-          <div key={sucursal.idClub} className="sucursal">
-            <Link to={`/Dashboard/Gestion_de_Sucursal/${sucursal.idClub}`}>
-              {sucursales.map((img) =>(
-                <div className="imagen">
-                <img src={img.imageUrl} />
-                </div>
-              ))}
+          <div key={sucursal.idClub} className="sucursal flex flex-col">
+            <a href
+            
+            
+            ={`/Dashboard/Gestion_de_Sucursal/${sucursal.idClub}`}>
+              <img src="https://blackgymfitclub.com/assets/LogoWhiteBlackGym-2e55f490.svg" alt="Logo" className="logo" />
               <div className="nombre">{sucursal.nameClub}</div>
-              <div className="direccion">Miembros del staff activos : {sucursal.StaffActivo}</div>
-              <div className="direccion">Clientes activos :{sucursal.ClientesActivos}</div>
-              <div className="modal">
-                <p>Hola</p>
+              <div className="iconos">
+                <div className="icono">
+                  <FontAwesomeIcon icon={faUsersRectangle} /> Staff: {sucursal.StaffActivo}
+                </div>
+                <div className="icono">
+                  <FontAwesomeIcon icon={faUser} /> Usuarios: {sucursal.ClientesActivos}
+                </div>
               </div>
-            </Link>
+              <div className="modal">
+              </div>
+            </a>
           </div>
         ))}
       </div>
