@@ -8,7 +8,7 @@ import { clearLocalStorage } from '@/utilities';
 import logo from '@/assets/icons/iconBG.svg';
 import { getClubes } from '@/services/Clubes/clubes.service';
 import { Clubes } from '@/models/clubes';
-import club, { addClub } from '@/redux/states/club';
+import { addClub } from '@/redux/states/club';
 import { deleteToken, saveToken } from '@/redux/states/token';
 import { authToken } from '@/services';
 import { Loading } from '@/components/LoadingComponent/LoadingComponent';
@@ -32,9 +32,7 @@ function Login() {
     navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
   }, []);
 
-  const login = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-
+  const login = async () => {
     if (!username || !password || !idClub) {
       setShowEmptyFieldsAlert(true);
       return;

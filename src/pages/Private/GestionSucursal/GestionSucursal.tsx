@@ -1,16 +1,14 @@
-
-import { ModalDeleteUser } from '@/components/ModalDeleteUser';
-import { ModalUsers } from '@/components/ModalUsers';
 import { Roles } from '@/models';
 import { Clients, ClientsSubs } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
 import { AppStore } from '@/redux/store';
-import {  viewDataClientsOrStaff } from '@/services/Clients/clients.service';
-import { faPlus, faRotate, faUserPen } from '@fortawesome/free-solid-svg-icons';
+import { viewDataClientsOrStaff } from '@/services/Clients/clients.service';
+import { faPenSquare, faPlus, faRotate, faUserPen, faUserSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { ModalUsers } from '@/components/ModalUsers/ModalUsers';
 
 export type GestionSucursalProps = {
 }
@@ -46,56 +44,67 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 			console.error(error);
 		}
 	}
+
 	useLayoutEffect(() => {
 		obtainClients();
 	}, []);
+
 	return <>
 		<div className='grid p-2 gap-6 items-center'>
 			<div className='overflow-hidden'>
 				<div>
-					<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
-						<h1 className='text-white text-sm'>Clientes registrados</h1>
-						<ModalUsers idUserTypeInt={'3'}></ModalUsers>
-					</div>
-					<div className='max-h-48 overflow-auto m-2'>
-						<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>Usuario</th>
-									<th>Apellido</th>
-									<th>Contacto de Emergencia</th>
-									<th>Número del contacto</th>
-									<th>Acciones</th>
-								</tr>
-							</thead>
-							<tbody>
-								{clients.map((client) => (
-									<tr key={client.idUser}>
-										<td>{client.idUser}</td>
-										<td>{client.username}</td>
-										<td>{client.lastName}</td>
-										<td>{client.nameEmergencyContact}</td>
-										<td>{client.emergencyContact}</td>
-										<td>
-											<div className='grid grid-flow-col gap-2'>
-												<ModalDeleteUser typeAction={1}></ModalDeleteUser>
-												<ModalDeleteUser typeAction={2}></ModalDeleteUser>
-											</div>
-										</td>
+					<div>
+						<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
+							<h1 className='text-white text-sm'>Clientes registrados</h1>
+							<ModalUsers idUserTypeInt={3}></ModalUsers>
+						</div>
+						<div className='max-h-48 overflow-auto m-2'>
+							<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Usuario</th>
+										<th>Apellido</th>
+										<th>Contacto de Emergencia</th>
+										<th>Número del contacto</th>
+										<th>Acciones</th>
 									</tr>
-								))}
-							</tbody>
-						</table>
+								</thead>
+								<tbody>
+									{clients.map((client) => (
+										<tr key={client.idUser}>
+											<td>{client.idUser}</td>
+											<td>{client.username}</td>
+											<td>{client.lastName}</td>
+											<td>{client.nameEmergencyContact}</td>
+											<td>{client.emergencyContact}</td>
+											<td>
+												<a href={`/Dashboard/Gestion_de_Sucursal/${params.idClub}/Gestion_de_Usuario/${client.idUser}`}>
+													<FontAwesomeIcon icon={faUserPen} className='h-4'></FontAwesomeIcon>
+												</a>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
 					</div>
+					{/* <div className='m-8'>
+						<div className="stats shadow border">
+							<div className="stat">
+								<div className="stat-title">Black Plus</div>
+								<div className="stat-value">89,400</div>
+								<div className="stat-desc">Usuarios activos</div>
+							</div>
+						</div>
+					</div> */}
 				</div>
-				<div>
-					<br />
+				<div className='mt-10'>
 					<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
 						<h1 className='text-white text-sm'>Clientes con subscripción</h1>
 					</div>
 					<div className='max-h-48 overflow-auto m-2'>
-						<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+						<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
 							<thead>
 								<tr>
 									<th>ID</th>
@@ -147,11 +156,11 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 				<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
 					<h1 className='text-white text-sm'>Miembros del Staf</h1>
 					{isAdmin && (
-						<ModalUsers idUserTypeInt={'2'}></ModalUsers>
+						<ModalUsers idUserTypeInt={2}></ModalUsers>
 					)}
 				</div>
 				<div className='max-h-48 overflow-auto p-2'>
-					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+					<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
 						<thead>
 							<tr>
 								<th>ID</th>

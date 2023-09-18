@@ -6,12 +6,18 @@ import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
 import { format } from 'date-fns-tz';
 import { Alert } from '../AlertComponent/AlertComponent';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPen } from '@fortawesome/free-solid-svg-icons';
+import { Clients } from '@/models';
 
 export type ModalUsersProps = {
-	idUserTypeInt: string
+	idUserTypeInt: number
 }
 
-const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
+export type ModalUpdateUserProps = {
+}
+
+export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
 	const params: any = useParams();
 
@@ -27,7 +33,7 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	const [phoneEmergency, setPhoneEmergency] = useState('');
 
 	const openModal = () => {
-		if (idUserTypeInt === '3') {
+		if (idUserTypeInt === 3) {
 			window.modalUsers.showModal();
 		} else {
 			window.modalStaff.showModal();
@@ -41,7 +47,7 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 		setEmail('');
 		setNameEmergency('');
 		setPhoneEmergency('');
-		if (idUserTypeInt === '3') {
+		if (idUserTypeInt === 3) {
 			window.modalUsers.close();
 		} else {
 			window.modalStaff.close();
@@ -57,14 +63,14 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 			setShowEmptyFieldsAlert(false);
 			const timeZone = 'America/Mexico_City';
 			const currentDate = new Date();
-			const fecha = (format(currentDate, 'yyyy-MM-dd HH:mm:ss', { timeZone }));
+			let fecha: string = (format(currentDate, 'yyyy-MM-dd HH:mm:ss', { timeZone }));
 			try {
-				const idClub = (params.idClub);
-				const idUserType = (idUserTypeInt);
+				let idClub: number = (params.idClub);
+				let idUserType: number = (idUserTypeInt);
 				const result = await newUserOrStaff(username, lastname, phone, email, nameEmergency, phoneEmergency, idUserType, idClub, fecha, token);
 				if (result) {
 					Alert(result.mensaje, true);
-					setTimeout(() => {		
+					setTimeout(() => {
 						closeModal();
 					}, 3000)
 				}
@@ -77,9 +83,9 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	}
 	return <>
 		<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={openModal}>
-			<h1 className=' text-xs'>{idUserTypeInt === '3' ? "Nuevo Cliente" : "Nuevo Staff"}</h1>
+			<h1 className=' text-xs'>{idUserTypeInt === 3 ? "Nuevo Cliente" : "Nuevo Staff"}</h1>
 		</button>
-		<dialog id={idUserTypeInt === '3' ? "modalUsers" : "modalStaff"} className="modal-box">
+		<dialog id={idUserTypeInt === 3 ? "modalUsers" : "modalStaff"} className="modal-box">
 			<div>
 				<h3 className="font-bold text-lg text-center m-4">Registro de Usuarios</h3>
 				<form className="grid grid-cols-2 text-black lg:text-sm text-xs gap-4">
@@ -109,18 +115,6 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 					</div>
 					<div className='form-control w-full'>
 						<label className='label'>
-							<span className='label-text'>ID <br /> de Sucursal:</span>
-						</label>
-						<input type="number" id="idClub" name="idClub" disabled className='input input-bordered w-full max-w-xs' placeholder={params.idClub} />
-					</div>
-					<div className='form-control w-full'>
-						<label className='label'>
-							<span className='label-text'>Tipo <br /> de Usuario:</span>
-						</label>
-						<input type="number" id="idUserType" name="idUserType" disabled className='input input-bordered w-full max-w-xs' placeholder={idUserTypeInt} />
-					</div>
-					<div className='form-control w-full'>
-						<label className='label'>
 							<span className='label-text'>Contacto de emergencia:</span>
 						</label>
 						<input value={nameEmergency} onChange={(e) => setNameEmergency(e.target.value)} type="text" id="nameemergencycontact" name="nameemergencycontact" required className='input input-bordered w-full max-w-xs' />
@@ -147,4 +141,6 @@ const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	</>
 };
 
-export default ModalUsers;
+export default {
+	ModalUsers
+}

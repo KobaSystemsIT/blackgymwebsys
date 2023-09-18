@@ -4,11 +4,13 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Logout } from '../../components/Logout';
-import { PrivateRoutes } from '@/models';
+
 export type NavbarProps = {};
 
-const Navbar: React.FC<NavbarProps> = ({ }) => {
+const Navbar: React.FC<NavbarProps> = ({}) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const pathSegments = location.pathname.split('/').filter((segment: string) => segment !== '');
 
   const breadcrumbItems = pathSegments.map((segment, index) => {
@@ -23,19 +25,22 @@ const Navbar: React.FC<NavbarProps> = ({ }) => {
     );
   });
 
-  const navigate = useNavigate();
-
   const handleGoBack = () => {
-    navigate(`${PrivateRoutes.DASHBOARD}`, { replace: true });// Navega hacia atrás en la pila de rutas
-    window.location.reload(); // Recarga la página
+    if (breadcrumbItems.length > 1) {
+      // Si hay más de un elemento en el breadcrumb, vamos atrás en la pila de rutas
+      const previousPath = `/${pathSegments.slice(0, pathSegments.length - 1).join('/')}`;
+      navigate(previousPath);
+    } else {
+      // Si solo hay un elemento en el breadcrumb, navegamos al inicio de la aplicación
+      navigate('/');
+    }
   };
-
 
   return (
     <div className="navbar p-4 border-b">
       <div className="relative flex-1">
         <div className="lg:text-sm text-xs breadcrumbs lg:ml-0 md:ml-8">
-          <ul onClick={handleGoBack}>
+          <ul>
             {breadcrumbItems}
           </ul>
         </div>
@@ -51,4 +56,3 @@ const Navbar: React.FC<NavbarProps> = ({ }) => {
 };
 
 export default Navbar;
-

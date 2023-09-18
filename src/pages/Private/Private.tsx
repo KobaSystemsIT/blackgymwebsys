@@ -18,6 +18,7 @@ import { tokenExpired } from '@/components/AlertToken/AlertToken';
 import { viewDataClientsOrStaff } from '@/services/Clients/clients.service';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
+import { GestionUsuarioView } from '@/views/GestionUsuarioView';
 
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
@@ -27,7 +28,7 @@ declare global {
     modalStaff: HTMLDialogElement;
     modalInventory: HTMLDialogElement;
     modalClubes: HTMLDialogElement;
-    modalDeleteUser: HTMLDialogElement;
+    modalUpdateUser: HTMLDialogElement;
 	}
 }
 
@@ -67,6 +68,7 @@ function Private() {
             <Route path='Gestion_de_Sucursal/:idClub' element={<GestionSucursal />}></Route>
             <Route path='Punto_de_Venta/:idClub' element={<PuntoVenta />} />
             <Route path='Inventario/:idClub' element={<Inventario />} />
+            <Route path='Gestion_de_Sucursal/:idClub/Gestion_de_Usuario/:idUser' element={<GestionUsuarioView/>}></Route>
 
             {/*rutas de administrador*/}
             <Route element={<RoleGuard rol={Roles.ADMIN} />}>

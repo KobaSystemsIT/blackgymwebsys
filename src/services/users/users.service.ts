@@ -1,7 +1,7 @@
 import baseUrl from "@/services/Login/auth.service";
 const dbaccess = baseUrl + 'dbaccess/';
 
-export const newUserOrStaff = (username: string, lastname: string, phone: string, email: string, nameEmergency: string, phoneEmergency: string, idUserType: string, idClub: string, fecha: string, token: any) => {
+export const newUserOrStaff = (username: string, lastname: string, phone: string, email: string, nameEmergency: string, phoneEmergency: string, idUserType: number, idClub: number, fecha: string, token: any) => {
     const body = {
         username: username,
         lastname: lastname,
