@@ -41,3 +41,43 @@ export const newUserOrStaff = (username: string, lastname: string, phone: string
             throw error;
         });
 }
+
+export const modifyOrDeleteUser = (idUser: number, username: string, lastName: string, phoneNumber:string, email: string, nameEmergencyContact: string, emergencyContact: string, valueOption: number, token: any) => {
+    const body = {
+        idUser: idUser,
+        username: username,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        email: email,
+        nameEmergencyContact: nameEmergencyContact,
+        emergencyContact: emergencyContact,
+        valueOption: valueOption,
+    }
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    };
+
+    return fetch(dbaccess + 'modifyOrDeleteUser', requestOptions)
+        .then(async (res) => {
+            if (!res.ok) {
+                const errorResponse = await res.json();
+                throw new Error(errorResponse.message);
+            }
+            return res.json();
+        })
+        .then((data) => {
+            if (data.error) {
+                throw new Error(data.message || 'Error desconocido');
+            }
+            return data;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            throw error;
+        });
+}

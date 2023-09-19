@@ -35,9 +35,9 @@ export const viewDataClientsOrStaff = (idClub: string, typeAction:number, token:
     });
 }
 
-export const getDataUser = (idClub: number, token: any) => {
+export const getDataUser = (idUser: number, token: any) => {
   const body = {
-    idClub: idClub
+    idUser: idUser
   }
   const requestOptions = {
     method: 'POST',
@@ -67,3 +67,6 @@ export const getDataUser = (idClub: number, token: any) => {
       throw error;
     });
 }
+
+
+

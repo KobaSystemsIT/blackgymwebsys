@@ -7,3 +7,14 @@ export interface UserInfo {
   rol:Roles;
   idClub:number;
 }
+
+export interface UserData {
+  username: string;
+  lastName: string;
+  phoneNumber: string;
+  email:string;
+  nameEmergencyContact: string;
+  emergencyContact:string;
+  nameSubscriptionType:string;
+  isActive:string
+}
