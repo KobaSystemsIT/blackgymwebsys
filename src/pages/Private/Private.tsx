@@ -81,7 +81,7 @@ function Private() {
         </div>
       </div>
       <br />
-      <div className='lg:hidden'>
+      <div className='lg:hidden pt-10'>
         <BottonNavigate />
       </div>
     </div>

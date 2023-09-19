@@ -78,8 +78,7 @@ const GestionUsuarioView: React.FC = () => {
 		if (selectedSubscription) {
 			const { idSubscriptionType, nameSubscriptionType, daysSubscription, priceSubscription, allAccess } = selectedSubscription;
 			const data = { idSubscriptionType, nameSubscriptionType, daysSubscription, priceSubscription, allAccess };
-			setSubscription(nameSubscriptionType);
-			console.log(data.allAccess)
+			console.log(idSubscriptionType)
 			let startDate: string = new Date().toISOString().split('T')[0];
 			let endDate: string = new Date(
 				new Date().getTime() + daysSubscription * 24 * 60 * 60 * 1000
@@ -99,21 +98,22 @@ const GestionUsuarioView: React.FC = () => {
 	return (
 		<>
 			<div className='p-2 flex flex-col'>
-				<div className='grid lg:grid-flow-col gap-6'>
-					<div className="card bg-base-100 shadow-xl border-2">
-						<figure className="px-10 pt-10">
-							<img src="https://www.emmegi.co.uk/wp-content/uploads/2019/01/User-Icon.jpg" alt="Shoes" className="rounded-xl" />
-						</figure>
-						<div className="card-body items-center text-center">
-							<h2 className="card-title">{user.username} {user.lastName}</h2>
+				<div className='grid lg:grid-flow-col md:grid-flow-col gap-6'>
+					<div className="grid shadow-xl border-2 rounded-2xl">
+						<div className="flex align-middle justify-center items-center p-2">
+							<img src="https://www.emmegi.co.uk/wp-content/uploads/2019/01/User-Icon.jpg" alt="User" className="rounded-xl h-56" />
+						</div>
+						<div className="items-center text-center lg:px-10 lg:py-10 p-4">
+							<h2 className="lg:text-xl text-base font-semibold">{user.username} {user.lastName}</h2>
 							<div>
-								<h1 className=' font-semibold text-lg mb-3'>Subscripción</h1>
-								<hr />
+								<h1 className='lg:text-lg font-semibold text-base mb-3'>Subscripción</h1>
+								<hr className="mt-2 mb-2" />
 								<h1 className='mt-3'>{user.nameSubscriptionType ? user.nameSubscriptionType : "Sin membresía"}</h1>
 								<h1 className='mt-3'>{user.isActive}</h1>
 							</div>
 						</div>
 					</div>
+
 					<div>
 						<h1 className='font-semibold text-xl p-2 lg:text-start text-center'>Gestión de Usuario</h1>
 						<hr />
@@ -156,8 +156,8 @@ const GestionUsuarioView: React.FC = () => {
 									<input value={user.emergencyContact} onChange={(e) => setUser({ ...user, emergencyContact: e.target.value })} type="number" id="emergencynumbercontact" name="emergencynumbercontact" required className='input input-bordered w-full max-w-xs' />
 								</div>
 							</form>
-							<div className='flex flex-row gap-4 mt-10 lg:justify-end md:justify-end'>
-								<button className='btn btn-success btn-sm font-normal' onClick={updateUserData}>Actualizar</button>
+							<div className='flex lg:flex-row flex-col gap-4 mt-10 lg:justify-end md:justify-end'>
+								<button className='btn btn-success btn-sm font-normal' onClick={updateUserData}>Actualizar datos</button>
 								<button type="button" className='btn btn-warning btn-sm font-normal' onClick={handleGoBack}>Volver</button>
 							</div>
 						</div>
@@ -173,8 +173,7 @@ const GestionUsuarioView: React.FC = () => {
 								<label className='label'>
 									<span className='label-text'>Tipo de Subscripción:</span>
 								</label>
-								<select
-									value={subscription}
+								<select									
 									onChange={handleSubscriptionChange}
 									className='input input-bordered w-full max-w-xs'
 								>
@@ -233,7 +232,7 @@ const GestionUsuarioView: React.FC = () => {
 								/>
 							</div>
 						</form>
-						<div className='flex flex-row gap-4 mt-10 lg:justify-end md:justify-end'>
+						<div className='flex lg:flex-row flex-col gap-4 mt-10 lg:justify-end md:justify-end'>
 							<button className='btn btn-success btn-sm font-normal'>Registrar Subscripción</button>
 							<button type="button" className='btn btn-warning btn-sm font-normal' onClick={handleGoBack}>Volver</button>
 						</div>
