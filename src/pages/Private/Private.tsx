@@ -29,6 +29,7 @@ declare global {
     modalInventory: HTMLDialogElement;
     modalClubes: HTMLDialogElement;
     modalUpdateUser: HTMLDialogElement;
+    modalCategories: HTMLDialogElement;
 	}
 }
 
