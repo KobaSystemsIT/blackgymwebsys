@@ -40,9 +40,9 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
                     <input type="hidden" id="inventoryID" name="inventoryID" value={inventoryID} />
                     <input type="hidden" id="created_at" name="created_at" value={new Date().toISOString()} />
                     <button className=' btn-success btn-sm font-normal'>Agregar</button>
-                    <button type="button" className='btn btn-sm font-normal' onClick={closeModal}>
+                    {/* <button type="button" className='btn btn-sm font-normal' onClick={closeModal}>
                         Cerrar
-                    </button>
+                    </button> */}
                 </form>
             </div>
         </dialog>

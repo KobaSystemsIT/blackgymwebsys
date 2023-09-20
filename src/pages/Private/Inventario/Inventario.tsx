@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import "./Inventario.css";
 import { useSelector } from "react-redux";
 import { AppStore } from "@/redux/store";
-import { viewInventoryData, updateInventory } from "@/services";
+import { viewInventoryData } from "@/services";
 import { useParams } from "react-router-dom";
 import { faPencilSquare, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
