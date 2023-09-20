@@ -9,4 +9,5 @@ export interface Subscription {
 export interface DataSubs {
     nameSubscriptionType: string;
     CantSubs: number;
+    TotActivos: number
 }

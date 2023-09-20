@@ -16,5 +16,6 @@ export interface UserData {
   nameEmergencyContact: string;
   emergencyContact:string;
   nameSubscriptionType:string;
-  isActive:string
+  isActive:string;
+  idUserType:number;
 }

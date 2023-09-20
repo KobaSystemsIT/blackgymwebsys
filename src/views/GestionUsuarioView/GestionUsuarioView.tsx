@@ -28,7 +28,8 @@ const GestionUsuarioView: React.FC = () => {
 		nameEmergencyContact: '',
 		emergencyContact: '',
 		nameSubscriptionType: '',
-		isActive: ''
+		isActive: '',
+		idUserType: 0
 	});
 
 	const [subscriptionData, setSubscriptionData] = useState<Subscription[]>([]);
@@ -123,7 +124,7 @@ const GestionUsuarioView: React.FC = () => {
 				  Alert(result.mensaje, true);
 				  setTimeout(() => {
 					handleGoBack();
-				  }, 5000);
+				  }, 4000);
 				}
 			  } catch (error) {
 				// Mostrar una alerta de error
@@ -193,9 +194,12 @@ const GestionUsuarioView: React.FC = () => {
 							<h2 className="lg:text-xl text-base font-semibold">{user.username} {user.lastName}</h2>
 							<div>								
 								<hr className="mt-2 mb-2" />
-								<h1 className='lg:text-lg font-semibold text-base mb-3'>Subscripción</h1>
-								<h1 className='mt-3 font-semibold'>{user.nameSubscriptionType ? user.nameSubscriptionType : "Sin membresía"}</h1>
-								<h1 className='mt-3'>{user.isActive}</h1>
+								{user.idUserType === 3 && (
+									<><h1 className='lg:text-lg font-semibold text-base mb-3'>Subscripción</h1><h1 className='mt-3 font-semibold'>{user.nameSubscriptionType ? user.nameSubscriptionType : "Sin membresía"}</h1><h1 className='mt-3'>{user.isActive}</h1></>
+								)}
+								{user.idUserType === 2 && (
+									<h1>Staff</h1>
+								)}
 							</div>
 						</div>
 					</div>
@@ -249,7 +253,8 @@ const GestionUsuarioView: React.FC = () => {
 					</div>
 				</div>
 
-				<div className='mt-10 p-4'>
+				{user.idUserType === 3 && (
+					<div className='mt-10 p-4'>
 					<h1 className='font-semibold text-xl p-2'>Gestión de Subscripción</h1>
 					<hr />
 					<div className='mt-10 rounded-xl border-2 p-6 shadow-xl'>
@@ -323,6 +328,7 @@ const GestionUsuarioView: React.FC = () => {
 						</div>
 					</div>
 				</div>
+				)}
 				
 				<div className='flex mt-5 p-4 justify-end'>
 					<button className=' btn btn-sm hover:bg-red-600' onClick={deleteUser}>Eliminar Usuario</button>						
