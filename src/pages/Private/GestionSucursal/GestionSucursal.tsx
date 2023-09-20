@@ -3,12 +3,15 @@ import { Clients, ClientsSubs } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
 import { AppStore } from '@/redux/store';
 import { viewDataClientsOrStaff } from '@/services/Clients/clients.service';
-import { faPenSquare, faPlus, faRotate, faUserPen, faUserSlash } from '@fortawesome/free-solid-svg-icons';
+import { faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ModalUsers } from '@/components/ModalUsers/ModalUsers';
+import { DataSubs } from '@/models/subscription/subscription';
+import icon from '@/assets/icons/iconBG.svg'
+import './GestionSucursal.css'
 
 export type GestionSucursalProps = {
 }
@@ -19,11 +22,12 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const token = tokenState.token;
 	const params: any = useParams();
 	const isAdmin = userState.rol === Roles.ADMIN;
-
+	const [mostrarContenido, setMostrarContenido] = useState(false);
 	const [clients, setClients] = useState<Clients[]>([]);
 	const [staff, setStaff] = useState<Staff[]>([]);
 	const [clientsSubs, setClientsSubs] = useState<ClientsSubs[]>([]);
 	const [filteredClients, setFilteredClients] = useState<Clients[]>([]);
+	const [cantsubs, setCantSubs] = useState<DataSubs[]>([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchTerm, setSearchTerm] = useState('');
 	const clientsPerPage = 5; // Número de clientes por página
@@ -63,6 +67,12 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 		} catch (error) {
 			console.error(error);
 		}
+		try {
+			const { data } = await viewDataClientsOrStaff(params.idClub, 4, token);
+			setCantSubs(data);
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	useLayoutEffect(() => {
@@ -79,7 +89,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 						<ModalUsers idUserTypeInt={3}></ModalUsers>
 					</div>
 					<div className='grid shadow-xl border-2 rounded-2xl'>
-						<div className='flex lg:flex-row flex-col justify-between p-4 items-center gap-4'>
+						<div className='flex lg:flex-row md:flex-row flex-col justify-between p-4 items-center gap-4'>
 							<input
 								type="text"
 								placeholder="Buscar por nombre..."
@@ -124,7 +134,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 							{Array.from({ length: Math.ceil(filteredClients.length / clientsPerPage) }, (_, index) => (
 								<button
 									key={index}
-									className={`join-item btn-xs bg-white text-black hover:bg-gray-400 ${currentPage === index + 1 ? 'btn-active' : ''}`}
+									className={`join-item btn-xs lg:bg-white bg-gray-300 lg:text-black hover:bg-gray-400 ${currentPage === index + 1 ? 'btn-active' : ''}`}
 									onClick={() => paginate(index + 1)}
 								>
 									{index + 1}
@@ -133,10 +143,29 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 						</div>
 					</div>
 				</div>
+				<div className='pt-10'>
+					<button onClick={() => setMostrarContenido(!mostrarContenido)} className='px-2 p-2'>
+						Total de subscripciones activas:
+					</button>
+					<hr />
+					<div className={`content-container grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 pt-10 justify-center ${mostrarContenido ? 'show' : 'hide'}`}>
+						{cantsubs.map((data, index) => (
+							<div key={index} className="grid grid-cols-2 card m-2 text-center shadow-lg border-2 bg-black text-white xl:w-96 lg:w-72">
+								<div className='flex justify-center items-center'>
+									<img src={icon} alt={data.nameSubscriptionType} className='h-[70%]' />
+								</div>
+								<div className='flex flex-col justify-center'>
+									<h1 className='font-semibold text-start lg:text-xl md:text-base text-sm'>{data.nameSubscriptionType}</h1>
+									<h1 className='lg:text-sm md:text-xm text-xs'>Subscripciones activas: {data.CantSubs}</h1>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
 				<div>
-					<div className='mt-10'>
+					<div className='pt-2'>
 						<div className='flex h-16 px-2 justify-between items-center'>
-							<h1 className='text-black lg:text-lg md:text-lg text-xs'>Clientes con subscripción</h1>
+							<h1 className='text-black lg:text-lg md:text-lg text-xs text-center'>Clientes con subscripción</h1>
 						</div>
 						<div className='grid shadow-xl border-2 rounded-2xl'>
 							<div className='max-h-48 overflow-auto m-2'>
@@ -150,7 +179,6 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 											<th>Activa</th>
 											<th>Inicia</th>
 											<th>Vence</th>
-											{/* <th>Acciones</th> */}
 										</tr>
 									</thead>
 									<tbody>
@@ -180,7 +208,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 					</div>
 				</div>
 			</div>
-			<div className='overflow-hidden mt-10'>
+			<div className='overflow-hidden mt-10 mb-10'>
 				<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
 					<h1 className='text-white text-sm'>Miembros del Staf</h1>
 					{isAdmin && (

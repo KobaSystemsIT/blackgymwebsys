@@ -131,7 +131,8 @@ const GestionUsuarioView: React.FC = () => {
 				console.log(error);
 			  }
 		  }
-	}
+	};
+
 	const newOrUpdateSubscriptions = async () => {
 		const confirmation = await Swal.fire({
 			title: '¿Desea registrar la subscripción?',
@@ -153,7 +154,7 @@ const GestionUsuarioView: React.FC = () => {
 			}
 		}
 		
-	}
+	};
 
 	const handleSubscriptionChange = (event: any) => {
 		const selectedSubscriptionType = parseInt(event.target.value, 10);

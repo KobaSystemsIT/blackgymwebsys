@@ -60,7 +60,7 @@ function Private() {
       </div>
       <div className="flex-grow overflow-x-hidden min-h-screen p-4 rounded-xl lg:m-2 md:m-4 m-0 pb-4">
         <Navbar />
-        <div className="p-6 overflow-y-auto relative z-0">
+        <div className="p-6 overflow-y-auto relative z-0 pb-10">
           <RoutesWithNotFound>
             <Route path="/" element={<Navigate to={PrivateRoutes.DASHBOARD} />} />
             <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
@@ -81,7 +81,7 @@ function Private() {
         </div>
       </div>
       <br />
-      <div className='lg:hidden pt-10'>
+      <div className='lg:hidden'>
         <BottonNavigate />
       </div>
     </div>

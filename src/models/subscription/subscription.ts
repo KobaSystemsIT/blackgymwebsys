@@ -5,3 +5,8 @@ export interface Subscription {
     priceSubscription: string;
     allAccess: boolean;
 }
+
+export interface DataSubs {
+    nameSubscriptionType: string;
+    CantSubs: number;
+}
