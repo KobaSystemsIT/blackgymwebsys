@@ -17,17 +17,37 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const userState = useSelector((store: AppStore) => store.user);
 	const tokenState = useSelector((store: AppStore) => store.token);
 	const token = tokenState.token;
+	const params: any = useParams();
+	const isAdmin = userState.rol === Roles.ADMIN;
 
 	const [clients, setClients] = useState<Clients[]>([]);
 	const [staff, setStaff] = useState<Staff[]>([]);
 	const [clientsSubs, setClientsSubs] = useState<ClientsSubs[]>([]);
-	const params: any = useParams();
-	const isAdmin = userState.rol === Roles.ADMIN;
+	const [filteredClients, setFilteredClients] = useState<Clients[]>([]);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [searchTerm, setSearchTerm] = useState('');
+	const clientsPerPage = 5; // Número de clientes por página
+
+	// Calcula el índice de inicio y final para la paginación
+	const indexOfLastClient = currentPage * clientsPerPage;
+	const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+	const currentClients = filteredClients.slice(indexOfFirstClient, indexOfLastClient);
+
+	// Cambiar de página
+	const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+	const handleSearch = () => {
+		const filtered = clients.filter((client) =>
+			client.username.toLowerCase().includes(searchTerm.toLowerCase())
+		);
+		setFilteredClients(filtered);
+	};
 
 	const obtainClients = async () => {
 		try {
 			const { data } = await viewDataClientsOrStaff(params.idClub, 1, token);
 			setClients(data);
+			setFilteredClients(data);
 		} catch (error) {
 			console.error(error);
 		}
@@ -38,7 +58,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 			console.error(error);
 		}
 		try {
-			const { data } = await viewDataClientsOrStaff(params.idClub, 2, token);
+			const { data } = await viewDataClientsOrStaff(params.idClub, 3, token);
 			setStaff(data);
 		} catch (error) {
 			console.error(error);
@@ -47,17 +67,29 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 
 	useLayoutEffect(() => {
 		obtainClients();
+		handleSearch();
 	}, []);
 
 	return <>
 		<div className='grid p-2 gap-6 items-center'>
 			<div className='overflow-hidden'>
 				<div>
-					<div>
-						<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
-							<h1 className='text-white text-sm'>Clientes registrados</h1>
-							<ModalUsers idUserTypeInt={3}></ModalUsers>
+					<div className='flex h-16 px-2 justify-between items-center'>
+						<h1 className='text-black lg:text-lg md:text-lg text-xs'>Clientes registrados</h1>
+						<ModalUsers idUserTypeInt={3}></ModalUsers>
+					</div>
+					<div className='grid shadow-xl border-2 rounded-2xl'>
+						<div className='flex lg:flex-row flex-col justify-between p-4 items-center gap-4'>
+							<input
+								type="text"
+								placeholder="Buscar por nombre..."
+								value={searchTerm}
+								onChange={(e) => setSearchTerm(e.target.value)}
+								className='input input-group-xs input-bordered w-full max-w-xs'
+							/>
+							<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={handleSearch}>Buscar</button>
 						</div>
+						<hr />
 						<div className='max-h-48 overflow-auto m-2'>
 							<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
 								<thead>
@@ -71,7 +103,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 									</tr>
 								</thead>
 								<tbody>
-									{clients.map((client) => (
+									{currentClients.map((client) => (
 										<tr key={client.idUser}>
 											<td>{client.idUser}</td>
 											<td>{client.username}</td>
@@ -88,67 +120,63 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								</tbody>
 							</table>
 						</div>
+						<div className="flex join justify-end mr-5 p-2">
+							{Array.from({ length: Math.ceil(filteredClients.length / clientsPerPage) }, (_, index) => (
+								<button
+									key={index}
+									className={`join-item btn-xs bg-white text-black hover:bg-gray-400 ${currentPage === index + 1 ? 'btn-active' : ''}`}
+									onClick={() => paginate(index + 1)}
+								>
+									{index + 1}
+								</button>
+							))}
+						</div>
 					</div>
-					{/* <div className='m-8'>
-						<div className="stats shadow border">
-							<div className="stat">
-								<div className="stat-title">Black Plus</div>
-								<div className="stat-value">89,400</div>
-								<div className="stat-desc">Usuarios activos</div>
+				</div>
+				<div>
+					<div className='mt-10'>
+						<div className='flex h-16 px-2 justify-between items-center'>
+							<h1 className='text-black lg:text-lg md:text-lg text-xs'>Clientes con subscripción</h1>
+						</div>
+						<div className='grid shadow-xl border-2 rounded-2xl'>
+							<div className='max-h-48 overflow-auto m-2'>
+								<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Usuario</th>
+											<th>Apellido</th>
+											<th>Subscripción</th>
+											<th>Activa</th>
+											<th>Inicia</th>
+											<th>Vence</th>
+											{/* <th>Acciones</th> */}
+										</tr>
+									</thead>
+									<tbody>
+										{clientsSubs.map((client) => (
+											<tr key={client.idUser}>
+												<td>{client.idUser}</td>
+												<td>{client.username}</td>
+												<td>{client.lastName}</td>
+												<td>{client.nameSubscriptionType}</td>
+												<td>{client.isActive}</td>
+												<td>
+													{client.startDate
+														? client.startDate.toString().split("T")[0]
+														: "N/A"}
+												</td>
+												<td>
+													{client.endDate
+														? client.endDate.toString().split("T")[0]
+														: "N/A"}
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
 							</div>
 						</div>
-					</div> */}
-				</div>
-				<div className='mt-10'>
-					<div className=' flex p-2 bg-black rounded-lg justify-between items-center'>
-						<h1 className='text-white text-sm'>Clientes con subscripción</h1>
-					</div>
-					<div className='max-h-48 overflow-auto m-2'>
-						<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>Usuario</th>
-									<th>Apellido</th>
-									<th>Contacto de Emergencia</th>
-									<th>Número del contacto</th>
-									<th>Subscripción</th>
-									<th>Activa</th>
-									<th>Inicia</th>
-									<th>Vence</th>
-									{/* <th>Acciones</th> */}
-								</tr>
-							</thead>
-							<tbody>
-								{clientsSubs.map((client) => (
-									<tr key={client.idUser}>
-										<td>{client.idUser}</td>
-										<td>{client.username}</td>
-										<td>{client.lastName}</td>
-										<td>{client.nameEmergencyContact}</td>
-										<td>{client.emergencyContact}</td>
-										<td>{client.nameSubscriptionType}</td>
-										<td>{client.isActive}</td>
-										<td>
-											{client.startDate
-												? client.startDate.toString().split("T")[0]
-												: "N/A"}
-										</td>
-										<td>
-											{client.endDate
-												? client.endDate.toString().split("T")[0]
-												: "N/A"}
-										</td>
-										{/* <td>
-											<div className='grid grid-flow-col gap-2'>
-												<button title='Editar Usuario'><FontAwesomeIcon icon={faUserPen} className='h-4' /></button>
-												<button title='Gestionar Subscripción'><FontAwesomeIcon icon={faPlus} className='h-4' /></button>
-											</div>
-										</td> */}
-									</tr>
-								))}
-							</tbody>
-						</table>
 					</div>
 				</div>
 			</div>

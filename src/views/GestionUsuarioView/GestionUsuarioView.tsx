@@ -5,10 +5,11 @@ import { getDataUser } from '@/services/Clients/clients.service';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
 import { UserData } from '@/models';
-import { crudSubscription } from '@/services/Subscriptions/subscription.service';
+import { crudSubscription, newOrUpdateSubscription } from '@/services/Subscriptions/subscription.service';
 import { Subscription } from '@/models/subscription/subscription';
 import { modifyOrDeleteUser } from '@/services/Users/users.service';
 import { Alert } from '@/components/AlertComponent/AlertComponent';
+import Swal from 'sweetalert2';
 
 
 const GestionUsuarioView: React.FC = () => {
@@ -17,6 +18,7 @@ const GestionUsuarioView: React.FC = () => {
 	const tokenState = useSelector((store: AppStore) => store.token);
 	const token = tokenState.token;
 	let idUser: number = params.idUser;
+	let idClub: number = params.idClub;
 
 	const [user, setUser] = useState<UserData>({
 		username: '',
@@ -30,7 +32,7 @@ const GestionUsuarioView: React.FC = () => {
 	});
 
 	const [subscriptionData, setSubscriptionData] = useState<Subscription[]>([]);
-	const [subscription, setSubscription] = useState('');
+	const [subscription, setSubscription] = useState(0);
 	const [price, setPrice] = useState('');
 	const [duration, setDuration] = useState('');
 	const [startDate, setStartDate] = useState('');
@@ -60,22 +62,105 @@ const GestionUsuarioView: React.FC = () => {
 	};
 
 	const updateUserData = async () => {
-		try {
-			const result = await modifyOrDeleteUser(idUser, user.username, user.lastName, user.phoneNumber, user.email, user.nameEmergencyContact, user.emergencyContact, 1, token);
+		// Mostrar una alerta de confirmación
+		const confirmation = await Swal.fire({
+		  title: '¿Desea actualizar los datos del usuario?',
+		  icon: 'question',
+		  showCancelButton: true,
+		  confirmButtonText: 'Sí',
+		  cancelButtonText: 'Cancelar',
+		});
+	  
+		if (confirmation.isConfirmed) {
+		  try {
+			const result = await modifyOrDeleteUser(
+			  idUser,
+			  user.username,
+			  user.lastName,
+			  user.phoneNumber,
+			  user.email,
+			  user.nameEmergencyContact,
+			  user.emergencyContact,
+			  1,
+			  token
+			);
 			if (result) {
-				Alert(result.mensaje, true);
+			  // Mostrar una alerta de éxito
+			  Alert(result.mensaje, true);
 			}
-		} catch (error) {
-			Alert('Hubo un error al procesar la solicitud.', true);
+		  } catch (error) {
+			// Mostrar una alerta de error
+			Swal.fire('Error', 'Hubo un error al procesar la solicitud.', 'error');
 			console.log(error);
+		  }
 		}
+	};
+
+	const deleteUser = async () => {
+		const confirmation = await Swal.fire({
+			title: '¿Desea eliminar a este usuario?',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: 'Sí',
+			cancelButtonText: 'Cancelar',
+		  });
+		
+		  if (confirmation.isConfirmed) {
+			try {
+				const result = await modifyOrDeleteUser(
+				  idUser,
+				  user.username,
+				  user.lastName,
+				  user.phoneNumber,
+				  user.email,
+				  user.nameEmergencyContact,
+				  user.emergencyContact,
+				  2,
+				  token
+				);
+				if (result) {
+				  // Mostrar una alerta de éxito
+				  Alert(result.mensaje, true);
+				  setTimeout(() => {
+					handleGoBack();
+				  }, 5000);
+				}
+			  } catch (error) {
+				// Mostrar una alerta de error
+				Swal.fire('Error', 'Hubo un error al procesar la solicitud.', 'error');
+				console.log(error);
+			  }
+		  }
+	}
+	const newOrUpdateSubscriptions = async () => {
+		const confirmation = await Swal.fire({
+			title: '¿Desea registrar la subscripción?',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: 'Sí',
+			cancelButtonText: 'Cancelar',
+		  });
+		
+		if (confirmation.isConfirmed) {
+			try {
+				const result = await newOrUpdateSubscription(idUser, subscription, idClub, startDate, endDate, token);
+				if (result) {
+					Alert(result.mensaje, true);
+				}
+			} catch (error) {
+				Alert('Hubo un error al procesar la solicitud.', false);
+				console.log(error)
+			}
+		}
+		
 	}
 
 	const handleSubscriptionChange = (event: any) => {
 		const selectedSubscriptionType = parseInt(event.target.value, 10);
+		setSubscription(selectedSubscriptionType);
 		const selectedSubscription = subscriptionData.find((sub) => sub.idSubscriptionType === selectedSubscriptionType);
-
 		if (selectedSubscription) {
+			
 			const { idSubscriptionType, nameSubscriptionType, daysSubscription, priceSubscription, allAccess } = selectedSubscription;
 			const data = { idSubscriptionType, nameSubscriptionType, daysSubscription, priceSubscription, allAccess };
 			console.log(idSubscriptionType)
@@ -101,19 +186,18 @@ const GestionUsuarioView: React.FC = () => {
 				<div className='grid lg:grid-flow-col md:grid-flow-col gap-6'>
 					<div className="grid shadow-xl border-2 rounded-2xl">
 						<div className="flex align-middle justify-center items-center p-2">
-							<img src="https://www.emmegi.co.uk/wp-content/uploads/2019/01/User-Icon.jpg" alt="User" className="rounded-xl h-56" />
+							<img src="https://www.emmegi.co.uk/wp-content/uploads/2019/01/User-Icon.jpg" alt="User" className="rounded-xl h-48" />
 						</div>
 						<div className="items-center text-center lg:px-10 lg:py-10 p-4">
 							<h2 className="lg:text-xl text-base font-semibold">{user.username} {user.lastName}</h2>
-							<div>
-								<h1 className='lg:text-lg font-semibold text-base mb-3'>Subscripción</h1>
+							<div>								
 								<hr className="mt-2 mb-2" />
-								<h1 className='mt-3'>{user.nameSubscriptionType ? user.nameSubscriptionType : "Sin membresía"}</h1>
+								<h1 className='lg:text-lg font-semibold text-base mb-3'>Subscripción</h1>
+								<h1 className='mt-3 font-semibold'>{user.nameSubscriptionType ? user.nameSubscriptionType : "Sin membresía"}</h1>
 								<h1 className='mt-3'>{user.isActive}</h1>
 							</div>
 						</div>
 					</div>
-
 					<div>
 						<h1 className='font-semibold text-xl p-2 lg:text-start text-center'>Gestión de Usuario</h1>
 						<hr />
@@ -233,10 +317,14 @@ const GestionUsuarioView: React.FC = () => {
 							</div>
 						</form>
 						<div className='flex lg:flex-row flex-col gap-4 mt-10 lg:justify-end md:justify-end'>
-							<button className='btn btn-success btn-sm font-normal'>Registrar Subscripción</button>
+							<button className='btn btn-success btn-sm font-normal' onClick={newOrUpdateSubscriptions}>Registrar Subscripción</button>
 							<button type="button" className='btn btn-warning btn-sm font-normal' onClick={handleGoBack}>Volver</button>
 						</div>
 					</div>
+				</div>
+				
+				<div className='flex mt-5 p-4 justify-end'>
+					<button className=' btn btn-sm hover:bg-red-600' onClick={deleteUser}>Eliminar Usuario</button>						
 				</div>
 			</div>
 		</>

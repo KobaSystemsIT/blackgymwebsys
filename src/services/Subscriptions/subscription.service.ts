@@ -37,3 +37,40 @@ export const crudSubscription = (idSub: number, nameSubscription: string, daysSu
             throw error;
         });
 }
+
+export const newOrUpdateSubscription = (idUser: number, idSubscriptionType:number, idClub:number, startDate:string, endDate:string, token: any) => {
+    const body = {
+        idUser: idUser,
+        idSubscriptionType: idSubscriptionType,
+        idClub: idClub,
+        startDate: startDate,
+        endDate: endDate
+    }
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    };
+
+    return fetch(dbaccess + 'newOrUpdateSubscription', requestOptions)
+        .then(async (res) => {
+            if (!res.ok) {
+                const errorResponse = await res.json();
+                throw new Error(errorResponse.message);
+            }
+            return res.json();
+        })
+        .then((data) => {
+            if (data.error) {
+                throw new Error(data.message || 'Error desconocido');
+            }
+            return data;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            throw error;
+        });
+}
