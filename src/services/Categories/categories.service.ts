@@ -2,6 +2,7 @@ import baseUrl from "@/services/Login/auth.service";
 const dbaccess = baseUrl + 'dbaccess/';
 
 export const crudCategoriesProducts = (productCategoryID: Number, nameCategory: String, typeAction: Number, token: any) => {
+    console.log(productCategoryID);
     const body = {
         productCategoryID: productCategoryID,
         nameCategory: nameCategory,

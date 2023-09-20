@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { crudClub } from '@/services/Clubes/clubes.service';
 import { crudCategoriesProducts } from '@/services/Categories/categories.service';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export type PanelAdminProps = {
 }
@@ -39,11 +40,19 @@ const PanelAdmin: React.FC = () => {
 		try {
 			const { data } = await crudCategoriesProducts(1, '', 2, token);
 			setCategory(data);
-			console.log(data);
 		} catch (error) {
 			console.error(error);
 		}
 	}
+
+	const deleteCategory = async (id: number) => {
+		try {
+			const { data } = await crudCategoriesProducts(id, '', 4, token);
+			getCategories();
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	useLayoutEffect(() => {
 		getClub();
@@ -110,8 +119,8 @@ const PanelAdmin: React.FC = () => {
 									<td>{category.nameCategory}</td>
 									<td>
 										<div className='grid grid-flow-col gap-2'>
-											<button title='Editar Category'><FontAwesomeIcon icon={faUserPen} className='h-4' /></button>
-											<button title='Gestionar Category'><FontAwesomeIcon icon={faPlus} className='h-4' /></button>
+											<button title='Eliminar Category' onClick={() => deleteCategory(category.productCategoryID)}>
+											<FontAwesomeIcon icon={faTrash} className='h-4'/></button>
 										</div>
 									</td>
 								</tr>
