@@ -30,7 +30,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const [cantsubs, setCantSubs] = useState<DataSubs[]>([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchTerm, setSearchTerm] = useState('');
-	const clientsPerPage = 5; // Número de clientes por página
+	const clientsPerPage = 5;
 
 	// Calcula el índice de inicio y final para la paginación
 	const indexOfLastClient = currentPage * clientsPerPage;
@@ -85,7 +85,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 			<div className='overflow-hidden'>
 				<div>
 					<div className='flex h-16 px-2 justify-between items-center'>
-						<h1 className='text-black lg:text-lg md:text-lg text-xs'>Clientes registrados</h1>
+						<h1 className='text-black lg:text-lg md:text-lg text-sm'>Clientes registrados</h1>
 						<ModalUsers idUserTypeInt={3}></ModalUsers>
 					</div>
 					<div className='grid shadow-xl border-2 rounded-2xl'>
@@ -130,7 +130,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								</tbody>
 							</table>
 						</div>
-						<div className="flex join justify-end mr-5 p-2">
+						<div className="flex join lg:justify-end justify-center p-2">
 							{Array.from({ length: Math.ceil(filteredClients.length / clientsPerPage) }, (_, index) => (
 								<button
 									key={index}
