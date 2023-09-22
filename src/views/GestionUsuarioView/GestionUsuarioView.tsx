@@ -41,7 +41,7 @@ const GestionUsuarioView: React.FC = () => {
 
 
 	const handleGoBack = () => {
-		navigate(-1); // Esto navegará hacia atrás en la pila de rutas
+		navigate(-1);
 	};
 
 	const getData = async () => {
@@ -63,7 +63,6 @@ const GestionUsuarioView: React.FC = () => {
 	};
 
 	const updateUserData = async () => {
-		// Mostrar una alerta de confirmación
 		const confirmation = await Swal.fire({
 		  title: '¿Desea actualizar los datos del usuario?',
 		  icon: 'question',
@@ -86,14 +85,12 @@ const GestionUsuarioView: React.FC = () => {
 			  token
 			);
 			if (result) {
-			  // Mostrar una alerta de éxito
 			  Alert(result.mensaje, true);
 			  setTimeout(() => {
 				handleGoBack();
 			  }, 3000)
 			}
 		  } catch (error) {
-			// Mostrar una alerta de error
 			Swal.fire('Error', 'Hubo un error al procesar la solicitud.', 'error');
 			console.log(error);
 		  }
@@ -123,14 +120,12 @@ const GestionUsuarioView: React.FC = () => {
 				  token
 				);
 				if (result) {
-				  // Mostrar una alerta de éxito
 				  Alert(result.mensaje, true);
 				  setTimeout(() => {
 					handleGoBack();
 				  }, 4000);
 				}
 			  } catch (error) {
-				// Mostrar una alerta de error
 				Swal.fire('Error', 'Hubo un error al procesar la solicitud.', 'error');
 				console.log(error);
 			  }
@@ -151,6 +146,9 @@ const GestionUsuarioView: React.FC = () => {
 				const result = await newOrUpdateSubscription(idUser, subscription, idClub, startDate, endDate, token);
 				if (result) {
 					Alert(result.mensaje, true);
+					setTimeout(() => {
+                        handleGoBack();
+                    }, 3000)
 				}
 			} catch (error) {
 				Alert('Hubo un error al procesar la solicitud.', false);

@@ -1,8 +1,8 @@
 import { Roles } from '@/models';
-import { Clients, ClientsSubs } from '@/models/clients';
+import { Clients, ClientsData, ClientsSubs } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
 import { AppStore } from '@/redux/store';
-import { viewDataClientsOrStaff } from '@/services/Clients/clients.service';
+import { getClientsData, viewDataClientsOrStaff } from '@/services/Clients/clients.service';
 import { faUser, faUserGroup, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useLayoutEffect, useState } from 'react';
@@ -22,12 +22,16 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const token = tokenState.token;
 	const params: any = useParams();
 	const isAdmin = userState.rol === Roles.ADMIN;
-	const [mostrarContenido, setMostrarContenido] = useState(false);
+
+
 	const [clients, setClients] = useState<Clients[]>([]);
 	const [staff, setStaff] = useState<Staff[]>([]);
 	const [clientsSubs, setClientsSubs] = useState<ClientsSubs[]>([]);
 	const [filteredClients, setFilteredClients] = useState<Clients[]>([]);
 	const [cantsubs, setCantSubs] = useState<DataSubs[]>([]);
+	const [clientsData, setClientsData] = useState<ClientsData[]>([]);
+
+	const [mostrarContenido, setMostrarContenido] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchTerm, setSearchTerm] = useState('');
 	const clientsPerPage = 5;
@@ -73,6 +77,12 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 		} catch (error) {
 			console.error(error);
 		}
+		try {
+			const { data } = await getClientsData(params.idClub, token);
+			setClientsData(data);
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	useLayoutEffect(() => {
@@ -83,63 +93,79 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	return <>
 		<div className='grid p-2 gap-6 items-center'>
 			<div className='overflow-hidden'>
-				<div>
-					<div className='flex h-16 px-2 justify-between items-center'>
-						<h1 className='text-black lg:text-lg md:text-lg text-sm'>Clientes registrados</h1>
-						<ModalUsers idUserTypeInt={3}></ModalUsers>
-					</div>
-					<div className='grid shadow-xl border-2 rounded-2xl'>
-						<div className='flex lg:flex-row md:flex-row flex-col justify-between p-4 items-center gap-4'>
-							<input
-								type="text"
-								placeholder="Buscar por nombre..."
-								value={searchTerm}
-								onChange={(e) => setSearchTerm(e.target.value)}
-								className='input input-group-xs input-bordered w-full max-w-xs'
-							/>
-							<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={handleSearch}>Buscar</button>
+				<div className='grid lg:grid-flow-col gap-4'>
+					<div>
+						<div className='flex h-16 px-2 justify-between items-center'>
+							<h1 className='text-black lg:text-lg md:text-lg text-sm'>Clientes registrados</h1>
+							<ModalUsers idUserTypeInt={3}></ModalUsers>
 						</div>
-						<hr />
-						<div className='max-h-48 overflow-auto m-2'>
-							<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
-								<thead>
-									<tr>
-										<th>ID</th>
-										<th>Usuario</th>
-										<th>Apellido</th>
-										<th>Contacto de Emergencia</th>
-										<th>Número del contacto</th>
-										<th>Acciones</th>
-									</tr>
-								</thead>
-								<tbody>
-									{currentClients.map((client) => (
-										<tr key={client.idUser}>
-											<td>{client.idUser}</td>
-											<td>{client.username}</td>
-											<td>{client.lastName}</td>
-											<td>{client.nameEmergencyContact}</td>
-											<td>{client.emergencyContact}</td>
-											<td>
-												<a href={`/Dashboard/Gestion_de_Sucursal/${params.idClub}/Gestion_de_Usuario/${client.idUser}`} title='Gestión de Usuario'>
-													<FontAwesomeIcon icon={faUserPen} className='h-4'></FontAwesomeIcon>
-												</a>
-											</td>
+						<div className='grid shadow-xl border-2 rounded-2xl'>
+							<div className='flex lg:flex-row md:flex-row flex-col justify-between p-4 items-center gap-4'>
+								<input
+									type="text"
+									placeholder="Buscar por nombre..."
+									value={searchTerm}
+									onChange={(e) => setSearchTerm(e.target.value)}
+									className='input input-group-xs input-bordered w-full max-w-xs'
+								/>
+								<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={handleSearch}>Buscar</button>
+							</div>
+							<hr />
+							<div className='max-h-48 overflow-auto m-2'>
+								<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Usuario</th>
+											<th>Apellido</th>
+											<th>Contacto de Emergencia</th>
+											<th>Número del contacto</th>
+											<th>Acciones</th>
 										</tr>
-									))}
-								</tbody>
-							</table>
+									</thead>
+									<tbody>
+										{currentClients.map((client) => (
+											<tr key={client.idUser}>
+												<td>{client.idUser}</td>
+												<td>{client.username}</td>
+												<td>{client.lastName}</td>
+												<td>{client.nameEmergencyContact}</td>
+												<td>{client.emergencyContact}</td>
+												<td>
+													<a href={`/Dashboard/Gestion_de_Sucursal/${params.idClub}/Gestion_de_Usuario/${client.idUser}`} title='Gestión de Usuario'>
+														<FontAwesomeIcon icon={faUserPen} className='h-4'></FontAwesomeIcon>
+													</a>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+							<div className="flex join lg:justify-end justify-center p-2">
+								{Array.from({ length: Math.ceil(filteredClients.length / clientsPerPage) }, (_, index) => (
+									<button
+										key={index}
+										className={`join-item btn-sm lg:bg-white bg-gray-300 lg:text-black hover:bg-gray-400 ${currentPage === index + 1 ? 'btn-active' : ''}`}
+										onClick={() => paginate(index + 1)}
+									>
+										{index + 1}
+									</button>
+								))}
+							</div>
 						</div>
-						<div className="flex join lg:justify-end justify-center p-2">
-							{Array.from({ length: Math.ceil(filteredClients.length / clientsPerPage) }, (_, index) => (
-								<button
-									key={index}
-									className={`join-item btn-sm lg:bg-white bg-gray-300 lg:text-black hover:bg-gray-400 ${currentPage === index + 1 ? 'btn-active' : ''}`}
-									onClick={() => paginate(index + 1)}
-								>
-									{index + 1}
-								</button>
-							))}
+					</div>
+					<div className='flex justify-center align-middle items-center pt-14'>
+						<div>
+							<div className="stats lg:stats-vertical shadow gap-4 border-2">
+								{clientsData.map((clients) => (
+									<div className={`stat ${clients.Categoria === 'Usuarios Nuevos' ? ' bg-lime-500' : ''} 
+									${clients.Categoria === 'Usuarios Renovación' ? 'bg-yellow-500' : ''} 
+									${clients.Categoria === 'Usuarios Por Vencer' ? 'bg-red-500' : ''} `} key={clients.id}>
+										<div className="stat-title font-semibold">{clients.Categoria}</div>
+										<div className="stat-value ml-5">{clients.Cantidad}</div>
+									</div>
+								))}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -165,7 +191,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 				<div>
 					<div className='pt-2'>
 						<div className='flex h-16 px-2 justify-between items-center'>
-							<h1 className='text-black lg:text-lg md:text-lg text-xs text-center'>Clientes con subscripción</h1>
+							<h1 className='text-black lg:text-lg md:text-lg text-sm text-center'>Clientes con subscripción</h1>
 						</div>
 						<div className='grid shadow-xl border-2 rounded-2xl'>
 							<div className='max-h-48 overflow-auto m-2'>
@@ -179,6 +205,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 											<th>Activa</th>
 											<th>Inicia</th>
 											<th>Vence</th>
+											<th>Días restantes</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -199,6 +226,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 														? client.endDate.toString().split("T")[0]
 														: "N/A"}
 												</td>
+												<td>{client.diasRestantes}</td>
 											</tr>
 										))}
 									</tbody>
@@ -210,8 +238,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 			</div>
 			<div>
 				<div className='overflow-hidden mt-10 mb-10'>
-				<div className='flex h-16 px-2 justify-between items-center'>
-						<h1 className='text-black lg:text-lg md:text-lg text-xs'>Miembros del Staff</h1>
+					<div className='flex h-16 px-2 justify-between items-center'>
+						<h1 className='text-black lg:text-lg md:text-lg text-sm'>Miembros del Staff</h1>
 						{isAdmin && (
 							<ModalUsers idUserTypeInt={2}></ModalUsers>
 						)}
@@ -240,9 +268,32 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 											<td>{staff.nameEmergencyContact}</td>
 											<td>{staff.emergencyContact}</td>
 											<td>
-												{staff.arrivalHour ? staff.arrivalHour.toString().split('T')[0] : "N/A"}
+												{staff.arrivalHour
+													? new Date(staff.arrivalHour).toLocaleString(undefined, {
+														year: 'numeric',
+														month: 'numeric',
+														day: 'numeric',
+														hour: 'numeric',
+														minute: 'numeric',
+														second: 'numeric',
+														hour12: true, // Habilita el formato de 12 horas
+													})
+													: "N/A"}
 											</td>
-											<td>{staff.exitHour ? staff.exitHour.toString().split('T')[0] : "N/A"}</td>
+											<td>
+												{staff.exitHour
+													? new Date(staff.exitHour).toLocaleString(undefined, {
+														year: 'numeric',
+														month: 'numeric',
+														day: 'numeric',
+														hour: 'numeric',
+														minute: 'numeric',
+														second: 'numeric',
+														hour12: true, // Habilita el formato de 12 horas
+													})
+													: "N/A"}
+											</td>
+
 											<td>
 												<a href={`/Dashboard/Gestion_de_Sucursal/${params.idClub}/Gestion_de_Usuario/${staff.idUser}`}>
 													<FontAwesomeIcon icon={faUserPen} className='h-4'></FontAwesomeIcon>

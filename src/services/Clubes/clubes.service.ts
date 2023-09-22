@@ -23,11 +23,7 @@ export const getClubes = () => {
         });
 };
 
-export const getClubesData = (idClub: string, typeAction:number, token: any) => {
-    // const body = {
-    //     idClub: idClub,
-    //     typeAction: typeAction
-    // }
+export const getClubesData = (token: any) => {
     const requestOptions = {
         method: 'GET',
         headers: {

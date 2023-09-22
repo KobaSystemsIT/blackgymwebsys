@@ -68,8 +68,8 @@ export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
-						closeModal();
-					}, 3000)
+                        window.location.reload();
+                    }, 3000)
 				}
 			} catch (error: any) {
 				setTimeout(() => {
