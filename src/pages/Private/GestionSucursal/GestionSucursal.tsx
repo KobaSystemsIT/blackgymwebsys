@@ -148,15 +148,15 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 						Total de subscripciones:
 					</button>
 					<hr />
-					<div className={`content-container grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 pt-10 justify-center ${mostrarContenido ? 'show' : 'hide'}`}>
+					<div className={`content-container grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 pt-10 lg:gap-5 justify-center ${mostrarContenido ? 'show' : 'hide'}`}>
 						{cantsubs.map((data, index) => (
-							<div key={index} className="grid grid-cols-2 card m-2 text-center shadow-lg border-2 bg-black text-white w-[80%]">
+							<div key={index} className="grid grid-cols-2 card m-2 text-center shadow-lg border-2 bg-black text-white">
 								<div className='flex justify-center items-center'>
 									<img src={icon} alt={data.nameSubscriptionType} className='h-[65%]' />
 								</div>
 								<div className='flex flex-col justify-center p-2'>
-									<h1 className='font-semibold text-start lg:text-base md:text-base text-sm'>{data.nameSubscriptionType}</h1>
-									<h1 className='lg:text-sm md:text-xm text-xs'>Total de Subs: {data.CantSubs}</h1>
+									<h1 className='font-semibold text-start lg:text-lg md:text-lg text-sm'>{data.nameSubscriptionType}</h1>
+									<h1 className='lg:text-base md:text-base text-xs'>Total de Subs: {data.CantSubs}</h1>
 								</div>
 							</div>
 						))}

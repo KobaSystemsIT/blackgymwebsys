@@ -1,11 +1,13 @@
 import baseUrl from "@/services/Login/auth.service";
+const urlcrudProducts = baseUrl + '/dbaccess/crudProducts';
 
-export const crudInventory = async (inventoryID: number, currentStock:number, productID: number, idClub: number, typeAction: number, token: any) => {
+
+export const crudProducts = async (productID: number, productName:string, productPrice: number, idCategory: number, typeAction: number, token: any) => {
     const body = {
-        inventoryID: inventoryID,
-        currentStock: currentStock,
         productID: productID,
-        idClub: idClub,
+        productName: productName,
+        productPrice: productPrice,
+        idCategory: idCategory,
         typeAction: typeAction
     }
 
@@ -18,7 +20,7 @@ export const crudInventory = async (inventoryID: number, currentStock:number, pr
         body: JSON.stringify(body),
     };
 
-    return fetch(baseUrl + 'dbaccess/crudInventory', requestOptions)
+    return fetch(baseUrl + 'dbaccess/crudProducts', requestOptions)
         .then(async (res) => {
             if (!res.ok) {
                 const errorResponse = await res.json();

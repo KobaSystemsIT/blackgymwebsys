@@ -88,6 +88,9 @@ const GestionUsuarioView: React.FC = () => {
 			if (result) {
 			  // Mostrar una alerta de éxito
 			  Alert(result.mensaje, true);
+			  setTimeout(() => {
+				handleGoBack();
+			  }, 3000)
 			}
 		  } catch (error) {
 			// Mostrar una alerta de error

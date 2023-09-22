@@ -6,9 +6,6 @@ import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
 import { format } from 'date-fns-tz';
 import { Alert } from '../AlertComponent/AlertComponent';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPen } from '@fortawesome/free-solid-svg-icons';
-import { Clients } from '@/models';
 
 export type ModalUsersProps = {
 	idUserTypeInt: number
