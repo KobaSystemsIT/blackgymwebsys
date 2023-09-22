@@ -30,6 +30,7 @@ declare global {
     modalClubes: HTMLDialogElement;
     modalUpdateUser: HTMLDialogElement;
     modalCategories: HTMLDialogElement;
+    modalProducts: HTMLDialogElement;
 	}
 }
 
