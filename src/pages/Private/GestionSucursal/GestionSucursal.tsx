@@ -1,4 +1,4 @@
-import { Roles } from '@/models';
+import { Roles, UserVisitor } from '@/models';
 import { Clients, ClientsData, ClientsSubs } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
 import { AppStore } from '@/redux/store';
@@ -12,6 +12,8 @@ import { ModalUsers } from '@/components/ModalUsers/ModalUsers';
 import { DataSubs } from '@/models/subscription/subscription';
 import icon from '@/assets/icons/iconBG.svg'
 import './GestionSucursal.css'
+import { crudUserVisitor } from '@/services/Users/users.service';
+import { userInfo } from 'os';
 
 export type GestionSucursalProps = {
 }
@@ -22,6 +24,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const token = tokenState.token;
 	const params: any = useParams();
 	const isAdmin = userState.rol === Roles.ADMIN;
+	const i: number = 0;
 
 
 	const [clients, setClients] = useState<Clients[]>([]);
@@ -30,8 +33,9 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const [filteredClients, setFilteredClients] = useState<Clients[]>([]);
 	const [cantsubs, setCantSubs] = useState<DataSubs[]>([]);
 	const [clientsData, setClientsData] = useState<ClientsData[]>([]);
+	const [userVisitor, setUserVisitor] = useState<UserVisitor[]>([]);
 
-	const [mostrarContenido, setMostrarContenido] = useState(false);
+	const [mostrarSubscripciones, setMostrarSubscripciones] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchTerm, setSearchTerm] = useState('');
 	const clientsPerPage = 5;
@@ -83,6 +87,13 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 		} catch (error) {
 			console.log(error);
 		}
+
+		try {
+			const { data } = await crudUserVisitor(0, '', params.idClub, '', 2, token);
+			setUserVisitor(data);
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	useLayoutEffect(() => {
@@ -92,6 +103,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 
 	return <>
 		<div className='grid p-2 gap-6 items-center'>
+			{/* {'Grid clientes'} */}
 			<div className='overflow-hidden'>
 				<div className='grid lg:grid-flow-col gap-4'>
 					<div>
@@ -179,27 +191,96 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								))}
 							</div>
 						</div>
-					</div> 
-				</div>
-				<div className='pt-10'>
-					<button onClick={() => setMostrarContenido(!mostrarContenido)} className='px-2 p-2 lg:text-lg md:text-lg text-sm'>
-						Total de subscripciones:
-					</button>
-					<hr />
-					<div className={`content-container grid grid-flow-row lg:grid-cols-3 md:grid-cols-2 grid-cols-1 pt-10 lg:gap-5 justify-center ${mostrarContenido ? 'show' : 'hide'}`}>
-						{cantsubs.map((data, index) => (
-							<div key={index} className="grid grid-cols-2 card m-2 text-center shadow-lg border-2 bg-black text-white">
-								<div className='flex justify-center items-center'>
-									<img src={icon} alt={data.nameSubscriptionType} className='h-[65%]' />
-								</div>
-								<div className='flex flex-col justify-center p-2'>
-									<h1 className='font-semibold text-start lg:text-lg md:text-lg text-sm'>{data.nameSubscriptionType}</h1>
-									<h1 className='lg:text-base md:text-base text-xs'>Total de Subs: {data.CantSubs}</h1>
-								</div>
-							</div>
-						))}
 					</div>
 				</div>
+
+			</div>
+
+			{/* {'Grid usuarios visitantes'} */}
+			<div className='overflow-hidden'>
+				<div className='grid gap-8'>
+					<div>
+						<div className='flex h-16 px-2 justify-between items-center'>
+							<h1 className='text-black lg:text-lg md:text-lg text-sm'>Usuarios Visitantes</h1>
+							{/* <ModalUsers idUserTypeInt={3}></ModalUsers> */}
+						</div>
+						<div className='grid shadow-xl border-2 rounded-2xl'>
+							<div className='max-h-48 overflow-auto m-2'>
+								<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Usuario</th>
+											<th>Teléfono</th>
+											<th>Hora de Entrada</th>
+											<th>Hora de salida</th>
+											<th>Visitas</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										{userVisitor.map((user) => (
+											<tr key={user.id}>
+												<td>{user.id}</td>
+												<td>{user.username}</td>
+												<td>{user.phone}</td>
+												<td>{user.arrivalHour
+													? new Date(user.arrivalHour).toLocaleString(undefined, {
+														year: 'numeric',
+														month: 'numeric',
+														day: 'numeric',
+														hour: 'numeric',
+														minute: 'numeric',
+														second: 'numeric',
+														hour12: false, // Habilita el formato de 12 horas
+													})
+													: "N/A"}</td>
+												<td>{user.exitHour
+													? new Date(user.exitHour).toLocaleString(undefined, {
+														year: 'numeric',
+														month: 'numeric',
+														day: 'numeric',
+														hour: 'numeric',
+														minute: 'numeric',
+														second: 'numeric',
+														hour12: false, // Habilita el formato de 12 horas
+													})
+													: "N/A"}</td>
+												<td>{user.visitas}</td>
+												<td>
+
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div className=''>
+						<button onClick={() => setMostrarSubscripciones(!mostrarSubscripciones)} className='px-2 p-2 lg:text-lg md:text-lg text-sm'>
+							Total de subscripciones:
+						</button>
+						<hr />
+						<div className={`content-container grid grid-flow-row lg:grid-cols-3 md:grid-cols-3 grid-cols-2 pt-10 gap-4 justify-center ${mostrarSubscripciones ? 'show' : 'hide'}`}>
+							{cantsubs.map((data, index) => (
+								<div key={index} className="grid grid-flow-col card p-2 text-center shadow-lg border-2 bg-black text-white">
+									<div className='flex justify-center items-center'>
+										<img src={icon} alt={data.nameSubscriptionType} className='lg:h-[55%] md:h-[40%] lg:block md:block hidden' />
+									</div>
+									<div className='flex flex-col justify-center p-2'>
+										<h1 className='font-semibold text-start lg:text-lg md:text-base text-sm'>{data.nameSubscriptionType}</h1>
+										<h1 className='lg:text-base md:text-sm text-xs pt-2 text-start'>Total de Subs: <span className='text-red-500'>{data.CantSubs}</span></h1>
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* {'Grid subscripciones'} */}
+			<div className='overflow-hidden'>
 				<div>
 					<div className='pt-2'>
 						<div className='flex h-16 px-2 justify-between items-center'>
@@ -210,7 +291,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
 									<thead>
 										<tr>
-											<th>ID</th>
+											<th>IDUSER</th>
 											<th>Usuario</th>
 											<th>Apellido</th>
 											<th>Subscripción</th>
@@ -248,8 +329,9 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 					</div>
 				</div>
 			</div>
-			<div>
-				<div className='overflow-hidden mt-10 mb-10'>
+			{/* {'Grid staff'} */}										
+			<div className='overflow-hidden mb-10'>
+				<div >
 					<div className='flex h-16 px-2 justify-between items-center'>
 						<h1 className='text-black lg:text-lg md:text-lg text-sm'>Miembros del Staff</h1>
 						{isAdmin && (

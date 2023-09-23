@@ -126,7 +126,7 @@ const GestionUsuarioView: React.FC = () => {
 				  }, 4000);
 				}
 			  } catch (error) {
-				Swal.fire('Error', 'Hubo un error al procesar la solicitud.', 'error');
+				Alert('Hubo un error al procesar la solicitud.', false);
 				console.log(error);
 			  }
 		  }

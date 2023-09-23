@@ -58,6 +58,7 @@ const ModalProducts: React.FC<ModalProductsProps> = () => {
                 }
             } catch (error: any) {
                 Alert(error.message, false);
+                console.log(error);
                 setTimeout(() => {
                 }, 3000)
             }
@@ -100,7 +101,7 @@ const ModalProducts: React.FC<ModalProductsProps> = () => {
                     </div>
                     <div className='form-control w-full'>
                         <label className='label'>
-                            <span className='label-text'>ID Category:</span>
+                            <span className='label-text'>Categoría:</span>
                         </label>
                         <select required
                             onChange={handleProductChange}

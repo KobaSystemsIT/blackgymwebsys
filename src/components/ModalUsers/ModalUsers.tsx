@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ModalUsers.css';
 import { useParams } from 'react-router-dom';
-import { newUserOrStaff } from '@/services/Users/users.service';
+import { crudUserSystem, newUserOrStaff } from '@/services/Users/users.service';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
 import { format } from 'date-fns-tz';
@@ -146,7 +146,7 @@ export const ModalUserSystem: React.FC<ModalUserSystemProps> = ({ }) => {
 	const tokenState = useSelector((store: AppStore) => store.token);
 	const token = tokenState.token;
 	const [username, setUsername] = useState('');
-	const [idTypeUser, setIdTypeUser] = useState(0);
+	const [idUserType, setIdTypeUser] = useState(0);
 	const [password, setPassword] = useState('');
 
 	const userType = [
@@ -159,23 +159,40 @@ export const ModalUserSystem: React.FC<ModalUserSystemProps> = ({ }) => {
 	}
 
 	const closeModal = () => {
+		window.modalUserSys.close();
 		setUsername('');
 		setPassword('');
-		window.modalUserSys.close();
+		setIdTypeUser(0);
 		setShowEmptyFieldsAlert(false);
 	}
 
 	const handleIdUserChange = (event: any) => {
         const selectedProduct = parseInt(event.target.value, 10)
-
         if (selectedProduct) {
             setIdTypeUser(selectedProduct);
-            console.log(selectedProduct)
         }
     };
 
-	const newUser = async () => {
-
+	const newUser = async (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		if(!username || !password || !idUserType){
+			setShowEmptyFieldsAlert(true);
+		} else {
+			setShowEmptyFieldsAlert(false);
+			try {
+				const result = await crudUserSystem(0, username, password, idUserType, 1, token);
+				if(result) {
+					Alert(result.mensaje, true);
+					setTimeout(() => {
+						closeModal();
+						window.location.reload();
+					}, 2500);
+				}
+			} catch (error:any) {
+				Alert(error, false);
+				console.log(error);
+			}
+		}
 	}
 	return (
 		<>
@@ -206,7 +223,7 @@ export const ModalUserSystem: React.FC<ModalUserSystemProps> = ({ }) => {
 								onChange={handleIdUserChange}
 								className='input input-bordered w-full'
 							>
-								<option>Seleccione una opción</option>
+								<option value=''>Seleccione una opción</option>
 								{userType.map((user) => (
 									<option key={user.idUserType} value={user.idUserType}>
 										{user.name}

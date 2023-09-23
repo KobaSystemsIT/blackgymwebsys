@@ -119,3 +119,40 @@ export const crudUserSystem = (adminID: number, username: string, password: stri
             throw error;
         });
 }
+
+export const crudUserVisitor = (id: number, username:string, idClub: number, phone:string, typeAction: number,  token: any) => {
+    const body = {
+        idUser: id,
+        username: username,
+        idClub: idClub,
+        phone: phone,
+        typeAction: typeAction,
+    }
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    };
+
+    return fetch(dbaccess + 'crudUserVisitor', requestOptions)
+        .then(async (res) => {
+            if (!res.ok) {
+                const errorResponse = await res.json();
+                throw new Error(errorResponse.message);
+            }
+            return res.json();
+        })
+        .then((data) => {
+            if (data.error) {
+                throw new Error(data.message || 'Error desconocido');
+            }
+            return data;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            throw error;
+        });
+};

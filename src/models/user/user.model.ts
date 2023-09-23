@@ -25,3 +25,13 @@ export interface UserSys {
   username:string,
   nameUserType:string
 }
+
+export interface UserVisitor {
+  id: number,
+  username: string,
+  phone: string,
+  arrivalHour: string,
+  exitHour: string,
+  visitas: number
+
+}
