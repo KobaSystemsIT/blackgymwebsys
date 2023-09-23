@@ -11,8 +11,9 @@ export type ModalUsersProps = {
 	idUserTypeInt: number
 }
 
-export type ModalUpdateUserProps = {
+export type ModalUserSystemProps = {
 }
+
 
 export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
@@ -20,9 +21,8 @@ export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 
 	const tokenState = useSelector((store: AppStore) => store.token);
 	const token = tokenState.token;
-
-	//declaramos las variables del formulario
 	const [username, setUsername] = useState('');
+
 	const [lastname, setLastname] = useState('');
 	const [phone, setPhone] = useState('');
 	const [email, setEmail] = useState('');
@@ -68,8 +68,8 @@ export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
-                        window.location.reload();
-                    }, 3000)
+						window.location.reload();
+					}, 3000)
 				}
 			} catch (error: any) {
 				setTimeout(() => {
@@ -138,6 +138,103 @@ export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 	</>
 };
 
+export const ModalUserSystem: React.FC<ModalUserSystemProps> = ({ }) => {
+
+	const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
+	const params: any = useParams();
+
+	const tokenState = useSelector((store: AppStore) => store.token);
+	const token = tokenState.token;
+	const [username, setUsername] = useState('');
+	const [idTypeUser, setIdTypeUser] = useState(0);
+	const [password, setPassword] = useState('');
+
+	const userType = [
+		{ idUserType: 1, name: 'Administrador' },
+		{ idUserType: 2, name: 'Staff' }
+	  ];
+
+	const openModal = () => {
+		window.modalUserSys.showModal();
+	}
+
+	const closeModal = () => {
+		setUsername('');
+		setPassword('');
+		window.modalUserSys.close();
+		setShowEmptyFieldsAlert(false);
+	}
+
+	const handleIdUserChange = (event: any) => {
+        const selectedProduct = parseInt(event.target.value, 10)
+
+        if (selectedProduct) {
+            setIdTypeUser(selectedProduct);
+            console.log(selectedProduct)
+        }
+    };
+
+	const newUser = async () => {
+
+	}
+	return (
+		<>
+			<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={openModal}>
+				<h1 className=' text-xs'>Nuevo Usuario</h1>
+			</button>
+			<dialog id="modalUserSys" className="modal-box">
+				<div>
+					<h3 className="font-bold text-lg text-center m-4">Registro de Usuarios</h3>
+					<form className="grid text-black lg:text-sm text-xs gap-4">
+						<div className='form-control w-full'>
+							<label className='label'>
+								<span className='label-text'>Nombre:</span>
+							</label>
+							<input value={username} onChange={(e) => setUsername(e.target.value)} type="text" id="username" name="username" required className='input input-bordered w-full' />
+						</div>
+						<div className='form-control w-full'>
+							<label className='label'>
+								<span className='label-text'>Contraseña</span>
+							</label>
+							<input value={password} onChange={(e) => setPassword(e.target.value)} type="password" id="lastname" name="lastname" required className='input input-bordered w-full' />
+						</div>
+						<div className='form-control w-full'>
+							<label className='label'>
+								<span className='label-text'>Tipo de Usuario:</span>
+							</label>
+							<select required
+								onChange={handleIdUserChange}
+								className='input input-bordered w-full'
+							>
+								<option>Seleccione una opción</option>
+								{userType.map((user) => (
+									<option key={user.idUserType} value={user.idUserType}>
+										{user.name}
+									</option>
+								))}
+							</select>
+
+						</div>
+						<div className='grid grid-cols-2 gap-6'>
+							<button className='btn btn-success btn-sm font-normal' onClick={newUser}>Registrar</button>
+							<button type="button" className='btn btn-warning btn-sm font-normal' onClick={closeModal}>
+								Cerrar
+							</button>
+						</div>
+					</form>
+					<br />
+					{showEmptyFieldsAlert && (
+						<div className="text-red-600">
+							Por favor, complete todos los campos.
+						</div>
+					)}
+				</div>
+			</dialog>
+		</>
+	)
+}
+
 export default {
-	ModalUsers
+	ModalUsers,
+	ModalUserSystem
 }

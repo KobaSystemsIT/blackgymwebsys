@@ -1,3 +1,4 @@
+import user from "@/redux/states/user";
 import baseUrl from "@/services/Login/auth.service";
 const dbaccess = baseUrl + 'dbaccess/';
 
@@ -63,6 +64,43 @@ export const modifyOrDeleteUser = (idUser: number, username: string, lastName: s
     };
 
     return fetch(dbaccess + 'modifyOrDeleteUser', requestOptions)
+        .then(async (res) => {
+            if (!res.ok) {
+                const errorResponse = await res.json();
+                throw new Error(errorResponse.message);
+            }
+            return res.json();
+        })
+        .then((data) => {
+            if (data.error) {
+                throw new Error(data.message || 'Error desconocido');
+            }
+            return data;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            throw error;
+        });
+};
+
+export const crudUserSystem = (adminID: number, username: string, password: string, idUserType:number, typeAction:number, token: any) => {
+    const body = {
+        adminID: adminID, 
+        username: username,
+        password: password,
+        idUserType: idUserType,
+        typeAction: typeAction
+    }
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    };
+
+    return fetch(dbaccess + 'crudUserSystem', requestOptions)
         .then(async (res) => {
             if (!res.ok) {
                 const errorResponse = await res.json();

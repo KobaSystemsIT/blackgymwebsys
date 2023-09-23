@@ -19,3 +19,9 @@ export interface UserData {
   isActive:string;
   idUserType:number;
 }
+
+export interface UserSys {
+  adminID:number,
+  username:string,
+  nameUserType:string
+}

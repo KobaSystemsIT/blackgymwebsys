@@ -16,8 +16,6 @@ const ModalCategories: React.FC<ModalCategoriesProps> = () => {
 
     const tokenState = useSelector((store: AppStore) => store.token);
     const token = tokenState.token;
-
-    const [categoryId, setcategoryId] = useState('');
     const [nameCateg, setnameCateg] = useState('');
 
     const openModal = () => {
@@ -25,7 +23,6 @@ const ModalCategories: React.FC<ModalCategoriesProps> = () => {
     }
 
     const closeModal = () => {
-        setcategoryId('');
         setnameCateg('');
         window.modalCategories.close();
         setShowEmptyFieldsAlert(false);
@@ -38,11 +35,6 @@ const ModalCategories: React.FC<ModalCategoriesProps> = () => {
             setShowEmptyFieldsAlert(true);
         } else {
             setShowEmptyFieldsAlert(false);
-            const timeZone = 'America/Mexico_City';
-
-            const currentDate = new Date();
-            //const fecha = (format(currentDate, 'yyyy-MM-dd HH:mm:ss', { timeZone }));
-            Loading();
             try {
                 const result = await crudCategoriesProducts(1, nameCateg, 1, token);
                 if (result) {
@@ -63,7 +55,7 @@ const ModalCategories: React.FC<ModalCategoriesProps> = () => {
 
     return <>
         <button className='btn lg:btn-sm btn-sm bg-black text-white rounded-lg hover:text-black hover:bg-transparent' onClick={openModal}>
-            <h1 className='text-xs'>Nueva Categoría <br /> de Producto</h1>
+            <h1 className='text-xs'>Nueva Categoría</h1>
         </button>
 
         <dialog id={"modalCategories"} className="modal-box z-10">

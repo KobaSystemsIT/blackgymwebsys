@@ -1,6 +1,6 @@
 import baseUrl from "@/services/Login/auth.service";
 
-const urlcrudProducts = baseUrl + '/dbaccess/crudProducts';
+const urlcrudProducts = baseUrl + 'dbaccess/crudProducts';
 
 
 export const crudProducts = async (productID: number, productName:string, productPrice: number, idCategory: number, typeAction: number, token: any) => {

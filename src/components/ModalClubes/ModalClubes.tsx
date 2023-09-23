@@ -80,7 +80,7 @@ const ModalClubes: React.FC<ModalClubesProps> = () => {
                         <label className='label'>
                             <span className='label-text'>Data Iframe:</span>
                         </label>
-                        <input value={dataIFrame} onChange={(e) => setdataIFrame(e.target.value)} type="text" id="addressClub" name="addressClub" required className='input input-bordered w-full' />
+                        <input value={dataIFrame} onChange={(e) => setdataIFrame(e.target.value)} type="text" id="dataIFrame" name="dataIFrame" required className='input input-bordered w-full' />
                     </div>
                     <div className='grid grid-cols-2 gap-6'>
                         <button className='btn btn-success btn-sm font-normal' onClick={newClubes}>Registrar</button>
