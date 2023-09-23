@@ -36,6 +36,9 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const [userVisitor, setUserVisitor] = useState<UserVisitor[]>([]);
 
 	const [mostrarSubscripciones, setMostrarSubscripciones] = useState(false);
+	const [mostrarClientes, setMostrarClientes] = useState(true);
+	const [mostrarClientesSubs, setMostrarClientesSubs] = useState(false);
+
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchTerm, setSearchTerm] = useState('');
 	const clientsPerPage = 5;
@@ -105,12 +108,14 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 		<div className='grid p-2 gap-6 items-center'>
 			{/* {'Grid clientes'} */}
 			<div className='overflow-hidden'>
-				<div className='grid lg:grid-flow-col gap-4'>
-					<div>
-						<div className='flex h-16 px-2 justify-between items-center'>
-							<h1 className='text-black lg:text-lg md:text-lg text-sm'>Clientes registrados</h1>
-							<ModalUsers idUserTypeInt={3}></ModalUsers>
-						</div>
+				<div className='grid gap-4'>
+					<div className='flex h-16 px-2 justify-between items-center'>
+						<button className='text-black lg:text-lg md:text-lg text-sm' onClick={() => setMostrarClientes(!mostrarClientes)}>Clientes registrados</button>
+						<ModalUsers idUserTypeInt={3}></ModalUsers>
+					</div>
+					<hr className={`content-container ${mostrarClientes ? 'hide' : 'show'}`}/>
+					
+					<div className={`content-container grid lg:grid-flow-col gap-4 ${mostrarClientes ? 'show' : 'hide'}`}>
 						<div className='grid shadow-xl border-2 rounded-2xl'>
 							<div className='flex lg:flex-row md:flex-row flex-col justify-between p-4 items-center gap-4'>
 								<input
@@ -165,8 +170,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								))}
 							</div>
 						</div>
-					</div>
-					<div className='flex justify-center align-middle items-center pt-14'>
+						<div className='flex justify-center align-middle items-center'>
 						<div className='lg:block md:block hidden'>
 							<div className="stats lg:stats-vertical gap-4">
 								{clientsData.map((clients) => (
@@ -192,8 +196,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 							</div>
 						</div>
 					</div>
+					</div>
 				</div>
-
 			</div>
 
 			{/* {'Grid usuarios visitantes'} */}
@@ -284,7 +288,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 				<div>
 					<div className='pt-2'>
 						<div className='flex h-16 px-2 justify-between items-center'>
-							<h1 className='text-black lg:text-lg md:text-lg text-sm text-center'>Clientes con subscripción</h1>
+							<button className='text-black lg:text-lg md:text-lg text-sm text-center' onClick={() => setMostrarClientesSubs(!mostrarClientesSubs)}>Clientes con subscripción</button>
 						</div>
 						<div className='grid shadow-xl border-2 rounded-2xl'>
 							<div className='max-h-48 overflow-auto m-2'>
@@ -329,7 +333,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 					</div>
 				</div>
 			</div>
-			{/* {'Grid staff'} */}										
+
+			{/* {'Grid staff'} */}
 			<div className='overflow-hidden mb-10'>
 				<div >
 					<div className='flex h-16 px-2 justify-between items-center'>
