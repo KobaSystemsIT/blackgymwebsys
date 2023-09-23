@@ -122,7 +122,7 @@ export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 						</label>
 						<input value={phoneEmergency} onChange={(e) => setPhoneEmergency(e.target.value)} type="number" id="emergencynumbercontact" name="emergencynumbercontact" required className='input input-bordered w-full max-w-xs' />
 					</div>
-					<button className='btn-success btn-sm font-normal' onClick={newUser}>Registrar</button>
+					<button className='btn btn-success btn-sm font-normal' onClick={newUser}>Registrar</button>
 					<button type="button" className='btn btn-warning btn-sm font-normal' onClick={closeModal}>
 						Cerrar
 					</button>

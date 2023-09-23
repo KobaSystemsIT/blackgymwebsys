@@ -30,15 +30,15 @@ const GestionSucursales: React.FC<GestionSucursalesProps> = ({ }) => {
 
   return (
     <div>
-      <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-3 grid-cols-1 gap-6">
         {clubesData.map((sucursal) => (
           <div key={sucursal.idClub} className="sucursal flex flex-col">
             <a href={`/Dashboard/Gestion_de_Sucursal/${sucursal.idClub}`}>
               <img src="https://blackgymfitclub.com/assets/LogoWhiteBlackGym-2e55f490.svg" alt="Logo" className="flex w-[70%]" />
-              <div className="text-white p-2 text-start">{sucursal.nameClub}</div>
+              <h1 className='text-white p-2 text-start font-semibold tex-club'>{sucursal.nameClub}</h1>
               <div className=" text-right text-white">
-                <h1>Staffs Activos: {sucursal.StaffActivo}</h1>
-                <h1>Clientes Activos: {sucursal.ClientesActivos}</h1>
+                <h1>Staffs Activos: <span className='text-red-500 font-semibold'>{sucursal.StaffActivo}</span></h1>
+                <h1>Clientes Activos: <span className='text-red-500 font-semibold'>{sucursal.ClientesActivos}</span></h1>
               </div>
             </a>
           </div>

@@ -31,7 +31,7 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
 
     const getProducts = async () => {
         try {
-            const {data} = await crudProducts(1, '', 1, 1, 2, token);
+            const { data } = await crudProducts(1, '', 1, 1, 2, token);
             setProducts(data);
         } catch (error) {
             console.log(error);
@@ -40,39 +40,39 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
 
     const newProduct = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        if(idProduct === 0 || amountProduct === 0){
+        if (idProduct === 0 || amountProduct === 0) {
             setShowEmptyFieldsAlert(true);
         } else {
             setShowEmptyFieldsAlert(false);
             try {
                 const result = await crudInventory(1, amountProduct, idProduct, params.idClub, 1, token);
-                if(result){
+                if (result) {
                     Alert(result.mensaje, true);
                     setTimeout(() => {
-						closeModal();
+                        closeModal();
                         window.location.reload()
-					}, 3000)
+                    }, 3000)
                 }
             } catch (error) {
                 setTimeout(() => {
-					Alert('Hubo un error al procesar la solicitud', false)
-				}, 3000)
+                    Alert('Hubo un error al procesar la solicitud', false)
+                }, 3000)
             }
         }
     }
 
-    const handleProductChange = (event:any) => {
+    const handleProductChange = (event: any) => {
         const selectedProduct = parseInt(event.target.value, 10)
 
-        if(selectedProduct) {
+        if (selectedProduct) {
             setIdProduct(selectedProduct);
         }
     };
 
-    const handleAmountChange = (event:any) => {
+    const handleAmountChange = (event: any) => {
         const selectedProduct = parseInt(event.target.value, 10)
 
-        if(selectedProduct) {
+        if (selectedProduct) {
             setAmountProduct(selectedProduct);
         }
     };
@@ -81,30 +81,30 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
         getProducts();
     }, []);
     return <>
-        <button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent' 
-        onClick={openModal}
+        <button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'
+            onClick={openModal}
         >
             <h1>Agregar existencias</h1>
         </button>
         <dialog id="modalInventory" className="modal-box">
             <div>
                 <h3 className="font-bold text-lg text-center m-4">Agregar Existencias al inventario</h3>
-                <form className="grid grid-cols-2 text-black lg:text-sm text-xs gap-4">
+                <form className="grid text-black lg:text-sm text-xs gap-4">
                     <div className='form-control w-full'>
                         <label className='label'>
                             <span className='label-text'>Producto:</span>
                         </label>
-                        <select required									
-									onChange={handleProductChange}
-									className='input input-bordered w-full max-w-xs'
-								>
-									<option value=''>Seleccione un producto</option>
-									{products.map((products) => (
-										<option key={products.productID} value={products.productID}>
-											{products.productName}
-										</option>
-									))}
-								</select>
+                        <select required
+                            onChange={handleProductChange}
+                            className='input input-bordered w-full max-w-xs'
+                        >
+                            <option value=''>Seleccione un producto</option>
+                            {products.map((products) => (
+                                <option key={products.productID} value={products.productID}>
+                                    {products.productName}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className='form-control w-full'>
                         <label className='label'>
@@ -114,17 +114,19 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
                     </div>
                     <input type="hidden" id="inventoryID" name="inventoryID" value={inventoryID} />
                     <input type="hidden" id="created_at" name="created_at" value={new Date().toISOString()} />
-                    <button className=' btn-success btn-sm font-normal' onClick={newProduct}>Agregar</button>
-                    <button type="button" className='btn btn-sm font-normal' onClick={closeModal}>
-                        Cerrar
-                    </button>
+                    <div className='grid grid-cols-2 gap-6'>
+                        <button className=' btn btn-success btn-sm font-normal' onClick={newProduct}>Agregar</button>
+                        <button type="button" className='btn btn-sm font-normal' onClick={closeModal}>
+                            Cerrar
+                        </button>
+                    </div>
                 </form>
                 <br />
                 {showEmptyFieldsAlert && (
-					<div className="text-red-600">
-						Por favor, complete todos los campos.
-					</div>
-				)}
+                    <div className="text-red-600">
+                        Por favor, complete todos los campos.
+                    </div>
+                )}
             </div>
         </dialog>
     </>

@@ -155,8 +155,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 						</div>
 					</div>
 					<div className='flex justify-center align-middle items-center pt-14'>
-						<div>
-							<div className="stats lg:stats-vertical shadow gap-4 border-2">
+						<div className='lg:block md:block hidden'>
+							<div className="stats lg:stats-vertical gap-4">
 								{clientsData.map((clients) => (
 									<div className={`stat ${clients.Categoria === 'Usuarios Nuevos' ? ' bg-lime-500' : ''} 
 									${clients.Categoria === 'Usuarios Renovación' ? 'bg-yellow-500' : ''} 
@@ -167,14 +167,26 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								))}
 							</div>
 						</div>
-					</div>
+						<div className='lg:hidden md:hidden block'>
+							<div className="grid grid-flow-col gap-4">
+								{clientsData.map((clients) => (
+									<div className={`card flex p-2 ${clients.Categoria === 'Usuarios Nuevos' ? ' bg-lime-500' : ''} 
+									${clients.Categoria === 'Usuarios Renovación' ? 'bg-yellow-500' : ''} 
+									${clients.Categoria === 'Usuarios Por Vencer' ? 'bg-red-500' : ''} `} key={clients.id}>
+										<div className="text-sm font-semibold">{clients.Categoria}</div>
+										<div className="ml-5">{clients.Cantidad}</div>
+									</div>
+								))}
+							</div>
+						</div>
+					</div> 
 				</div>
 				<div className='pt-10'>
-					<button onClick={() => setMostrarContenido(!mostrarContenido)} className='px-2 p-2'>
+					<button onClick={() => setMostrarContenido(!mostrarContenido)} className='px-2 p-2 lg:text-lg md:text-lg text-sm'>
 						Total de subscripciones:
 					</button>
 					<hr />
-					<div className={`content-container grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 pt-10 lg:gap-5 justify-center ${mostrarContenido ? 'show' : 'hide'}`}>
+					<div className={`content-container grid grid-flow-row lg:grid-cols-3 md:grid-cols-2 grid-cols-1 pt-10 lg:gap-5 justify-center ${mostrarContenido ? 'show' : 'hide'}`}>
 						{cantsubs.map((data, index) => (
 							<div key={index} className="grid grid-cols-2 card m-2 text-center shadow-lg border-2 bg-black text-white">
 								<div className='flex justify-center items-center'>

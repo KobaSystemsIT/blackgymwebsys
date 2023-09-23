@@ -4,12 +4,11 @@ import { useSelector } from "react-redux";
 import { AppStore } from "@/redux/store";
 import { crudInventory } from "@/services";
 import { useParams } from "react-router-dom";
-import { faPencilSquare, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Inventory } from "@/models/inventory/inventory";
 import { ModalInventory } from "@/components/ModalInventory";
 import Swal from "sweetalert2";
-import { error } from "console";
 import { Alert } from "@/components/AlertComponent/AlertComponent";
 
 export type InventarioProps = {};
@@ -90,7 +89,7 @@ const Inventario: React.FC<InventarioProps> = () => {
                                     <td>
                                         <div className="grid grid-flow-col gap-2">
                                             <button title="Eliminar Producto" onClick={() => deleteProduct(data.inventoryID)}>
-                                                <FontAwesomeIcon icon={faXmark} className="h-4" />
+                                                <FontAwesomeIcon icon={faTrash} className="h-4" />
                                             </button>
                                         </div>
                                     </td>

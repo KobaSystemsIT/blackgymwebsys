@@ -49,6 +49,7 @@ const ModalCategories: React.FC<ModalCategoriesProps> = () => {
                     Alert(result.mensaje, true);
                     setTimeout(() => {
                         closeModal();
+                        window.location.reload();
                     }, 3000)
                 }
             } catch (error: any) {
@@ -61,26 +62,28 @@ const ModalCategories: React.FC<ModalCategoriesProps> = () => {
     }
 
     return <>
-        <button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent' onClick={openModal}>
-            <h1>{"Nuevo Category"}</h1>
+        <button className='btn lg:btn-sm btn-sm bg-black text-white rounded-lg hover:text-black hover:bg-transparent' onClick={openModal}>
+            <h1 className='text-xs'>Nueva Categoría <br /> de Producto</h1>
         </button>
 
         <dialog id={"modalCategories"} className="modal-box z-10">
             <div>
-                <h3 className="font-bold text-center m-4 text-base">Registro de Categories</h3>
-                <form className="grid grid-cols-2 text-black lg:text-sm text-xs gap-4">
+                <h3 className="font-bold text-center m-4 text-base">Registro de Categorías para Productos</h3>
+                <form className="grid grid-cols-1 text-black lg:text-sm text-xs gap-4">
                     <div className='form-control w-full'>
                         <label className='label'>
-                            <span className='label-text'>Nombre del Category:</span>
+                            <span className='label-text'>Nombre de la categoría:</span>
                         </label>
-                        <input value={nameCateg} onChange={(e) => setnameCateg(e.target.value)} type="text" id="nameCateg" name="nameCateg" required className='input input-bordered w-full max-w-xs' />
+                        <input value={nameCateg} onChange={(e) => setnameCateg(e.target.value)} type="text" id="nameCateg" name="nameCateg" required className='input input-bordered w-full' />
                     </div>
                     <div>
                     </div>
-                    <button className='btn-success btn-sm font-normal' onClick={newCategories}>Registrar</button>
-                    <button type="button" className='btn btn-warning btn-sm font-normal' onClick={closeModal}>
-                        Cerrar
-                    </button>
+                    <div className='grid grid-cols-2 gap-6'>
+                        <button className='btn btn-success btn-sm font-normal' onClick={newCategories}>Registrar</button>
+                        <button type="button" className='btn btn-warning btn-sm font-normal' onClick={closeModal}>
+                            Cerrar
+                        </button>
+                    </div>
                 </form>
                 <br />
                 {showEmptyFieldsAlert && (
