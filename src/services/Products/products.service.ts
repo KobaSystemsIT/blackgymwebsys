@@ -1,4 +1,5 @@
 import baseUrl from "@/services/Login/auth.service";
+
 const urlcrudProducts = baseUrl + '/dbaccess/crudProducts';
 
 
@@ -10,7 +11,7 @@ export const crudProducts = async (productID: number, productName:string, produc
         idCategory: idCategory,
         typeAction: typeAction
     }
-
+	
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -20,17 +21,17 @@ export const crudProducts = async (productID: number, productName:string, produc
         body: JSON.stringify(body),
     };
 
-    return fetch(baseUrl + 'dbaccess/crudProducts', requestOptions)
+    return fetch(urlcrudProducts, requestOptions)
         .then(async (res) => {
             if (!res.ok) {
                 const errorResponse = await res.json();
-                throw new Error(errorResponse.message); 
+                throw new Error(errorResponse.message);
             }
-            return res.json(); 
+            return res.json();
         })
         .then((data) => {
             if (data.error) {
-                throw new Error(data.message || 'Error desconocido'); 
+                throw new Error(data.message || 'Error desconocido');
             }
             return data;
         })

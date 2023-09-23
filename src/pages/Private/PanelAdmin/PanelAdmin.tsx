@@ -4,6 +4,7 @@ import { AppStore } from '@/redux/store';
 import './PanelAdmin.css';
 import { Clubes } from '@/models';
 import { Categories } from '@/models/categories';
+import { Products } from '@/models/products';
 import { ModalClubes } from '@/components/ModalClubes';
 import { ModalCategories } from '@/components/ModalCategories';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,6 +12,8 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { crudClub } from '@/services/Clubes/clubes.service';
 import { crudCategoriesProducts } from '@/services/Categories/categories.service';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { crudProducts } from '@/services/Products/products.service';
+import ModalProducts from '@/components/ModalProducts/ModalProducts';
 import { Alert } from '@/components/AlertComponent/AlertComponent';
 import Swal from 'sweetalert2';
 
@@ -22,6 +25,7 @@ const PanelAdmin: React.FC = () => {
 	const token = tokenState.token;
 	const [clubes, setClubes] = useState<Clubes[]>([]);
 	const [categories, setCategory] = useState<Categories[]>([]);
+	const [products, setProducts] = useState<Products[]>([]);
 
 	const getClub = async () => {
 		try {
@@ -36,6 +40,15 @@ const PanelAdmin: React.FC = () => {
 		try {
 			const { data } = await crudCategoriesProducts(1, '', 2, token);
 			setCategory(data);
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	const getProducts = async () => {
+		try {
+			const { data } = await crudProducts(0, '', 0, 0, 2, token);
+			setProducts(data);
 		} catch (error) {
 			console.error(error);
 		}
@@ -94,6 +107,7 @@ const PanelAdmin: React.FC = () => {
 	useLayoutEffect(() => {
 		getClub();
 		getCategories();
+		getProducts();
 	}, []);
 
 	return (
@@ -166,6 +180,41 @@ const PanelAdmin: React.FC = () => {
 							</table>
 						</div>
 					</div>
+				</div>
+			</div>
+
+			<div className='grid p-2 gap-4 items-center'>
+				<div className='overflow-hidden'>
+					<div className=' flex p-2 bg-gray-200 rounded-lg justify-between items-center'>
+						<h1 className='text-black text-sm'>Products registrados</h1>
+						<ModalProducts></ModalProducts>
+					</div>
+				</div>
+				<div className='max-h-48 overflow-auto m-2'>
+					<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white text-center'>
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nombre</th>
+								<th>Precio</th>
+							</tr>
+						</thead>
+						<tbody>
+							{products.map((product) => (
+								<tr key={product.productID}>
+									<td>{product.productID}</td>
+									<td>{product.productName}</td>
+									<td>{product.productPrice}</td>
+									<td>
+										<div className='grid grid-flow-col gap-2'>
+											<button title='Editar Product'><FontAwesomeIcon icon={faUserPen} className='h-4' /></button>
+											<button title='Gestionar Product'><FontAwesomeIcon icon={faPlus} className='h-4' /></button>
+										</div>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</>
