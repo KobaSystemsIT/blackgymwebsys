@@ -20,33 +20,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  
 }
 
 .sucursal:hover {
   transform: scale(1.03);
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
   background-color: #373535;
+  
 }
 
-/* Nombre de la sucursal */
-.nombre {
-  font-size: 18px;
-  font-weight: bold;
-  color: #ffffff;
-  margin: 10px 0;
-}
-
-/* Estilo de la imagen */
-.imagen img {
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 10px;
-  border-radius: 12px;
-}
-
-/* Media query para pantallas más pequeñas */
-@media screen and (max-width: 768px) {
-  .sucursal-container {
-    grid-template-columns: 1fr; /* Muestra una sola columna en pantallas pequeñas */
-  }
+.sucursal:hover .text-club {
+  color: red;
 }

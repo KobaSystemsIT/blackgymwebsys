@@ -7,7 +7,8 @@ export interface ClientsSubs {
     nameSubscriptionType: string,
     isActive: string,
     startDate: string,
-    endDate: string
+    endDate: string,
+    diasRestantes:string
 }
 
 export interface Clients {
@@ -16,4 +17,11 @@ export interface Clients {
     lastName: string,
     nameEmergencyContact: string,
     emergencyContact: string,
+}
+
+export interface ClientsData {
+    id:number
+    Cantidad: number,
+    Categoria: string, 
+    Color:string 
 }

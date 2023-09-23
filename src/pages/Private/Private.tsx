@@ -19,6 +19,7 @@ import { viewDataClientsOrStaff } from '@/services/Clients/clients.service';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
 import { GestionUsuarioView } from '@/views/GestionUsuarioView';
+import { GestionClubView } from '@/views/GestionClubView';
 
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
@@ -32,6 +33,7 @@ declare global {
     modalCategories: HTMLDialogElement;
     modalProducts: HTMLDialogElement;
 	}
+  }
 }
 
 function Private() {
@@ -62,7 +64,7 @@ function Private() {
       </div>
       <div className="flex-grow overflow-x-hidden min-h-screen p-4 rounded-xl lg:m-2 md:m-4 m-0 pb-4">
         <Navbar />
-        <div className="p-6 overflow-y-auto relative z-0">
+        <div className="p-6 overflow-y-auto relative z-0 pb-10">
           <RoutesWithNotFound>
             <Route path="/" element={<Navigate to={PrivateRoutes.DASHBOARD} />} />
             <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
@@ -70,10 +72,12 @@ function Private() {
             <Route path='Gestion_de_Sucursal/:idClub' element={<GestionSucursal />}></Route>
             <Route path='Punto_de_Venta/:idClub' element={<PuntoVenta />} />
             <Route path='Inventario/:idClub' element={<Inventario />} />
-            <Route path='Gestion_de_Sucursal/:idClub/Gestion_de_Usuario/:idUser' element={<GestionUsuarioView/>}></Route>
+            <Route path='Gestion_de_Sucursal/:idClub/Gestion_de_Usuario/:idUser' element={<GestionUsuarioView />}></Route>
+
 
             {/*rutas de administrador*/}
             <Route element={<RoleGuard rol={Roles.ADMIN} />}>
+              <Route path='Panel_de_Administrador/Gestion_de_Club/:idClub' element={<GestionClubView />}></Route>
               <Route path="Gestion_de_Sucursales/" element={<GestionSucursales />} />
               <Route path="Gestion_Financiera/" element={<GestionFinanciera />} />
               <Route path="Panel_de_Administrador" element={<PanelAdmin />} />

@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import './ModalUsers.css';
 import { useParams } from 'react-router-dom';
-import { newUserOrStaff } from '@/services/users/users.service';
+import { newUserOrStaff } from '@/services/Users/users.service';
 import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
 import { format } from 'date-fns-tz';
 import { Alert } from '../AlertComponent/AlertComponent';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPen } from '@fortawesome/free-solid-svg-icons';
-import { Clients } from '@/models';
 
 export type ModalUsersProps = {
 	idUserTypeInt: number
@@ -71,8 +68,8 @@ export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
-						closeModal();
-					}, 3000)
+                        window.location.reload();
+                    }, 3000)
 				}
 			} catch (error: any) {
 				setTimeout(() => {
@@ -125,7 +122,7 @@ export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 						</label>
 						<input value={phoneEmergency} onChange={(e) => setPhoneEmergency(e.target.value)} type="number" id="emergencynumbercontact" name="emergencynumbercontact" required className='input input-bordered w-full max-w-xs' />
 					</div>
-					<button className='btn-success btn-sm font-normal' onClick={newUser}>Registrar</button>
+					<button className='btn btn-success btn-sm font-normal' onClick={newUser}>Registrar</button>
 					<button type="button" className='btn btn-warning btn-sm font-normal' onClick={closeModal}>
 						Cerrar
 					</button>

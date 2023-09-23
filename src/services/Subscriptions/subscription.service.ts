@@ -1,17 +1,13 @@
 import baseUrl from "@/services/Login/auth.service";
 const dbaccess = baseUrl + 'dbaccess/';
 
-export const newUserOrStaff = (username: string, lastname: string, phone: string, email: string, nameEmergency: string, phoneEmergency: string, idUserType: number, idClub: number, fecha: string, token: any) => {
+export const crudSubscription = (idSub: number, nameSubscription: string, daysSubscription: number, priceSubscription: number, typeAction:number, token: any) => {
     const body = {
-        username: username,
-        lastname: lastname,
-        phone: phone,
-        email: email,
-        nameEmergency: nameEmergency,
-        phoneEmergency: phoneEmergency,
-        idUserType: idUserType,
-        idClub: idClub,
-        fecha: fecha
+        idSub: idSub,
+        nameSubscription: nameSubscription,
+        daysSubscription: daysSubscription,
+        priceSubscription: priceSubscription,
+        typeAction: typeAction
     }
     const requestOptions = {
         method: 'POST',
@@ -22,7 +18,7 @@ export const newUserOrStaff = (username: string, lastname: string, phone: string
         body: JSON.stringify(body),
     };
 
-    return fetch(dbaccess + 'newUserOrStaff', requestOptions)
+    return fetch(dbaccess + 'crudSubscription', requestOptions)
         .then(async (res) => {
             if (!res.ok) {
                 const errorResponse = await res.json();
@@ -42,16 +38,13 @@ export const newUserOrStaff = (username: string, lastname: string, phone: string
         });
 }
 
-export const modifyOrDeleteUser = (idUser: number, username: string, lastName: string, phoneNumber:string, email: string, nameEmergencyContact: string, emergencyContact: string, valueOption: number, token: any) => {
+export const newOrUpdateSubscription = (idUser: number, idSubscriptionType:number, idClub:number, startDate:string, endDate:string, token: any) => {
     const body = {
         idUser: idUser,
-        username: username,
-        lastName: lastName,
-        phoneNumber: phoneNumber,
-        email: email,
-        nameEmergencyContact: nameEmergencyContact,
-        emergencyContact: emergencyContact,
-        valueOption: valueOption,
+        idSubscriptionType: idSubscriptionType,
+        idClub: idClub,
+        startDate: startDate,
+        endDate: endDate
     }
     const requestOptions = {
         method: 'POST',
@@ -62,7 +55,7 @@ export const modifyOrDeleteUser = (idUser: number, username: string, lastName: s
         body: JSON.stringify(body),
     };
 
-    return fetch(dbaccess + 'modifyOrDeleteUser', requestOptions)
+    return fetch(dbaccess + 'newOrUpdateSubscription', requestOptions)
         .then(async (res) => {
             if (!res.ok) {
                 const errorResponse = await res.json();

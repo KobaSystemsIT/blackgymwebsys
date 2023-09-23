@@ -1,7 +1,9 @@
 import baseUrl from "@/services/Login/auth.service";
-const dbaccess = baseUrl + 'dbaccess/';
 
-export const crudProducts = (productID: Number, productName: String, productPrice: number, idCategory: Number, typeAction: Number, token: any) => {
+const urlcrudProducts = baseUrl + '/dbaccess/crudProducts';
+
+
+export const crudProducts = async (productID: number, productName:string, productPrice: number, idCategory: number, typeAction: number, token: any) => {
     const body = {
         productID: productID,
         productName: productName,
@@ -9,6 +11,7 @@ export const crudProducts = (productID: Number, productName: String, productPric
         idCategory: idCategory,
         typeAction: typeAction
     }
+	
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -18,7 +21,7 @@ export const crudProducts = (productID: Number, productName: String, productPric
         body: JSON.stringify(body),
     };
 
-    return fetch(dbaccess + 'crudProducts', requestOptions)
+    return fetch(urlcrudProducts, requestOptions)
         .then(async (res) => {
             if (!res.ok) {
                 const errorResponse = await res.json();
@@ -36,4 +39,4 @@ export const crudProducts = (productID: Number, productName: String, productPric
             console.error('Error:', error);
             throw error;
         });
-}
+};

@@ -1,7 +1,8 @@
 export interface Clubes {
     idClub: number,
     nameClub: string, 
-    addressClub: string
+    addressClub: string;
+    dataIFrame: string;
 }
 
 export interface ClubesData{
