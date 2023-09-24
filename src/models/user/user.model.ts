@@ -33,5 +33,4 @@ export interface UserVisitor {
   arrivalHour: string,
   exitHour: string,
   visitas: number
-
 }

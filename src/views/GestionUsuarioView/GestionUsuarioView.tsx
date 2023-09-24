@@ -38,6 +38,7 @@ const GestionUsuarioView: React.FC = () => {
 	const [duration, setDuration] = useState('');
 	const [startDate, setStartDate] = useState('');
 	const [endDate, setEndDate] = useState('');
+	const [isDisabled, setDisabled] = useState(false);
 
 
 	const handleGoBack = () => {
@@ -73,6 +74,7 @@ const GestionUsuarioView: React.FC = () => {
 	  
 		if (confirmation.isConfirmed) {
 		  try {
+			setDisabled(true);
 			const result = await modifyOrDeleteUser(
 			  idUser,
 			  user.username,
@@ -87,6 +89,7 @@ const GestionUsuarioView: React.FC = () => {
 			if (result) {
 			  Alert(result.mensaje, true);
 			  setTimeout(() => {
+				setDisabled(false);
 				handleGoBack();
 			  }, 3000)
 			}
@@ -108,6 +111,7 @@ const GestionUsuarioView: React.FC = () => {
 		
 		  if (confirmation.isConfirmed) {
 			try {
+				setDisabled(true);
 				const result = await modifyOrDeleteUser(
 				  idUser,
 				  user.username,
@@ -122,6 +126,7 @@ const GestionUsuarioView: React.FC = () => {
 				if (result) {
 				  Alert(result.mensaje, true);
 				  setTimeout(() => {
+					setDisabled(false);
 					handleGoBack();
 				  }, 4000);
 				}
@@ -143,10 +148,12 @@ const GestionUsuarioView: React.FC = () => {
 		
 		if (confirmation.isConfirmed) {
 			try {
+				setDisabled(true);
 				const result = await newOrUpdateSubscription(idUser, subscription, idClub, startDate, endDate, token);
 				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
+						setDisabled(false);
                         handleGoBack();
                     }, 3000)
 				}
@@ -247,7 +254,7 @@ const GestionUsuarioView: React.FC = () => {
 								</div>
 							</form>
 							<div className='flex lg:flex-row flex-col gap-4 mt-10 lg:justify-end md:justify-end'>
-								<button className='btn btn-success btn-sm font-normal' onClick={updateUserData}>Actualizar datos</button>
+								<button className='btn btn-success btn-sm font-normal' onClick={updateUserData} disabled={isDisabled}>Actualizar datos</button>
 								<button type="button" className='btn btn-warning btn-sm font-normal' onClick={handleGoBack}>Volver</button>
 							</div>
 						</div>
@@ -324,7 +331,7 @@ const GestionUsuarioView: React.FC = () => {
 							</div>
 						</form>
 						<div className='flex lg:flex-row flex-col gap-4 mt-10 lg:justify-end md:justify-end'>
-							<button className='btn btn-success btn-sm font-normal' onClick={newOrUpdateSubscriptions}>Registrar Subscripción</button>
+							<button className='btn btn-success btn-sm font-normal' onClick={newOrUpdateSubscriptions} disabled={isDisabled}>Registrar Subscripción</button>
 							<button type="button" className='btn btn-warning btn-sm font-normal' onClick={handleGoBack}>Volver</button>
 						</div>
 					</div>
@@ -332,7 +339,7 @@ const GestionUsuarioView: React.FC = () => {
 				)}
 				
 				<div className='flex mt-5 p-4 justify-end'>
-					<button className=' btn btn-sm hover:bg-red-600' onClick={deleteUser}>Eliminar Usuario</button>						
+					<button className=' btn btn-sm hover:bg-red-600' onClick={deleteUser} disabled={isDisabled}>Eliminar Usuario</button>						
 				</div>
 			</div>
 		</>

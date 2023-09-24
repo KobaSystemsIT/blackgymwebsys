@@ -1,4 +1,3 @@
-import user from "@/redux/states/user";
 import baseUrl from "@/services/Login/auth.service";
 const dbaccess = baseUrl + 'dbaccess/';
 
@@ -122,7 +121,7 @@ export const crudUserSystem = (adminID: number, username: string, password: stri
 
 export const crudUserVisitor = (id: number, username:string, idClub: number, phone:string, typeAction: number,  token: any) => {
     const body = {
-        idUser: id,
+        id: id,
         username: username,
         idClub: idClub,
         phone: phone,

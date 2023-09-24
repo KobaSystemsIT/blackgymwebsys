@@ -34,6 +34,7 @@ declare global {
     modalCategories: HTMLDialogElement;
     modalProducts: HTMLDialogElement;
     modalUserSys: HTMLDialogElement;
+    modalUserVisitors: HTMLDialogElement;
   }
 }
 

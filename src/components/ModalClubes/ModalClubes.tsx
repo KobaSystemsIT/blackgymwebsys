@@ -10,7 +10,6 @@ export type ModalClubesProps = {
 
 const ModalClubes: React.FC<ModalClubesProps> = () => {
     const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
-    const params: any = useParams();
 
     const tokenState = useSelector((store: AppStore) => store.token);
     const token = tokenState.token;
@@ -18,6 +17,7 @@ const ModalClubes: React.FC<ModalClubesProps> = () => {
     const [nameClub, setNameClub] = useState('');
     const [addressClub, setAddressClub] = useState('');
     const [dataIFrame, setdataIFrame] = useState('');
+    const [isDisabled, setDisabled] = useState(false);
 
     const openModal = () => {
         window.modalClubes.showModal();
@@ -38,10 +38,12 @@ const ModalClubes: React.FC<ModalClubesProps> = () => {
         } else {
             setShowEmptyFieldsAlert(false);
             try {
+                setDisabled(true);
                 const result = await crudClub(1, nameClub, addressClub, dataIFrame, 1, token);
                 if (result) {
                     Alert(result.mensaje, true);
                     setTimeout(() => {
+                        setDisabled(false);
                         closeModal();
                         window.location.reload();
                     }, 3000)
@@ -83,7 +85,7 @@ const ModalClubes: React.FC<ModalClubesProps> = () => {
                         <input value={dataIFrame} onChange={(e) => setdataIFrame(e.target.value)} type="text" id="dataIFrame" name="dataIFrame" required className='input input-bordered w-full' />
                     </div>
                     <div className='grid grid-cols-2 gap-6'>
-                        <button className='btn btn-success btn-sm font-normal' onClick={newClubes}>Registrar</button>
+                        <button className='btn btn-success btn-sm font-normal' onClick={newClubes} disabled={isDisabled}>Registrar</button>
                         <button type="button" className='btn btn-warning btn-sm font-normal' onClick={closeModal}>
                             Cerrar
                         </button>

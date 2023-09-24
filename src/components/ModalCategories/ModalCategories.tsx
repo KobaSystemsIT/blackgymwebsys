@@ -12,11 +12,10 @@ export type ModalCategoriesProps = {
 
 const ModalCategories: React.FC<ModalCategoriesProps> = () => {
     const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
-    const params: any = useParams();
-
     const tokenState = useSelector((store: AppStore) => store.token);
     const token = tokenState.token;
     const [nameCateg, setnameCateg] = useState('');
+    const [isDisabled, setDisabled] = useState(false);
 
     const openModal = () => {
         window.modalCategories.showModal();
@@ -36,10 +35,12 @@ const ModalCategories: React.FC<ModalCategoriesProps> = () => {
         } else {
             setShowEmptyFieldsAlert(false);
             try {
+                setDisabled(true);
                 const result = await crudCategoriesProducts(1, nameCateg, 1, token);
                 if (result) {
                     Alert(result.mensaje, true);
                     setTimeout(() => {
+                        setDisabled(false);
                         closeModal();
                         window.location.reload();
                     }, 3000)
@@ -71,7 +72,7 @@ const ModalCategories: React.FC<ModalCategoriesProps> = () => {
                     <div>
                     </div>
                     <div className='grid grid-cols-2 gap-6'>
-                        <button className='btn btn-success btn-sm font-normal' onClick={newCategories}>Registrar</button>
+                        <button className='btn btn-success btn-sm font-normal' onClick={newCategories} disabled={isDisabled}>Registrar</button>
                         <button type="button" className='btn btn-warning btn-sm font-normal' onClick={closeModal}>
                             Cerrar
                         </button>

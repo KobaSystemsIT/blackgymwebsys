@@ -19,6 +19,7 @@ const Inventario: React.FC<InventarioProps> = () => {
 
     const [inventory, setInventoryData] = useState<Inventory[]>([]);
     const params: any = useParams();
+    const [isDisabled, setDisabled] = useState(false);
 
     const obtainInventoryData = async () => {
         try {
@@ -40,10 +41,12 @@ const Inventario: React.FC<InventarioProps> = () => {
 
         if (confirmation.isConfirmed) {
             try {
+                setDisabled(true);
                 const result = await crudInventory(id, 0, 0, params.idClub, 3, token);
                 if (result) {
                     Alert(result.mensaje, true);
                     setTimeout(() => {
+                        setDisabled(false);
                         window.location.reload();
                     }, 3000)
                 }
@@ -88,7 +91,7 @@ const Inventario: React.FC<InventarioProps> = () => {
                                     </td>
                                     <td>
                                         <div className="grid grid-flow-col gap-2">
-                                            <button title="Eliminar Producto" onClick={() => deleteProduct(data.inventoryID)}>
+                                            <button title="Eliminar Producto" disabled={isDisabled} onClick={() => deleteProduct(data.inventoryID)}>
                                                 <FontAwesomeIcon icon={faTrash} className="h-4" />
                                             </button>
                                         </div>

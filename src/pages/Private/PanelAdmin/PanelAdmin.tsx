@@ -37,6 +37,7 @@ const PanelAdmin: React.FC = () => {
 	const [mostrarCategorias, setMostrarCategorias] = useState(false);
 	const [mostrarProductos, setMostrarProductos] = useState(false);
 	const [mostrarUsuarios, setMostrarUsuarios] = useState(true);
+	const [isDisabled, setDisabled] = useState(false);
 
 	const getData = async () => {
 		try {
@@ -79,10 +80,12 @@ const PanelAdmin: React.FC = () => {
 
 		if (confirmation.isConfirmed) {
 			try {
+				setDisabled(true);
 				const response = await crudCategoriesProducts(id, '', 4, token);
 				if (response) {
 					Alert(response.mensaje, true);
 					setTimeout(() => {
+						setDisabled(false);
 						window.location.reload();
 					}, 2500);
 				}
@@ -104,10 +107,12 @@ const PanelAdmin: React.FC = () => {
 
 		if (confirmation.isConfirmed) {
 			try {
+				setDisabled(true);
 				const response = await crudProducts(idProduct, '', 0, 0, 4, token);
 				if (response) {
 					Alert(response.mensaje, true);
 					setTimeout(() => {
+						setDisabled(false);
 						window.location.reload();
 					}, 2500)
 				}
@@ -128,10 +133,12 @@ const PanelAdmin: React.FC = () => {
 
 		if (confirmation.isConfirmed) {
 			try {
+				setDisabled(true);
 				const result = await crudClub(idClub, '', '', '', 4, token);
 				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
+						setDisabled(false);
 						window.location.reload();
 					}, 2500)
 				}
@@ -153,10 +160,12 @@ const PanelAdmin: React.FC = () => {
 
 		if (confirmation.isConfirmed) {
 			try {
+				setDisabled(true);
 				const result = await crudUserSystem(adminID, '', '', 0, 4, token);
 				if(result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
+						setDisabled(false);
 						window.location.reload();
 					}, 2500)
 				}
@@ -173,6 +182,7 @@ const PanelAdmin: React.FC = () => {
 	return (
 		<>
 			<div className='grid p-2 gap-6 items-center'>
+				{/* {'Clubes'} */}
 				<div className='overflow-hidden'>
 					<div className='flex h-16 px-2 justify-between items-center'>
 						<button className='text-black lg:text-lg md:text-lg text-sm text-center' onClick={() => setMostrarClubes(!mostrarClubes)}>Clubes registrados</button>
@@ -197,10 +207,10 @@ const PanelAdmin: React.FC = () => {
 											<td>{club.addressClub}</td>
 											<td>
 												<div className='grid grid-flow-col gap-2'>
-													<a href={`/Dashboard/Panel_de_Administrador/Gestion_de_Club/${club.idClub}`} title='Gestión de Usuario'>
+													<a href={`/Dashboard/Panel_de_Administrador/Gestion_de_Club/${club.idClub}`} title='Gestión de Club'>
 														<FontAwesomeIcon icon={faPenToSquare} className='h-4'></FontAwesomeIcon>
 													</a>
-													<button title='Gestionar Club'><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteClub(club.idClub)} /></button>
+													<button title='Eliminar Club' disabled={isDisabled}><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteClub(club.idClub)}/></button>
 												</div>
 											</td>
 										</tr>
@@ -210,6 +220,7 @@ const PanelAdmin: React.FC = () => {
 						</div>
 					</div>
 				</div>
+				{/* {'Categorias y productos'} */}
 				<div className='overflow-hidden grid lg:grid-flow-col gap-4'>
 					<div>
 						<div className='flex h-16 px-2 justify-between items-center'>
@@ -233,7 +244,7 @@ const PanelAdmin: React.FC = () => {
 												<td>{category.nameCategory}</td>
 												<td>
 													<div className='grid grid-flow-col gap-2'>
-														<button title='Eliminar Category' onClick={() => deleteCategory(category.productCategoryID)}>
+														<button title='Eliminar Categoría' disabled={isDisabled} onClick={() => deleteCategory(category.productCategoryID)}>
 															<FontAwesomeIcon icon={faTrash} className='h-4' /></button>
 													</div>
 												</td>
@@ -269,7 +280,7 @@ const PanelAdmin: React.FC = () => {
 												<td>
 													<div className='grid grid-flow-col gap-2'>
 														<button title='Editar Product'><FontAwesomeIcon icon={faPenToSquare} className='h-4' /></button>
-														<button title='Gestionar Product'><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteProduct(product.productID)} /></button>
+														<button title='Eliminar producto' disabled={isDisabled}><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteProduct(product.productID)} /></button>
 													</div>
 												</td>
 											</tr>
@@ -280,6 +291,7 @@ const PanelAdmin: React.FC = () => {
 						</div>
 					</div>
 				</div>
+				{/* {'Usuarios del sistema'} */}
 				<div className='overflow-hidden'>
 					<div className='flex h-16 px-2 justify-between items-center'>
 						<button className='text-black lg:text-lg md:text-lg text-sm text-center' onClick={() => setMostrarUsuarios(!mostrarUsuarios)}>Usuarios del Sistema</button>
@@ -305,10 +317,10 @@ const PanelAdmin: React.FC = () => {
 											<td>{user.nameUserType}</td>
 											<td>
 												<div className='grid grid-flow-col gap-2'>
-													<a href={`/Dashboard/Panel_de_Administrador/Gestion_de_Usuario/${user.adminID}`} title='Gestión de Usuario'>
+													{/* <a href={`/Dashboard/Panel_de_Administrador/Gestion_de_Usuario/${user.adminID}`} title='Gestión de Usuario'>
 														<FontAwesomeIcon icon={faUserPen} className='h-4'></FontAwesomeIcon>
-													</a>
-													<button title='Gestionar Club'><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteUser(user.adminID)}/></button>
+													</a> */}
+													<button title='Eliminar usuario' disabled={isDisabled}><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteUser(user.adminID)}/></button>
 												</div>
 											</td>
 										</tr>

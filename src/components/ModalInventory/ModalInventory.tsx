@@ -21,6 +21,8 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
     const [products, setProducts] = useState<Products[]>([])
     const [idProduct, setIdProduct] = useState(0);
     const [amountProduct, setAmountProduct] = useState(0);
+    const [isDisabled, setDisabled] = useState(false);
+
     const openModal = () => {
         window.modalInventory.showModal();
     }
@@ -45,11 +47,13 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
         } else {
             setShowEmptyFieldsAlert(false);
             try {
+                setDisabled(true);
                 const result = await crudInventory(1, amountProduct, idProduct, params.idClub, 1, token);
                 if (result) {
                     Alert(result.mensaje, true);
                     setTimeout(() => {
                         closeModal();
+                        setDisabled(false);
                         window.location.reload()
                     }, 3000)
                 }
@@ -96,7 +100,7 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
                         </label>
                         <select required
                             onChange={handleProductChange}
-                            className='input input-bordered w-full max-w-xs'
+                            className='input input-bordered w-full'
                         >
                             <option value=''>Seleccione un producto</option>
                             {products.map((products) => (
@@ -110,12 +114,12 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
                         <label className='label'>
                             <span className='label-text'>Cantidad:</span>
                         </label>
-                        <input type="number" id="currentStock" name="currentStock" onChange={handleAmountChange} min={0} defaultValue={0} required className='input input-bordered w-full max-w-xs' />
+                        <input type="number" id="currentStock" name="currentStock" onChange={handleAmountChange} min={0} defaultValue={0} required className='input input-bordered w-full' />
                     </div>
                     <input type="hidden" id="inventoryID" name="inventoryID" value={inventoryID} />
                     <input type="hidden" id="created_at" name="created_at" value={new Date().toISOString()} />
                     <div className='grid grid-cols-2 gap-6'>
-                        <button className=' btn btn-success btn-sm font-normal' onClick={newProduct}>Agregar</button>
+                        <button className=' btn btn-success btn-sm font-normal' onClick={newProduct} disabled={isDisabled}>Agregar</button>
                         <button type="button" className='btn btn-sm font-normal' onClick={closeModal}>
                             Cerrar
                         </button>

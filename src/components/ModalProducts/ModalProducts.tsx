@@ -11,7 +11,6 @@ export type ModalProductsProps = {
 
 const ModalProducts: React.FC<ModalProductsProps> = () => {
     const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
-
     const tokenState = useSelector((store: AppStore) => store.token);
     const token = tokenState.token;
 
@@ -19,6 +18,7 @@ const ModalProducts: React.FC<ModalProductsProps> = () => {
     const [productPrice, setproductPrice] = useState('');
     const [idCategory, setidCategory] = useState(0);
     const [products, setProducts] = useState<CategoryProducts[]>([]);
+    const [isDisabled, setDisabled] = useState(false);
 
     const openModal = () => {
         window.modalProducts.showModal();
@@ -48,11 +48,13 @@ const ModalProducts: React.FC<ModalProductsProps> = () => {
         } else {
             setShowEmptyFieldsAlert(false);
             try {
+                setDisabled(true);
                 const result = await crudProducts(1, productName, Number(productPrice), idCategory, 1, token);
                 if (result) {
                     Alert(result.mensaje, true);
                     setTimeout(() => {
                         closeModal();
+                        setDisabled(false);
                         window.location.reload();
                     }, 3000)
                 }
@@ -118,7 +120,7 @@ const ModalProducts: React.FC<ModalProductsProps> = () => {
                     <div>
                     </div>
                     <div className='grid grid-cols-2 gap-6'>
-                        <button className='btn btn-success btn-sm font-normal' onClick={newProducts}>Registrar</button>
+                        <button className='btn btn-success btn-sm font-normal' onClick={newProducts} disabled={isDisabled}>Registrar</button>
                         <button type="button" className='btn btn-warning btn-sm font-normal' onClick={closeModal}>
                             Cerrar
                         </button>
