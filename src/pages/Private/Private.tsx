@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux';
 import { AppStore } from '@/redux/store';
 import { GestionClubView } from '@/views/GestionClubView';
 import GestionUsuarioView from '@/views/GestionUsuarioView/GestionUsuarioView';
-import { GestionUsuarioSysView } from '@/views/GestionUsuarioSysView';
+import { GestionProductosView } from '@/views/GestionProductosView';
 
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
@@ -79,9 +79,8 @@ function Private() {
 
             {/*rutas de administrador*/}
             <Route element={<RoleGuard rol={Roles.ADMIN} />}>
-              <Route path='Gestion_de_Usuario/:adminID' element={<GestionUsuarioSysView/>}></Route>
-              <Route path='Panel_de_Administrador/Gestion_de_Usuario/:adminID' element={<GestionUsuarioSysView/>}></Route>
               <Route path='Panel_de_Administrador/Gestion_de_Club/:idClub' element={<GestionClubView />}></Route>
+              <Route path='Panel_de_Administrador/Gestion_de_Producto/:productID' element={<GestionProductosView />}></Route>
               <Route path="Gestion_de_Sucursales/" element={<GestionSucursales />} />
               <Route path="Gestion_Financiera/" element={<GestionFinanciera />} />
               <Route path="Panel_de_Administrador" element={<PanelAdmin />} />

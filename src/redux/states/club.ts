@@ -5,7 +5,8 @@ import { clearLocalStorage, persistLocalStorage } from '@/utilities';
 export const EmptyClubState: Clubes = {
     idClub: 0,
     nameClub: '',
-    addressClub: ''
+    addressClub: '',
+    dataIFrame: ''
 };
 
 export const clubKey = 'club';

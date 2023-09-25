@@ -40,10 +40,12 @@ const GestionClubView: React.FC = () => {
 
 		if (confirmation.isConfirmed){
 			try {
+				setDisabled(true);
 				const result = await crudClub(club.idClub, club.nameClub, club.addressClub, club.dataIFrame, 3, token);
 				if(result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
+						setDisabled(false);
 						window.location.reload();
 					}, 2500);
 				}
@@ -58,7 +60,6 @@ const GestionClubView: React.FC = () => {
 		try {
 			const { data } = await getClubDatabyId(idClub, token);
 			setClub(data);
-			console.log(club)
 		} catch (error) {
 			console.log(error);
 		}

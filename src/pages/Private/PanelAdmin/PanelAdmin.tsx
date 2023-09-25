@@ -98,7 +98,7 @@ const PanelAdmin: React.FC = () => {
 
 	const deleteProduct = async (idProduct: number) => {
 		const confirmation = await Swal.fire({
-			title: '¿Desea eliminar a esta categoría?',
+			title: '¿Desea eliminar a este producto?',
 			icon: 'question',
 			showCancelButton: true,
 			confirmButtonText: 'Sí',
@@ -162,14 +162,14 @@ const PanelAdmin: React.FC = () => {
 			try {
 				setDisabled(true);
 				const result = await crudUserSystem(adminID, '', '', 0, 4, token);
-				if(result) {
+				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
 						setDisabled(false);
 						window.location.reload();
 					}, 2500)
 				}
-			} catch (error:any) {
+			} catch (error: any) {
 				Alert(error, false);
 			}
 		}
@@ -210,7 +210,7 @@ const PanelAdmin: React.FC = () => {
 													<a href={`/Dashboard/Panel_de_Administrador/Gestion_de_Club/${club.idClub}`} title='Gestión de Club'>
 														<FontAwesomeIcon icon={faPenToSquare} className='h-4'></FontAwesomeIcon>
 													</a>
-													<button title='Eliminar Club' disabled={isDisabled}><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteClub(club.idClub)}/></button>
+													<button title='Eliminar Club' disabled={isDisabled}><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteClub(club.idClub)} /></button>
 												</div>
 											</td>
 										</tr>
@@ -278,8 +278,10 @@ const PanelAdmin: React.FC = () => {
 												<td>{product.productName}</td>
 												<td>${product.productPrice}.00</td>
 												<td>
-													<div className='grid grid-flow-col gap-2'>
-														<button title='Editar Product'><FontAwesomeIcon icon={faPenToSquare} className='h-4' /></button>
+													<div className='grid grid-flow-col gap-4'>
+														<a href={`/Dashboard/Panel_de_Administrador/Gestion_de_Producto/${product.productID}`} title='Gestión de Club'>
+															<FontAwesomeIcon icon={faPenToSquare} className='h-4'></FontAwesomeIcon>
+														</a>
 														<button title='Eliminar producto' disabled={isDisabled}><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteProduct(product.productID)} /></button>
 													</div>
 												</td>
@@ -320,7 +322,7 @@ const PanelAdmin: React.FC = () => {
 													{/* <a href={`/Dashboard/Panel_de_Administrador/Gestion_de_Usuario/${user.adminID}`} title='Gestión de Usuario'>
 														<FontAwesomeIcon icon={faUserPen} className='h-4'></FontAwesomeIcon>
 													</a> */}
-													<button title='Eliminar usuario' disabled={isDisabled}><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteUser(user.adminID)}/></button>
+													<button title='Eliminar usuario' disabled={isDisabled}><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteUser(user.adminID)} /></button>
 												</div>
 											</td>
 										</tr>

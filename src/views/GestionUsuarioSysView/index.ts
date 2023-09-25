@@ -1,1 +1,0 @@
-export { default as GestionUsuarioSysView } from './GestionUsuarioSysView';

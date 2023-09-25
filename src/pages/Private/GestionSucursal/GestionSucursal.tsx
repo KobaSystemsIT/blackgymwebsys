@@ -339,7 +339,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 													})
 													: "N/A"}</td>
 												<td>{user.visitas}</td>
-												<td className='flex justify-center gap-6'>
+												<td className='flex justify-center items-center align-middle gap-6'>
 													<button title="Checar entrada" disabled={isDisabled} onClick={() => logInCheck(user.id, user.username)}>
 														<FontAwesomeIcon icon={faCircleCheck} className="h-4" />
 													</button>
