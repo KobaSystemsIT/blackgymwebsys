@@ -3,7 +3,7 @@ import { Clients, ClientsData, ClientsSubs } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
 import { AppStore } from '@/redux/store';
 import { getClientsData, viewDataClientsOrStaff } from '@/services/Clients/clients.service';
-import { faCircleCheck, faRightFromBracket, faTrash, faUser, faUserGroup, faUserPen } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faRightFromBracket, faTrash, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -13,10 +13,11 @@ import { DataSubs } from '@/models/subscription/subscription';
 import icon from '@/assets/icons/iconBG.svg'
 import './GestionSucursal.css'
 import { crudUserVisitor } from '@/services/Users/users.service';
-import { userInfo } from 'os';
 import Swal from 'sweetalert2';
 import { Alert } from '@/components/AlertComponent/AlertComponent';
 import { crudSubscription } from '@/services/Subscriptions/subscription.service';
+import { DateTime } from 'luxon';
+
 
 export type GestionSucursalProps = {
 }
@@ -51,6 +52,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const indexOfLastClient = currentPage * clientsPerPage;
 	const indexOfFirstClient = indexOfLastClient - clientsPerPage;
 	const currentClients = filteredClients.slice(indexOfFirstClient, indexOfLastClient);
+
 
 	// Cambiar de página
 	const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -102,8 +104,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 		}
 
 		try {
-			const {data} = await crudSubscription(0, '', 0, 0, 5, token);
-		} catch (error){
+			const { data } = await crudSubscription(0, '', 0, 0, 5, token);
+		} catch (error) {
 			console.log(error)
 		}
 	};
@@ -446,9 +448,9 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 				<div >
 					<div className='flex h-16 px-2 justify-between items-center'>
 						<button className='text-black lg:text-lg md:text-lg text-sm' onClick={() => setMostrarStaff(!mostrarStaff)}>Miembros del Staff</button>
-						{isAdmin && (
+						{/* {isAdmin && ( */}
 							<ModalUsers idUserTypeInt={2}></ModalUsers>
-						)}
+						{/* )} */}
 					</div>
 					<hr className={`content-container ${mostrarStaff ? 'hide' : 'show'}`} />
 					<div className={`content-container grid lg:grid-flow-col gap-4 shadow-xl border-2 rounded-2xl ${mostrarStaff ? 'show' : 'hide'}`}>
@@ -475,30 +477,20 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 											<td>{staff.nameEmergencyContact}</td>
 											<td>{staff.emergencyContact}</td>
 											<td>
-												{staff.arrivalHour
-													? new Date(staff.arrivalHour).toLocaleString(undefined, {
-														year: 'numeric',
-														month: 'numeric',
-														day: 'numeric',
-														hour: 'numeric',
-														minute: 'numeric',
-														second: 'numeric',
-														hour12: true, // Habilita el formato de 12 horas
-													})
-													: "N/A"}
+												{staff.arrivalHour ? (() => {
+													const dateTimeString = staff.arrivalHour.replace('Z', '');
+													const dateTime = DateTime.fromISO(dateTimeString, { zone: 'utc' });
+													const formattedTime = dateTime.toFormat('yyyy-MM-dd hh:mm:ss a');
+													return formattedTime;
+												})() : "N/A"}
 											</td>
 											<td>
-												{staff.exitHour
-													? new Date(staff.exitHour).toLocaleString(undefined, {
-														year: 'numeric',
-														month: 'numeric',
-														day: 'numeric',
-														hour: 'numeric',
-														minute: 'numeric',
-														second: 'numeric',
-														hour12: true, // Habilita el formato de 12 horas
-													})
-													: "N/A"}
+												{staff.exitHour ? (() => {
+													const dateTimeString = staff.exitHour.replace('Z', '');
+													const dateTime = DateTime.fromISO(dateTimeString, { zone: 'utc' });
+													const formattedTime = dateTime.toFormat('yyyy-MM-dd hh:mm:ss a');
+													return formattedTime;
+												})() : "N/A"}
 											</td>
 
 											<td>
