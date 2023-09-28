@@ -1,9 +1,9 @@
-const baseUrl = 'https://accessdb.blackgymfitclub.com/api/';
-//const baseUrl = 'http://localhost:3001/api/';
+//const baseUrl = 'https://accessdb.blackgymfitclub.com/api/';
+const baseUrl = 'http://localhost:3001/api/';
 const loginUrl = baseUrl + 'login';
 export let authToken = '';
 
-export const initLogin = (username: string, password: string, idClub: string) => {
+export const initLogin = (username: string, password: string, idClub: number) => {
   const body = {
     username: username,
     password: password,

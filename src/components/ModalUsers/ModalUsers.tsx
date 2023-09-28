@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import './ModalUsers.css';
-import { useParams } from 'react-router-dom';
-import { crudUserSystem, crudUserVisitor, newUserOrStaff } from '@/services/Users/users.service';
-import { useSelector } from 'react-redux';
+import { Clubes } from '@/models';
 import { AppStore } from '@/redux/store';
+import { getClubes } from '@/services/Clubes/clubes.service';
+import { crudUserSystem, crudUserVisitor, newUserOrStaff } from '@/services/Users/users.service';
 import { format } from 'date-fns-tz';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Alert } from '../AlertComponent/AlertComponent';
+import './ModalUsers.css';
 
 export type ModalUsersProps = {
 	idUserTypeInt: number
@@ -85,7 +87,7 @@ export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 		</button>
 		<dialog id={idUserTypeInt === 3 ? "modalUsers" : "modalStaff"} className="modal-box">
 			<div>
-				<h3 className="font-bold text-lg text-center m-4">Registro de Usuarios</h3>
+				<h3 className="font-bold text-lg text-center m-4">Registro de {idUserTypeInt === 3 ? 'Clientes' : 'Staff'}</h3>
 				<form className="grid grid-cols-2 text-black lg:text-sm text-xs gap-4">
 					<div className='form-control w-full'>
 						<label className='label'>
@@ -147,41 +149,45 @@ export const ModalUserSystem: React.FC<ModalUserSystemProps> = ({ }) => {
 	const [idUserType, setIdTypeUser] = useState(0);
 	const [password, setPassword] = useState('');
 	const [isDisabled, setDisabled] = useState(false);
+	const [clubes, setClubes] = useState<Clubes[]>([]);
+	const [idClub, setIdClub] = useState(0);
 
 	const userType = [
 		{ idUserType: 1, name: 'Administrador' },
 		{ idUserType: 2, name: 'Staff' }
-	  ];
+	];
 
 	const openModal = () => {
 		window.modalUserSys.showModal();
 	}
 
 	const closeModal = () => {
-		window.modalUserSys.close();
+		setDisabled(false);
 		setUsername('');
 		setPassword('');
 		setIdTypeUser(0);
+		setIdClub(0);
 		setShowEmptyFieldsAlert(false);
+		window.modalUserSys.close();	
 	}
 
 	const handleIdUserChange = (event: any) => {
-        const selectedProduct = parseInt(event.target.value, 10)
-        if (selectedProduct) {
-            setIdTypeUser(selectedProduct);
-        }
-    };
+		const selectedProduct = parseInt(event.target.value, 10)
+		if (selectedProduct) {
+			setIdTypeUser(selectedProduct);
+		}
+	};
 
 	const newUser = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
-		if(!username || !password || !idUserType){
+		if (!username || !password || !idUserType) {
 			setShowEmptyFieldsAlert(true);
 		} else {
 			setShowEmptyFieldsAlert(false);
 			try {
 				setDisabled(true);
 				const result = await crudUserSystem(0, username, password, idUserType, 1, token);
-				if(result) {
+				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
 						closeModal();
@@ -189,32 +195,59 @@ export const ModalUserSystem: React.FC<ModalUserSystemProps> = ({ }) => {
 						window.location.reload();
 					}, 2500);
 				}
-			} catch (error:any) {
+			} catch (error: any) {
 				Alert(error, false);
 				console.log(error);
 			}
 		}
-	}
+	};
+
+	const handleClub = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const selectedValue = e.target.value;
+		const id = parseInt(selectedValue);
+		const targetClub = clubes.find((club) => club.idClub === id);
+		if (targetClub) {
+			setIdClub(targetClub.idClub);
+		} else {
+			console.log('No se encontró ningún club para el ID seleccionado');
+		}
+	};
+
+	const obtainClubes = async () => {
+		try {
+			const { data } = await getClubes();
+			setClubes(data);
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	};
+
+	useEffect(() => {
+		obtainClubes();
+	}, []);
+
 	return (
 		<>
-			<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={openModal}>
+			<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={openModal} onLoad={obtainClubes}>
 				<h1 className=' text-xs'>Nuevo Usuario</h1>
 			</button>
 			<dialog id="modalUserSys" className="modal-box">
 				<div>
-					<h3 className="font-bold text-lg text-center m-4">Registro de Usuarios</h3>
+					<h3 className="font-bold text-lg text-center m-4">Registro de Usuarios del Sistema</h3>
 					<form className="grid text-black lg:text-sm text-xs gap-4">
-						<div className='form-control w-full'>
-							<label className='label'>
-								<span className='label-text'>Nombre:</span>
-							</label>
-							<input value={username} onChange={(e) => setUsername(e.target.value)} type="text" id="username" name="username" required className='input input-bordered w-full' />
-						</div>
-						<div className='form-control w-full'>
-							<label className='label'>
-								<span className='label-text'>Contraseña</span>
-							</label>
-							<input value={password} onChange={(e) => setPassword(e.target.value)} type="password" id="lastname" name="lastname" required className='input input-bordered w-full' />
+						<div className='grid lg:grid-cols-2 grid-flow-row gap-4'>
+							<div className='form-control w-full'>
+								<label className='label'>
+									<span className='label-text'>Nombre de usuario:</span>
+								</label>
+								<input value={username} onChange={(e) => setUsername(e.target.value)} type="text" id="username" name="username" required className='input input-bordered w-full' />
+							</div>
+							<div className='form-control w-full'>
+								<label className='label'>
+									<span className='label-text'>Contraseña</span>
+								</label>
+								<input value={password} onChange={(e) => setPassword(e.target.value)} type="password" id="lastname" name="lastname" required className='input input-bordered w-full' />
+							</div>
 						</div>
 						<div className='form-control w-full'>
 							<label className='label'>
@@ -224,14 +257,30 @@ export const ModalUserSystem: React.FC<ModalUserSystemProps> = ({ }) => {
 								onChange={handleIdUserChange}
 								className='input input-bordered w-full'
 							>
-								<option value=''>Seleccione una opción</option>
+								<option value={0}>Seleccione una opción</option>
 								{userType.map((user) => (
 									<option key={user.idUserType} value={user.idUserType}>
 										{user.name}
 									</option>
 								))}
 							</select>
-
+						</div>
+						<div className='form-control w-full'>
+							<label className='label'>
+								<span className='label-text'>Sucursal:</span>
+							</label>
+							<select
+								id="idClub"
+								name="idClub"
+								className='input input-bordered w-full'
+								value={idClub}
+								onChange={handleClub}
+							>
+								<option value="">Selecciona una sucursal.</option>
+								{clubes.map(club => (
+									<option key={club.idClub} value={club.idClub}>{club.nameClub}</option>
+								))}
+							</select>
 						</div>
 						<div className='grid grid-cols-2 gap-6'>
 							<button className='btn btn-success btn-sm font-normal' onClick={newUser} disabled={isDisabled}>Registrar</button>
@@ -275,14 +324,14 @@ export const ModalUserVisitors: React.FC = () => {
 
 	const newUser = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
-		if(!username || !phone){
+		if (!username || !phone) {
 			setShowEmptyFieldsAlert(true);
 		} else {
 			setShowEmptyFieldsAlert(false);
 			try {
 				setDisabled(true);
 				const result = await crudUserVisitor(0, username, params.idClub, phone, 1, token);
-				if(result) {
+				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
 						closeModal();
@@ -290,7 +339,7 @@ export const ModalUserVisitors: React.FC = () => {
 						window.location.reload();
 					}, 2500);
 				}
-			} catch (error:any) {
+			} catch (error: any) {
 				Alert(error, false);
 				console.log(error);
 			}
@@ -303,7 +352,7 @@ export const ModalUserVisitors: React.FC = () => {
 			</button>
 			<dialog id="modalUserSys" className="modal-box">
 				<div>
-					<h3 className="font-bold text-lg text-center m-4">Registro de Usuarios</h3>
+					<h3 className="font-bold text-lg text-center m-4">Registro de Visita</h3>
 					<form className="grid text-black lg:text-sm text-xs gap-4">
 						<div className='form-control w-full'>
 							<label className='label'>
@@ -335,8 +384,6 @@ export const ModalUserVisitors: React.FC = () => {
 		</>
 	)
 };
-
-
 
 export default {
 	ModalUsers,

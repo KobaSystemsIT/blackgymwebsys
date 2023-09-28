@@ -1,26 +1,27 @@
-import { lazy, useEffect } from 'react';
-import { Navigate, Route } from 'react-router-dom';
-import { PrivateRoutes, Roles } from '../../models';
-import { RoutesWithNotFound } from '../../utilities';
-import { GestionSucursales } from './GestionSucursales';
-import { RoleGuard } from '@/guards';
-import { GestionSucursal } from './GestionSucursal';
+import BottonNavigate from '@/common/BottomNavigate/BottomNavigate';
 import { CantAccess } from '@/common/CantAccess';
 import { Navbar } from '@/common/Navbar';
 import { Sidebar } from '@/common/Sidebar';
-import { PuntoVenta } from './PuntoVenta';
-import { GestionFinanciera } from './GestionFinanciera';
-import { PanelAdmin } from './PanelAdmin';
-import { GestionInventarios } from './GestionInventarios';
-import { Inventario } from './Inventario';
-import BottonNavigate from '@/common/BottomNavigate/BottomNavigate';
 import { tokenExpired } from '@/components/AlertToken/AlertToken';
-import { viewDataClientsOrStaff } from '@/services/Clients/clients.service';
-import { useSelector } from 'react-redux';
+import { RoleGuard } from '@/guards';
 import { AppStore } from '@/redux/store';
+import { viewDataClientsOrStaff } from '@/services/Clients/clients.service';
 import { GestionClubView } from '@/views/GestionClubView';
-import GestionUsuarioView from '@/views/GestionUsuarioView/GestionUsuarioView';
 import { GestionProductosView } from '@/views/GestionProductosView';
+import GestionUsuarioView from '@/views/GestionUsuarioView/GestionUsuarioView';
+import { lazy, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate, Route } from 'react-router-dom';
+import { PrivateRoutes, Roles } from '../../models';
+import { RoutesWithNotFound } from '../../utilities';
+import { Finanzas } from './Finanzas';
+import { GestionFinanciera } from './GestionFinanciera';
+import { GestionInventarios } from './GestionInventarios';
+import { GestionSucursal } from './GestionSucursal';
+import { GestionSucursales } from './GestionSucursales';
+import { Inventario } from './Inventario';
+import { PanelAdmin } from './PanelAdmin';
+import { PuntoVenta } from './PuntoVenta';
 
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'));
 
@@ -35,6 +36,7 @@ declare global {
     modalProducts: HTMLDialogElement;
     modalUserSys: HTMLDialogElement;
     modalUserVisitors: HTMLDialogElement;
+    modalPuntoDeVenta: HTMLDialogElement;
   }
 }
 
@@ -75,6 +77,7 @@ function Private() {
             <Route path='Punto_de_Venta/:idClub' element={<PuntoVenta />} />
             <Route path='Inventario/:idClub' element={<Inventario />} />
             <Route path='Gestion_de_Sucursal/:idClub/Gestion_de_Usuario/:idUser' element={<GestionUsuarioView />}></Route>
+            <Route path='Finanzas_por_Sucursal/:idClub' element={<Finanzas/>}></Route>
 
 
             {/*rutas de administrador*/}

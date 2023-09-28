@@ -6,6 +6,7 @@ export interface ClientsSubs {
     emergencyContact: string,
     nameSubscriptionType: string,
     isActive: string,
+    isRenovation: string,
     startDate: string,
     endDate: string,
     diasRestantes:string

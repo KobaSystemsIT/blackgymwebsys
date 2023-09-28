@@ -1,66 +1,81 @@
-import { Roles, UserVisitor } from '@/models';
+import icon from '@/assets/icons/iconBG.svg';
+import { Alert } from '@/components/AlertComponent/AlertComponent';
+import { ModalUserVisitors, ModalUsers } from '@/components/ModalUsers/ModalUsers';
+import { UserVisitor } from '@/models';
 import { Clients, ClientsData, ClientsSubs } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
+import { DataSubs } from '@/models/subscription/subscription';
 import { AppStore } from '@/redux/store';
 import { getClientsData, viewDataClientsOrStaff } from '@/services/Clients/clients.service';
+import { crudSubscription } from '@/services/Subscriptions/subscription.service';
+import { crudUserVisitor } from '@/services/Users/users.service';
 import { faCircleCheck, faRightFromBracket, faTrash, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DateTime } from 'luxon';
 import React, { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { ModalUserVisitors, ModalUsers } from '@/components/ModalUsers/ModalUsers';
-import { DataSubs } from '@/models/subscription/subscription';
-import icon from '@/assets/icons/iconBG.svg'
-import './GestionSucursal.css'
-import { crudUserVisitor } from '@/services/Users/users.service';
 import Swal from 'sweetalert2';
-import { Alert } from '@/components/AlertComponent/AlertComponent';
-import { crudSubscription } from '@/services/Subscriptions/subscription.service';
-import { DateTime } from 'luxon';
+import './GestionSucursal.css';
 
 
 export type GestionSucursalProps = {
 }
 
 const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
-	const userState = useSelector((store: AppStore) => store.user);
 	const tokenState = useSelector((store: AppStore) => store.token);
 	const token = tokenState.token;
 	const params: any = useParams();
-	const isAdmin = userState.rol === Roles.ADMIN;
 
 	const [clients, setClients] = useState<Clients[]>([]);
 	const [staff, setStaff] = useState<Staff[]>([]);
 	const [clientsSubs, setClientsSubs] = useState<ClientsSubs[]>([]);
 	const [filteredClients, setFilteredClients] = useState<Clients[]>([]);
+	const [filteredSubsClients, setfilteredSubsClients] = useState<ClientsSubs[]>([]);
 	const [cantsubs, setCantSubs] = useState<DataSubs[]>([]);
 	const [clientsData, setClientsData] = useState<ClientsData[]>([]);
 	const [userVisitor, setUserVisitor] = useState<UserVisitor[]>([]);
 
 	const [mostrarSubscripciones, setMostrarSubscripciones] = useState(false);
 	const [mostrarClientes, setMostrarClientes] = useState(true);
-	const [mostrarClientesSubs, setMostrarClientesSubs] = useState(false);
+	const [mostrarClientesSubs, setMostrarClientesSubs] = useState(true);
 	const [mostrarStaff, setMostrarStaff] = useState(true);
 	const [mostrarVisitantes, setMostrarVisitantes] = useState(false);
 	const [isDisabled, setDisabled] = useState(false);
 
 	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPageSubs, setCurrentPageSubs] = useState(1);
 	const [searchTerm, setSearchTerm] = useState('');
-	const clientsPerPage = 5;
+	const [searchSubUser, setSearchSubUser] = useState('');
+	const [clientsPerPage, setClientsPerPage] = useState(15);
+	const subsPerPage = 15;
 
-	// Calcula el índice de inicio y final para la paginación
+	//clients
 	const indexOfLastClient = currentPage * clientsPerPage;
 	const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+
+	//clients subs
+	const indexOfLastClientSubs = currentPageSubs * subsPerPage;
+	const indexOfFirstClientSubs = indexOfLastClientSubs - subsPerPage;
+
 	const currentClients = filteredClients.slice(indexOfFirstClient, indexOfLastClient);
+	const currentSubsClients = filteredSubsClients.slice(indexOfFirstClientSubs, indexOfLastClientSubs);
 
-
-	// Cambiar de página
 	const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+	const paginateSubs = (pageNumber: number) => setCurrentPageSubs(pageNumber);
+
 	const handleSearch = () => {
 		const filtered = clients.filter((client) =>
 			client.username.toLowerCase().includes(searchTerm.toLowerCase())
 		);
 		setFilteredClients(filtered);
+	};
+
+	const searchClientsSUbs = () => {
+		const filtered = clientsSubs.filter((client) =>
+			client.username.toLowerCase().includes(searchSubUser.toLowerCase())
+		);
+		setfilteredSubsClients(filtered);
 	};
 
 	const obtainClients = async () => {
@@ -70,44 +85,44 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 			setFilteredClients(data);
 		} catch (error) {
 			console.error(error);
-		}
+		};
 		try {
 			const { data } = await viewDataClientsOrStaff(params.idClub, 2, token);
 			setClientsSubs(data);
 		} catch (error) {
 			console.error(error);
-		}
+		};
 		try {
 			const { data } = await viewDataClientsOrStaff(params.idClub, 3, token);
 			setStaff(data);
 		} catch (error) {
 			console.error(error);
-		}
+		};
 		try {
 			const { data } = await viewDataClientsOrStaff(params.idClub, 4, token);
 			setCantSubs(data);
 		} catch (error) {
 			console.error(error);
-		}
+		};
 		try {
 			const { data } = await getClientsData(params.idClub, token);
 			setClientsData(data);
 		} catch (error) {
 			console.log(error);
-		}
+		};
 
 		try {
 			const { data } = await crudUserVisitor(0, '', params.idClub, '', 2, token);
 			setUserVisitor(data);
 		} catch (error) {
 			console.log(error);
-		}
+		};
 
 		try {
 			const { data } = await crudSubscription(0, '', 0, 0, 5, token);
 		} catch (error) {
 			console.log(error)
-		}
+		};
 	};
 
 	const deleteUserVisitor = async (id: number) => {
@@ -159,8 +174,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 				Alert(error, false);
 				console.log(error);
 			}
-		}
-	}
+		};
+	};
 
 	const logOutCheck = async (id: number, user: string) => {
 		const usuario = user;
@@ -185,16 +200,17 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 				Alert(error, false);
 				console.log(error);
 			}
-		}
-	}
+		};
+	};
 
 	useLayoutEffect(() => {
 		obtainClients();
+		searchClientsSUbs();
 		handleSearch();
 	}, []);
 
 	return <>
-		<div className='grid p-2 gap-6 items-center'>
+		<div className='grid gap-6 items-center'>
 			{/* {'Grid clientes'} */}
 			<div className='overflow-hidden'>
 				<div className='grid gap-4'>
@@ -203,22 +219,32 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 						<ModalUsers idUserTypeInt={3}></ModalUsers>
 					</div>
 					<hr className={`content-container ${mostrarClientes ? 'hide' : 'show'}`} />
-
 					<div className={`content-container grid lg:grid-flow-col gap-4 ${mostrarClientes ? 'show' : 'hide'}`}>
 						<div className='grid shadow-xl border-2 rounded-2xl'>
 							<div className='flex lg:flex-row md:flex-row flex-col justify-between p-4 items-center gap-4'>
-								<input
-									type="text"
-									placeholder="Buscar por nombre..."
-									value={searchTerm}
-									onChange={(e) => setSearchTerm(e.target.value)}
-									className='input input-group-xs input-bordered w-full max-w-xs'
-								/>
-								<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={handleSearch}>Buscar</button>
+								<div className='flex flex-row gap-4 items-center'>
+									<input
+										type="text"
+										placeholder="Buscar por nombre..."
+										value={searchTerm}
+										onChange={(e) => setSearchTerm(e.target.value)}
+										className='input input-group-xs input-bordered w-full max-w-xs'
+									/>
+									<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={handleSearch}>Buscar</button>
+								</div>
+								<div className='dropdown dropdown-bottom dropdown-end'>
+									<label tabIndex={0} className="btn-sm">Total por página: <span className=' font-bold border-b-2'>{clientsPerPage}</span></label>
+									<ul tabIndex={0} className="dropdown-content z-20 menu p-2 shadow bg-base-100 rounded-box w-16">
+										<li>
+											<button onClick={() => setClientsPerPage(15)} className=''>15</button>
+											<button onClick={() => setClientsPerPage(25)} className=''>25</button>
+										</li>
+									</ul>
+								</div>
 							</div>
 							<hr />
-							<div className='max-h-48 overflow-auto m-2'>
-								<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+							<div className=' max-h-64 overflow-auto m-2'>
+								<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white text-center'>
 									<thead>
 										<tr>
 											<th>ID</th>
@@ -289,17 +315,91 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 				</div>
 			</div>
 
+			{/* {'Grid subscripciones'} */}
+			<div className='overflow-hidden'>
+				<div className='flex h-16 px-2 justify-between items-center'>
+					<button className='text-black lg:text-lg md:text-lg text-sm text-center' onClick={() => setMostrarClientesSubs(!mostrarClientesSubs)}>Clientes con subscripción</button>
+				</div>
+				<hr className={`content-container ${mostrarClientesSubs ? 'hide' : 'show'}`} />
+				<div className={`content-container  ${mostrarClientesSubs ? 'show' : 'hide'}`}>
+					<div className='grid shadow-xl border-2 rounded-xl'>
+						<div className='flex lg:flex-row md:flex-row flex-col justify-between p-4 items-center gap-4'>
+							<input
+								type="text"
+								placeholder="Buscar por nombre..."
+								value={searchSubUser}
+								onChange={(e) => setSearchSubUser(e.target.value)}
+								className='input input-group-xs input-bordered w-full max-w-xs'
+							/>
+							<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={searchClientsSUbs}>Buscar</button>
+						</div>
+						<hr />
+						<div className='max-h-56 overflow-auto m-2'>
+							<table className='table table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Usuario</th>
+										<th>Apellido</th>
+										<th>Subscripción</th>
+										<th>Activa</th>
+										<th>Renovación</th>
+										<th>Inicia</th>
+										<th>Vence</th>
+										<th>Días restantes</th>
+									</tr>
+								</thead>
+								<tbody>
+									{currentSubsClients.map((client) => (
+										<tr key={client.idUser}>
+											<td>{client.idUser}</td>
+											<td>{client.username}</td>
+											<td>{client.lastName}</td>
+											<td>{client.nameSubscriptionType}</td>
+											<td className={`${ client.isActive === 'Si' && client.isRenovation === 'No' ? 'bg-lime-400' : ''}`}>{client.isActive}</td>
+											<td  className={`${ client.isActive === 'Si' && client.isRenovation === 'Si' ? 'bg-yellow-500' : ''}`}>{client.isRenovation}</td>
+											<td>
+												{client.startDate
+													? client.startDate.toString().split("T")[0]
+													: "N/A"}
+											</td>
+											<td>
+												{client.endDate
+													? client.endDate.toString().split("T")[0]
+													: "N/A"}
+											</td>
+											<td className={`${parseInt(client.diasRestantes) <= 7 ? 'bg-red-500' : '' }`}>{client.diasRestantes}</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+						<div className="flex join lg:justify-end justify-center p-2">
+							{Array.from({ length: Math.ceil(filteredSubsClients.length / subsPerPage) }, (_, index) => (
+								<button
+									key={index}
+									className={`join-item btn-sm lg:bg-white bg-gray-300 lg:text-black hover:bg-gray-400 ${currentPageSubs === index + 1 ? 'btn-active' : ''}`}
+									onClick={() => paginateSubs(index + 1)}
+								>
+									{index + 1}
+								</button>
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+
 			{/* {'Grid usuarios visitantes'} */}
 			<div className='overflow-hidden'>
 				<div className='grid gap-8'>
 					<div>
 						<div className='flex h-16 px-2 justify-between items-center'>
-							<button className='text-black lg:text-lg md:text-lg text-sm' onClick={() => setMostrarVisitantes(!mostrarVisitantes)}>Usuarios Visitantes</button>
+							<button className='text-black lg:text-lg md:text-lg text-sm' onClick={() => setMostrarVisitantes(!mostrarVisitantes)}>Clientes Visitantes</button>
 							<ModalUserVisitors></ModalUserVisitors>
 						</div>
 						<hr className={`content-container ${mostrarVisitantes ? 'hide' : 'show'}`} />
 						<div className={`content-container grid shadow-xl border-2 rounded-xl ${mostrarVisitantes ? 'show' : 'hide'}`}>
-							<div className='max-h-48 overflow-auto m-2'>
+							<div className=' max-h-56 overflow-auto m-2'>
 								<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
 									<thead>
 										<tr>
@@ -391,65 +491,13 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 				</div>
 			</div>
 
-			{/* {'Grid subscripciones'} */}
-			<div className='overflow-hidden'>
-				<div>
-					<div>
-						<div className='flex h-16 px-2 justify-between items-center'>
-							<button className='text-black lg:text-lg md:text-lg text-sm text-center' onClick={() => setMostrarClientesSubs(!mostrarClientesSubs)}>Clientes con subscripción</button>
-						</div>
-						<hr className={`content-container ${mostrarClientesSubs ? 'hide' : 'show'}`} />
-						<div className={`content-container grid shadow-xl border-2 rounded-xl ${mostrarClientesSubs ? 'show' : 'hide'}`}>
-							<div className='max-h-48 overflow-auto m-2'>
-								<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
-									<thead>
-										<tr>
-											<th>ID</th>
-											<th>Usuario</th>
-											<th>Apellido</th>
-											<th>Subscripción</th>
-											<th>Activa</th>
-											<th>Inicia</th>
-											<th>Vence</th>
-											<th>Días restantes</th>
-										</tr>
-									</thead>
-									<tbody>
-										{clientsSubs.map((client) => (
-											<tr key={client.idUser}>
-												<td>{client.idUser}</td>
-												<td>{client.username}</td>
-												<td>{client.lastName}</td>
-												<td>{client.nameSubscriptionType}</td>
-												<td>{client.isActive}</td>
-												<td>
-													{client.startDate
-														? client.startDate.toString().split("T")[0]
-														: "N/A"}
-												</td>
-												<td>
-													{client.endDate
-														? client.endDate.toString().split("T")[0]
-														: "N/A"}
-												</td>
-												<td>{client.diasRestantes}</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
 			{/* {'Grid staff'} */}
 			<div className='overflow-hidden mb-10'>
 				<div >
 					<div className='flex h-16 px-2 justify-between items-center'>
 						<button className='text-black lg:text-lg md:text-lg text-sm' onClick={() => setMostrarStaff(!mostrarStaff)}>Miembros del Staff</button>
 						{/* {isAdmin && ( */}
-							<ModalUsers idUserTypeInt={2}></ModalUsers>
+						<ModalUsers idUserTypeInt={2}></ModalUsers>
 						{/* )} */}
 					</div>
 					<hr className={`content-container ${mostrarStaff ? 'hide' : 'show'}`} />

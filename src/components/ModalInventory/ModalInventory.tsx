@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import './ModalInventory.css';
-import { useParams } from 'react-router-dom';
-import { crudProducts } from '@/services/Products/products.service';
-import { useSelector } from 'react-redux';
-import { AppStore } from '@/redux/store';
 import { Products } from '@/models/products/products';
+import { AppStore } from '@/redux/store';
 import { crudInventory } from '@/services';
+import { crudProducts } from '@/services/Products/products.service';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Alert } from '../AlertComponent/AlertComponent';
+import './ModalInventory.css';
 
 export type ModalInventoryProps = {
-    inventoryID: number,
 }
 
-const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
+const ModalInventory: React.FC<ModalInventoryProps> = ({ }) => {
     const tokenState = useSelector((store: AppStore) => store.token);
     const token = tokenState.token;
     const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
@@ -116,8 +115,6 @@ const ModalInventory: React.FC<ModalInventoryProps> = ({ inventoryID }) => {
                         </label>
                         <input type="number" id="currentStock" name="currentStock" onChange={handleAmountChange} min={0} defaultValue={0} required className='input input-bordered w-full' />
                     </div>
-                    <input type="hidden" id="inventoryID" name="inventoryID" value={inventoryID} />
-                    <input type="hidden" id="created_at" name="created_at" value={new Date().toISOString()} />
                     <div className='grid grid-cols-2 gap-6'>
                         <button className=' btn btn-success btn-sm font-normal' onClick={newProduct} disabled={isDisabled}>Agregar</button>
                         <button type="button" className='btn btn-sm font-normal' onClick={closeModal}>

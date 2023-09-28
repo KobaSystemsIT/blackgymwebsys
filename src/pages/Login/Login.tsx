@@ -1,18 +1,17 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { PrivateRoutes, PublicRoutes } from '@/models';
-import { createUser, resetUser, UserKey } from '@/redux/states/user';
-import { initLogin } from '@/services';
-import { clearLocalStorage } from '@/utilities';
 import logo from '@/assets/icons/iconBG.svg';
-import { getClubes } from '@/services/Clubes/clubes.service';
+import { Alert } from '@/components/AlertComponent/AlertComponent';
+import { Loading } from '@/components/LoadingComponent/LoadingComponent';
+import { PrivateRoutes, PublicRoutes } from '@/models';
 import { Clubes } from '@/models/clubes';
 import { addClub } from '@/redux/states/club';
 import { deleteToken, saveToken } from '@/redux/states/token';
-import { authToken } from '@/services';
-import { Loading } from '@/components/LoadingComponent/LoadingComponent';
-import { Alert } from '@/components/AlertComponent/AlertComponent';
+import { UserKey, createUser, resetUser } from '@/redux/states/user';
+import { authToken, initLogin } from '@/services';
+import { getClubes } from '@/services/Clubes/clubes.service';
+import { clearLocalStorage } from '@/utilities';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const dispatch = useDispatch();
@@ -20,7 +19,7 @@ function Login() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [idClub, setIdClub] = useState('0');
+  const [idClub, setIdClub] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
   const [clubes, setClubes] = useState<Clubes[]>([]);
@@ -36,7 +35,7 @@ function Login() {
     if (!username || !password || !idClub) {
       setShowEmptyFieldsAlert(true);
       return;
-    }
+    };
 
     try {
       const result = await initLogin(username, password, idClub);
@@ -51,21 +50,21 @@ function Login() {
       console.error('Error de inicio de sesión:', error);
       setErrorMessage(error.message);
       Alert(error.message, false);
-    }
+    };
   };
 
   const handleClub = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
-    setIdClub(selectedValue);
     const id = parseInt(selectedValue);
     const targetClub = clubes.find((club) => club.idClub === id);
     if (targetClub) {
+      setIdClub(id);
       const { idClub, nameClub, addressClub } = targetClub;
       const data = { idClub, nameClub, addressClub };
       dispatch(addClub({ ...data }));
     } else {
       console.log('No se encontró ningún club para el ID seleccionado');
-    }
+    };
   };
 
   const obtainClubes = async () => {
@@ -74,11 +73,15 @@ function Login() {
       setClubes(data);
     } catch (error) {
       console.error('Error:', error);
-    }
+    };
   };
 
+  useEffect(() => {
+		obtainClubes();
+	}, []);
+
   return (
-    <div className="bg-gray-100 flex flex-col justify-center sm:py-12 overflow-hidden h-screen" onLoad={obtainClubes}>
+    <div className="bg-gray-100 flex flex-col justify-center sm:py-12 overflow-hidden h-screen">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
         <div
           className="absolute inset-0 bg-gradient-to-r from-black to-white shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl">
@@ -87,7 +90,7 @@ function Login() {
           <div className="max-w-md mx-auto">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm" >
               <img
-                className="mx-auto h-16 w-auto"
+                className="mx-auto h-24 w-auto"
                 src={logo}
                 alt="Your Company"
               />
@@ -121,7 +124,7 @@ function Login() {
                       ))}
                     </select>
                   </div>
-                  <label htmlFor="idClub" className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Club</label>
+                  <label htmlFor="idClub" className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Sucursal</label>
                 </div>
                 {showEmptyFieldsAlert && (
                   <div className="text-red-600">
