@@ -1,6 +1,6 @@
 import { Roles } from "@/models";
 import { AppStore } from "@/redux/store";
-import { faCartShopping, faChartPie, faCity, faShop, faWarehouse } from "@fortawesome/free-solid-svg-icons";
+import { faCity, faShop, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
 
@@ -33,12 +33,12 @@ function Dashboard() {
                 <h1>Gestión de <br /> Inventarios</h1>
               </div>
             </a>
-            <a href="Gestion_Financiera/" className="card bg-black shadow-md rounded-lg">
+            {/* <a href="Gestion_Financiera/" className="card bg-black shadow-md rounded-lg">
               <div className="card-body justify-center">
                 <FontAwesomeIcon icon={faChartPie} className=""/>
                 <h1>Gestión <br /> Financiera</h1>
               </div>
-            </a>
+            </a> */}
           </>
         ) : (
           <>
@@ -48,12 +48,12 @@ function Dashboard() {
                 <h1>Gestión de <br /> sucursal</h1>
               </div>
             </a>
-            <a href={`Punto_de_Venta/${clubState.idClub}`} className="card bg-black shadow-md rounded-lg">
+            {/* <a href={`Punto_de_Venta/${clubState.idClub}`} className="card bg-black shadow-md rounded-lg">
               <div className="card-body justify-center">
                 <FontAwesomeIcon icon={faCartShopping} />
                 <h1>Punto de <br /> Venta</h1>
               </div>
-            </a>
+            </a> */}
             <a href={`Inventario/${clubState.idClub}`} className="card bg-black shadow-md rounded-lg">
               <div className="card-body justify-center">
                 <FontAwesomeIcon icon={faWarehouse} />

@@ -368,7 +368,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 													? client.endDate.toString().split("T")[0]
 													: "N/A"}
 											</td>
-											<td className={`${parseInt(client.diasRestantes) <= 7 ? 'bg-red-500' : '' }`}>{client.diasRestantes}</td>
+											<td className={`${parseInt(client.diasRestantes) <= 5 ? 'bg-red-500' : '' }`}>{client.diasRestantes}</td>
 										</tr>
 									))}
 								</tbody>

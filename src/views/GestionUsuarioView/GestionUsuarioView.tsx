@@ -1,15 +1,16 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import './GestionUsuarioView.css';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getDataUser } from '@/services/Clients/clients.service';
-import { useSelector } from 'react-redux';
-import { AppStore } from '@/redux/store';
-import { UserData } from '@/models';
-import { crudSubscription, newOrUpdateSubscription } from '@/services/Subscriptions/subscription.service';
-import { Subscription } from '@/models/subscription/subscription';
-import { modifyOrDeleteUser } from '@/services/Users/users.service';
 import { Alert } from '@/components/AlertComponent/AlertComponent';
+import { UserData } from '@/models';
+import { Subscription } from '@/models/subscription/subscription';
+import { AppStore } from '@/redux/store';
+import { getDataUser } from '@/services/Clients/clients.service';
+import { getPaymentData } from '@/services/PaymentOptions/paymentoptions.service';
+import { crudSubscription, newOrUpdateSubscription } from '@/services/Subscriptions/subscription.service';
+import { modifyOrDeleteUser } from '@/services/Users/users.service';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import './GestionUsuarioView.css';
 
 
 const GestionUsuarioView: React.FC = () => {
@@ -186,9 +187,19 @@ const GestionUsuarioView: React.FC = () => {
 		}
 	};
 
+	const getPayment = async () => {
+		try {
+			const data = getPaymentData(token);
+			
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
 	useEffect(() => {
 		getData();
 		getDataSub();
+		getPayment();
 	}, []);
 	return (
 		<>
@@ -200,7 +211,7 @@ const GestionUsuarioView: React.FC = () => {
 						</div>
 						<div className="items-center text-center lg:px-10 lg:py-10 p-4">
 							<h2 className="lg:text-xl text-base font-semibold">{user.username} {user.lastName}</h2>
-							<div>								
+							<div>
 								<hr className="mt-2 mb-2" />
 								{user.idUserType === 3 && (
 									<><h1 className='lg:text-lg font-semibold text-base mb-3'>Subscripción</h1><h1 className='mt-3 font-semibold'>{user.nameSubscriptionType ? user.nameSubscriptionType : "Sin membresía"}</h1><h1 className='mt-3'>{user.isActive}</h1></>
@@ -271,7 +282,7 @@ const GestionUsuarioView: React.FC = () => {
 								<label className='label'>
 									<span className='label-text'>Tipo de Subscripción:</span>
 								</label>
-								<select									
+								<select
 									onChange={handleSubscriptionChange}
 									className='input input-bordered w-full max-w-xs'
 								>
@@ -324,6 +335,17 @@ const GestionUsuarioView: React.FC = () => {
 								</label>
 								<input
 									type="date"
+									value={endDate}
+									onChange={(e) => setEndDate(e.target.value)}
+									className='input input-bordered w-full max-w-xs'
+								/>
+							</div>
+							<div className='form-control w-full'>
+								<label className='label'>
+									<span className='label-text'>Método de pago:</span>
+								</label>
+								<input
+									type="text"
 									value={endDate}
 									onChange={(e) => setEndDate(e.target.value)}
 									className='input input-bordered w-full max-w-xs'

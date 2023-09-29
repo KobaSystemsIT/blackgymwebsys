@@ -1,6 +1,6 @@
 import { Roles } from "@/models";
 import { AppStore } from "@/redux/store";
-import { faCartShopping, faChartPie, faCity, faHome, faShop, faUsers, faWarehouse } from '@fortawesome/free-solid-svg-icons';
+import { faCity, faHome, faShop, faUsers, faWarehouse } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from "react-redux";
 
@@ -33,7 +33,7 @@ export default function BottonNavigate() {
                         </a>
                     </button>
                 )}
-                {!isAdmin && (
+                {/* {!isAdmin && (
                     <button>
                         <a
                             href={`/Dashboard/Punto_de_Venta/${clubState.idClub}`}
@@ -45,7 +45,7 @@ export default function BottonNavigate() {
                             />
                         </a>
                     </button>
-                )}
+                )} */}
                 {!isAdmin && (
                     <button>
                         <a
@@ -87,7 +87,7 @@ export default function BottonNavigate() {
                     </button>
                 )}
 
-                {isAdmin && (
+                {/* {isAdmin && (
                     <button>
                         <a
                             href={`/Dashboard/Gestion_Financiera/`}
@@ -99,7 +99,7 @@ export default function BottonNavigate() {
                             />
                         </a>
                     </button>
-                )}
+                )} */}
 
                 {isAdmin && (
                     <button>
