@@ -47,8 +47,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const [currentPageSubs, setCurrentPageSubs] = useState(1);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchSubUser, setSearchSubUser] = useState('');
-	const [clientsPerPage, setClientsPerPage] = useState(15);
-	const subsPerPage = 15;
+	const [clientsPerPage, setClientsPerPage] = useState(20);
+	const subsPerPage = 20;
 
 	//clients
 	const indexOfLastClient = currentPage * clientsPerPage;
@@ -236,7 +236,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 									<label tabIndex={0} className="btn-sm">Total por página: <span className=' font-bold border-b-2'>{clientsPerPage}</span></label>
 									<ul tabIndex={0} className="dropdown-content z-20 menu p-2 shadow bg-base-100 rounded-box w-16">
 										<li>
-											<button onClick={() => setClientsPerPage(15)} className=''>15</button>
+											<button onClick={() => setClientsPerPage(20)} className=''>20</button>
 											<button onClick={() => setClientsPerPage(25)} className=''>25</button>
 										</li>
 									</ul>
@@ -247,6 +247,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white text-center'>
 									<thead>
 										<tr>
+											<th></th>
 											<th>ID</th>
 											<th>Usuario</th>
 											<th>Apellido</th>
@@ -256,8 +257,9 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 										</tr>
 									</thead>
 									<tbody>
-										{currentClients.map((client) => (
+										{currentClients.map((client, index) => (
 											<tr key={client.idUser}>
+												<td>{index}</td>
 												<td>{client.idUser}</td>
 												<td>{client.username}</td>
 												<td>{client.lastName}</td>
@@ -338,6 +340,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 							<table className='table table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
 								<thead>
 									<tr>
+										<th></th>
 										<th>ID</th>
 										<th>Usuario</th>
 										<th>Apellido</th>
@@ -350,8 +353,9 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 									</tr>
 								</thead>
 								<tbody>
-									{currentSubsClients.map((client) => (
+									{currentSubsClients.map((client, index) => (
 										<tr key={client.idUser}>
+											<td>{index + 1}</td>
 											<td>{client.idUser}</td>
 											<td>{client.username}</td>
 											<td>{client.lastName}</td>
