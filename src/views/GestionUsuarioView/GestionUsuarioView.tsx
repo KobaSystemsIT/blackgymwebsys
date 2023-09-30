@@ -1,5 +1,6 @@
 import { Alert } from '@/components/AlertComponent/AlertComponent';
 import { UserData } from '@/models';
+import { PaymentOptions } from '@/models/paymentOptions/paymentOptions';
 import { Subscription } from '@/models/subscription/subscription';
 import { AppStore } from '@/redux/store';
 import { getDataUser } from '@/services/Clients/clients.service';
@@ -18,9 +19,8 @@ const GestionUsuarioView: React.FC = () => {
 	const params: any = useParams();
 	const tokenState = useSelector((store: AppStore) => store.token);
 	const token = tokenState.token;
-	let idUser: number = params.idUser;
-	let idClub: number = params.idClub;
 
+	const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
 	const [user, setUser] = useState<UserData>({
 		username: '',
 		lastName: '',
@@ -34,12 +34,15 @@ const GestionUsuarioView: React.FC = () => {
 	});
 
 	const [subscriptionData, setSubscriptionData] = useState<Subscription[]>([]);
+	const [paymentOptions, setPaymentOptions] = useState<PaymentOptions[]>([]);
 	const [subscription, setSubscription] = useState(0);
 	const [price, setPrice] = useState('');
 	const [duration, setDuration] = useState('');
 	const [startDate, setStartDate] = useState('');
 	const [endDate, setEndDate] = useState('');
+	const [paymentSelected, setPaymentSelected] = useState(0);
 	const [isDisabled, setDisabled] = useState(false);
+	const [comments, setCommets] = useState('');
 
 
 	const handleGoBack = () => {
@@ -48,7 +51,7 @@ const GestionUsuarioView: React.FC = () => {
 
 	const getData = async () => {
 		try {
-			const { userData } = await getDataUser(idUser, token);
+			const { userData } = await getDataUser(parseInt(params.idUser), token);
 			setUser(userData);
 		} catch (error) {
 			console.log(error);
@@ -66,38 +69,38 @@ const GestionUsuarioView: React.FC = () => {
 
 	const updateUserData = async () => {
 		const confirmation = await Swal.fire({
-		  title: '¿Desea actualizar los datos del usuario?',
-		  icon: 'question',
-		  showCancelButton: true,
-		  confirmButtonText: 'Sí',
-		  cancelButtonText: 'Cancelar',
+			title: '¿Desea actualizar los datos del usuario?',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: 'Sí',
+			cancelButtonText: 'Cancelar',
 		});
-	  
+
 		if (confirmation.isConfirmed) {
-		  try {
-			setDisabled(true);
-			const result = await modifyOrDeleteUser(
-			  idUser,
-			  user.username,
-			  user.lastName,
-			  user.phoneNumber,
-			  user.email,
-			  user.nameEmergencyContact,
-			  user.emergencyContact,
-			  1,
-			  token
-			);
-			if (result) {
-			  Alert(result.mensaje, true);
-			  setTimeout(() => {
-				setDisabled(false);
-				handleGoBack();
-			  }, 3000)
+			try {
+				setDisabled(true);
+				const result = await modifyOrDeleteUser(
+					parseInt(params.idUser),
+					user.username,
+					user.lastName,
+					user.phoneNumber,
+					user.email,
+					user.nameEmergencyContact,
+					user.emergencyContact,
+					1,
+					token
+				);
+				if (result) {
+					Alert(result.mensaje, true);
+					setTimeout(() => {
+						setDisabled(false);
+						handleGoBack();
+					}, 3000)
+				}
+			} catch (error) {
+				Swal.fire('Error', 'Hubo un error al procesar la solicitud.', 'error');
+				console.log(error);
 			}
-		  } catch (error) {
-			Swal.fire('Error', 'Hubo un error al procesar la solicitud.', 'error');
-			console.log(error);
-		  }
 		}
 	};
 
@@ -108,62 +111,66 @@ const GestionUsuarioView: React.FC = () => {
 			showCancelButton: true,
 			confirmButtonText: 'Sí',
 			cancelButtonText: 'Cancelar',
-		  });
-		
-		  if (confirmation.isConfirmed) {
-			try {
-				setDisabled(true);
-				const result = await modifyOrDeleteUser(
-				  idUser,
-				  user.username,
-				  user.lastName,
-				  user.phoneNumber,
-				  user.email,
-				  user.nameEmergencyContact,
-				  user.emergencyContact,
-				  2,
-				  token
-				);
-				if (result) {
-				  Alert(result.mensaje, true);
-				  setTimeout(() => {
-					setDisabled(false);
-					handleGoBack();
-				  }, 4000);
-				}
-			  } catch (error) {
-				Alert('Hubo un error al procesar la solicitud.', false);
-				console.log(error);
-			  }
-		  }
-	};
+		});
 
-	const newOrUpdateSubscriptions = async () => {
-		const confirmation = await Swal.fire({
-			title: '¿Desea registrar la subscripción?',
-			icon: 'question',
-			showCancelButton: true,
-			confirmButtonText: 'Sí',
-			cancelButtonText: 'Cancelar',
-		  });
-		
 		if (confirmation.isConfirmed) {
 			try {
 				setDisabled(true);
-				const result = await newOrUpdateSubscription(idUser, subscription, idClub, startDate, endDate, token);
+				const result = await modifyOrDeleteUser(
+					parseInt(params.idUser),
+					user.username,
+					user.lastName,
+					user.phoneNumber,
+					user.email,
+					user.nameEmergencyContact,
+					user.emergencyContact,
+					2,
+					token
+				);
 				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
 						setDisabled(false);
-                        handleGoBack();
-                    }, 3000)
+						handleGoBack();
+					}, 4000);
 				}
 			} catch (error) {
 				Alert('Hubo un error al procesar la solicitud.', false);
-				console.log(error)
+				console.log(error);
 			}
 		}
-		
+	};
+
+	const newOrUpdateSubscriptions = async () => {
+		if (!paymentSelected || !subscription) {
+			setShowEmptyFieldsAlert(true);
+		} else {
+			setShowEmptyFieldsAlert(false);
+			const confirmation = await Swal.fire({
+				title: '¿Desea registrar la subscripción?',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonText: 'Sí',
+				cancelButtonText: 'Cancelar',
+			});
+			if (confirmation.isConfirmed) {
+				try {
+					setDisabled(true);
+					console.log(params.idUser, subscription, price, params.idClub, startDate, endDate, paymentSelected, comments, token)
+					const result = await newOrUpdateSubscription(parseInt(params.idUser), subscription, parseFloat(price), parseInt(params.idClub), startDate, endDate, paymentSelected, comments, token);
+					if (result) {
+						Alert(result.mensaje, true);
+						setTimeout(() => {
+							setDisabled(false);
+					        handleGoBack();
+					    }, 3000)
+					}
+				} catch (error) {
+					Alert('Hubo un error al procesar la solicitud.', false);
+					console.log(error)
+				}
+			}
+		}
 	};
 
 	const handleSubscriptionChange = (event: any) => {
@@ -171,7 +178,7 @@ const GestionUsuarioView: React.FC = () => {
 		setSubscription(selectedSubscriptionType);
 		const selectedSubscription = subscriptionData.find((sub) => sub.idSubscriptionType === selectedSubscriptionType);
 		if (selectedSubscription) {
-			
+
 			const { idSubscriptionType, nameSubscriptionType, daysSubscription, priceSubscription, allAccess } = selectedSubscription;
 			const data = { idSubscriptionType, nameSubscriptionType, daysSubscription, priceSubscription, allAccess };
 			console.log(idSubscriptionType)
@@ -189,8 +196,8 @@ const GestionUsuarioView: React.FC = () => {
 
 	const getPayment = async () => {
 		try {
-			const data = getPaymentData(token);
-			
+			const { data } = await getPaymentData(token);
+			setPaymentOptions(data);
 		} catch (error) {
 			console.log(error);
 		}
@@ -274,94 +281,109 @@ const GestionUsuarioView: React.FC = () => {
 
 				{user.idUserType === 3 && (
 					<div className='mt-10 p-4'>
-					<h1 className='font-semibold text-xl p-2'>Gestión de Subscripción</h1>
-					<hr />
-					<div className='mt-10 rounded-xl border-2 p-6 shadow-xl'>
-						<form className="grid lg:grid-cols-3 md:grid-cols-2 lg:text-sm text-xs gap-4">
-							<div className='form-control w-full'>
-								<label className='label'>
-									<span className='label-text'>Tipo de Subscripción:</span>
-								</label>
-								<select
-									onChange={handleSubscriptionChange}
-									className='input input-bordered w-full max-w-xs'
-								>
-									<option value=''>Seleccione una suscripción</option>
-									{subscriptionData.map((sub) => (
-										<option key={sub.idSubscriptionType} value={sub.idSubscriptionType}>
-											{sub.nameSubscriptionType}
-										</option>
-									))}
-								</select>
+						<h1 className='font-semibold text-xl p-2'>Gestión de Subscripción</h1>
+						<hr />
+						<div className='mt-10 rounded-xl border-2 p-6 shadow-xl'>
+							<form className="grid lg:grid-cols-3 md:grid-cols-2 lg:text-sm text-xs gap-4">
+								<div className='form-control w-full'>
+									<label className='label'>
+										<span className='label-text'>Tipo de Subscripción:</span>
+									</label>
+									<select
+										onChange={handleSubscriptionChange}
+										className='input input-bordered w-full max-w-xs'
+									>
+										<option value=''>Seleccione una suscripción</option>
+										{subscriptionData.map((sub) => (
+											<option key={sub.idSubscriptionType} value={sub.idSubscriptionType}>
+												{sub.nameSubscriptionType}
+											</option>
+										))}
+									</select>
+								</div>
+								<div className='form-control w-full'>
+									<label className='label'>
+										<span className='label-text'>Precio:</span>
+									</label>
+									<input
+										type="number"
+										value={price}
+										onChange={(e) => setPrice(e.target.value)}
+										className='input input-bordered w-full max-w-xs'
+									/>
+								</div>
+								<div className='form-control w-full'>
+									<label className='label'>
+										<span className='label-text'>Duración:</span>
+									</label>
+									<input
+										type="number"
+										value={duration}
+										readOnly
+										onChange={(e) => setDuration(e.target.value)}
+										className='input input-bordered w-full max-w-xs'
+									/>
+								</div>
+								<div className='form-control w-full'>
+									<label className='label'>
+										<span className='label-text'>Fecha de Inicio:</span>
+									</label>
+									<input
+										type="date"
+										value={startDate}
+										onChange={(e) => setStartDate(e.target.value)}
+										className='input input-bordered w-full max-w-xs'
+									/>
+								</div>
+								<div className='form-control w-full'>
+									<label className='label'>
+										<span className='label-text'>Fecha fin:</span>
+									</label>
+									<input
+										type="date"
+										value={endDate}
+										onChange={(e) => setEndDate(e.target.value)}
+										className='input input-bordered w-full max-w-xs'
+									/>
+								</div>
+								<div className='form-control w-full'>
+									<label className='label'>
+										<span className='label-text'>Método de pago:</span>
+									</label>
+									<select
+										onChange={(e) => setPaymentSelected(parseInt(e.target.value))}
+										className='input input-bordered w-full max-w-xs'
+									>
+										<option value=''>Seleccione un método de pago</option>
+										{paymentOptions.map((pay) => (
+											<option key={pay.idPaymentOption} value={pay.idPaymentOption}>
+												{pay.paymentDescription}
+											</option>
+										))}
+									</select>
+								</div>
+								<div className='form-control w-full'>
+									<label className='label'>
+										<span className='label-text'>Comentarios:</span>
+									</label>
+									<textarea value={comments} onChange={(e)=>setCommets(e.target.value)} className="textarea textarea-bordered" placeholder="Comentarios"></textarea>
+								</div>
+							</form>
+							{showEmptyFieldsAlert && (
+								<div className="text-red-600 pt-5 text-end">
+									Todos los campos son necesarios.
+								</div>
+							)}
+							<div className='flex lg:flex-row flex-col gap-4 mt-10 lg:justify-end md:justify-end'>
+								<button className='btn btn-success btn-sm font-normal' onClick={newOrUpdateSubscriptions} disabled={isDisabled}>Registrar Subscripción</button>
+								<button type="button" className='btn btn-warning btn-sm font-normal' onClick={handleGoBack}>Volver</button>
 							</div>
-							<div className='form-control w-full'>
-								<label className='label'>
-									<span className='label-text'>Precio:</span>
-								</label>
-								<input
-									type="number"
-									value={price}
-									onChange={(e) => setPrice(e.target.value)}
-									readOnly
-									className='input input-bordered w-full max-w-xs'
-								/>
-							</div>
-							<div className='form-control w-full'>
-								<label className='label'>
-									<span className='label-text'>Duración:</span>
-								</label>
-								<input
-									type="number"
-									value={duration}
-									readOnly
-									onChange={(e) => setDuration(e.target.value)}
-									className='input input-bordered w-full max-w-xs'
-								/>
-							</div>
-							<div className='form-control w-full'>
-								<label className='label'>
-									<span className='label-text'>Fecha de Inicio:</span>
-								</label>
-								<input
-									type="date"
-									value={startDate}
-									onChange={(e) => setStartDate(e.target.value)}
-									className='input input-bordered w-full max-w-xs'
-								/>
-							</div>
-							<div className='form-control w-full'>
-								<label className='label'>
-									<span className='label-text'>Fecha fin:</span>
-								</label>
-								<input
-									type="date"
-									value={endDate}
-									onChange={(e) => setEndDate(e.target.value)}
-									className='input input-bordered w-full max-w-xs'
-								/>
-							</div>
-							<div className='form-control w-full'>
-								<label className='label'>
-									<span className='label-text'>Método de pago:</span>
-								</label>
-								<input
-									type="text"
-									value={endDate}
-									onChange={(e) => setEndDate(e.target.value)}
-									className='input input-bordered w-full max-w-xs'
-								/>
-							</div>
-						</form>
-						<div className='flex lg:flex-row flex-col gap-4 mt-10 lg:justify-end md:justify-end'>
-							<button className='btn btn-success btn-sm font-normal' onClick={newOrUpdateSubscriptions} disabled={isDisabled}>Registrar Subscripción</button>
-							<button type="button" className='btn btn-warning btn-sm font-normal' onClick={handleGoBack}>Volver</button>
 						</div>
 					</div>
-				</div>
 				)}
-				
+
 				<div className='flex mt-5 p-4 justify-end'>
-					<button className=' btn btn-sm hover:bg-red-600' onClick={deleteUser} disabled={isDisabled}>Eliminar Usuario</button>						
+					<button className=' btn btn-sm hover:bg-red-600' onClick={deleteUser} disabled={isDisabled}>Eliminar Usuario</button>
 				</div>
 			</div>
 		</>

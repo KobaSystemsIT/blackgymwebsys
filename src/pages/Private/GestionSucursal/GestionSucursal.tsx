@@ -247,7 +247,6 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								<table className='table table-zebra table-sm table-pin-rows table-pin-cols bg-white text-center'>
 									<thead>
 										<tr>
-											<th></th>
 											<th>ID</th>
 											<th>Usuario</th>
 											<th>Apellido</th>
@@ -257,9 +256,8 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 										</tr>
 									</thead>
 									<tbody>
-										{currentClients.map((client, index) => (
+										{currentClients.map((client) => (
 											<tr key={client.idUser}>
-												<td>{index}</td>
 												<td>{client.idUser}</td>
 												<td>{client.username}</td>
 												<td>{client.lastName}</td>
@@ -340,7 +338,6 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 							<table className='table table-sm table-pin-rows table-pin-cols bg-white mt-5 text-center'>
 								<thead>
 									<tr>
-										<th></th>
 										<th>ID</th>
 										<th>Usuario</th>
 										<th>Apellido</th>
@@ -355,7 +352,6 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								<tbody>
 									{currentSubsClients.map((client, index) => (
 										<tr key={client.idUser}>
-											<td>{index + 1}</td>
 											<td>{client.idUser}</td>
 											<td>{client.username}</td>
 											<td>{client.lastName}</td>

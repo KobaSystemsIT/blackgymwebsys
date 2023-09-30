@@ -1,25 +1,24 @@
-import React, { useState, useLayoutEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { AppStore } from '@/redux/store';
-import './PanelAdmin.css';
+import { Alert } from '@/components/AlertComponent/AlertComponent';
+import { ModalCategories } from '@/components/ModalCategories';
+import { ModalClubes } from '@/components/ModalClubes';
+import ModalProducts from '@/components/ModalProducts/ModalProducts';
+import { ModalUserSystem } from '@/components/ModalUsers/ModalUsers';
 import { Clubes, UserSys } from '@/models';
 import { Categories } from '@/models/categories';
 import { Products } from '@/models/products';
-import { ModalClubes } from '@/components/ModalClubes';
-import { ModalCategories } from '@/components/ModalCategories';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faL, faPenToSquare, faUserPen } from '@fortawesome/free-solid-svg-icons';
-import { crudClub } from '@/services/Clubes/clubes.service';
+import { AppStore } from '@/redux/store';
 import { crudCategoriesProducts } from '@/services/Categories/categories.service';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { crudClub } from '@/services/Clubes/clubes.service';
 import { crudProducts } from '@/services/Products/products.service';
-import ModalProducts from '@/components/ModalProducts/ModalProducts';
-import { Alert } from '@/components/AlertComponent/AlertComponent';
-import Swal from 'sweetalert2';
-import '../GestionSucursal'
-import { ModalUserSystem } from '@/components/ModalUsers/ModalUsers';
 import { crudUserSystem } from '@/services/Users/users.service';
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useLayoutEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import '../GestionSucursal';
+import './PanelAdmin.css';
 
 export type PanelAdminProps = {
 }
@@ -62,7 +61,7 @@ const PanelAdmin: React.FC = () => {
 		};
 
 		try {
-			const { data } = await crudUserSystem(0, '', '', 0, 2, token);
+			const { data } = await crudUserSystem(0, '', '', 0, 0, 2, token);
 			setUserSys(data);
 		} catch (error) {
 			console.log(error);
@@ -161,7 +160,7 @@ const PanelAdmin: React.FC = () => {
 		if (confirmation.isConfirmed) {
 			try {
 				setDisabled(true);
-				const result = await crudUserSystem(adminID, '', '', 0, 4, token);
+				const result = await crudUserSystem(adminID, '', '', 0, params.idClub, 4, token);
 				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {

@@ -82,13 +82,14 @@ export const modifyOrDeleteUser = (idUser: number, username: string, lastName: s
         });
 };
 
-export const crudUserSystem = (adminID: number, username: string, password: string, idUserType:number, typeAction:number, token: any) => {
+export const crudUserSystem = (adminID: number, username: string, password: string, idUserType:number, idClub:number,  typeAction:number, token: any) => {
     const body = {
         adminID: adminID, 
         username: username,
         password: password,
         idUserType: idUserType,
-        typeAction: typeAction
+        typeAction: typeAction,
+        idClub: idClub
     }
     const requestOptions = {
         method: 'POST',

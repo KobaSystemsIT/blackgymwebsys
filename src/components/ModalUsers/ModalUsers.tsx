@@ -180,13 +180,13 @@ export const ModalUserSystem: React.FC<ModalUserSystemProps> = ({ }) => {
 
 	const newUser = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
-		if (!username || !password || !idUserType) {
+		if (!username || !password || !idUserType || !idClub) {
 			setShowEmptyFieldsAlert(true);
 		} else {
 			setShowEmptyFieldsAlert(false);
 			try {
 				setDisabled(true);
-				const result = await crudUserSystem(0, username, password, idUserType, 1, token);
+				const result = await crudUserSystem(0, username, password, idUserType, idClub, 1, token);
 				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
