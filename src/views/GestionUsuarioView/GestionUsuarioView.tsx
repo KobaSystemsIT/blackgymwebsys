@@ -43,6 +43,7 @@ const GestionUsuarioView: React.FC = () => {
 	const [paymentSelected, setPaymentSelected] = useState(0);
 	const [isDisabled, setDisabled] = useState(false);
 	const [comments, setCommets] = useState('');
+	const [fechaVenta, setFechaVenta] = useState('');
 
 
 	const handleGoBack = () => {
@@ -55,7 +56,10 @@ const GestionUsuarioView: React.FC = () => {
 			setUser(userData);
 		} catch (error) {
 			console.log(error);
-		}
+		};
+
+		let startDate: string = new Date().toISOString().split('T')[0];
+		setFechaVenta(startDate);
 	};
 
 	const getDataSub = async () => {
@@ -157,7 +161,7 @@ const GestionUsuarioView: React.FC = () => {
 				try {
 					setDisabled(true);
 					console.log(params.idUser, subscription, price, params.idClub, startDate, endDate, paymentSelected, comments, token)
-					const result = await newOrUpdateSubscription(parseInt(params.idUser), subscription, parseFloat(price), parseInt(params.idClub), startDate, endDate, paymentSelected, comments, token);
+					const result = await newOrUpdateSubscription(parseInt(params.idUser), subscription, parseFloat(price), parseInt(params.idClub), startDate, endDate, paymentSelected, comments, fechaVenta, token);
 					if (result) {
 						Alert(result.mensaje, true);
 						setTimeout(() => {
@@ -326,7 +330,7 @@ const GestionUsuarioView: React.FC = () => {
 								</div>
 								<div className='form-control w-full'>
 									<label className='label'>
-										<span className='label-text'>Fecha de Inicio:</span>
+										<span className='label-text'>Inicio de Subscripción:</span>
 									</label>
 									<input
 										type="date"
@@ -337,7 +341,7 @@ const GestionUsuarioView: React.FC = () => {
 								</div>
 								<div className='form-control w-full'>
 									<label className='label'>
-										<span className='label-text'>Fecha fin:</span>
+										<span className='label-text'>Vencimiento de Subscripción:</span>
 									</label>
 									<input
 										type="date"
@@ -361,6 +365,17 @@ const GestionUsuarioView: React.FC = () => {
 											</option>
 										))}
 									</select>
+								</div>
+								<div className='form-control w-full'>
+									<label className='label'>
+										<span className='label-text'>Fecha de Venta:</span>
+									</label>
+									<input
+										type="date"
+										value={fechaVenta}
+										onChange={(e) => setFechaVenta(e.target.value)}
+										className='input input-bordered w-full max-w-xs'
+									/>
 								</div>
 								<div className='form-control w-full'>
 									<label className='label'>

@@ -38,6 +38,7 @@ declare global {
     modalUserVisitors: HTMLDialogElement;
     modalPuntoDeVenta: HTMLDialogElement;
     modalSuppliers:HTMLDialogElement;
+    modalPaySuppliers:HTMLDialogElement;
   }
 }
 

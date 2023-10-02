@@ -39,11 +39,12 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 	}, []);
 	return (<>
 		<div>
-			<div className='flex h-16 px-2 justify-between items-center'>
+			<div className='flex flex-col h-16 px-2 items-center justify-center gap-4'>
 				<h1 className='text-black lg:text-2xl md:text-lg text-base'>Punto de Venta</h1>
-				<ModalPuntoDeVenta></ModalPuntoDeVenta>
-			</div>
-			<hr />
+				<div className='grid grid-flow-col'>
+					<ModalPuntoDeVenta></ModalPuntoDeVenta>
+				</div>
+			</div>			
 			<div>
 				<div className='overflow-hidden pt-10'>
 					<div className='grid shadow-xl border-2 rounded-2xl'>
@@ -88,6 +89,7 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 					</div>
 				</div>
 			</div>
+			<hr />
 		</div>
 	</>);
 };

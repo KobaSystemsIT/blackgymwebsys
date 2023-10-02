@@ -38,7 +38,7 @@ export const crudSubscription = (idSub: number, nameSubscription: string, daysSu
         });
 }
 
-export const newOrUpdateSubscription = (idUser: number, idSubscriptionType:number, price:number, idClub:number, startDate:string, endDate:string, idPaymentOption:number, comentarios:string, token: any) => {
+export const newOrUpdateSubscription = (idUser: number, idSubscriptionType:number, price:number, idClub:number, startDate:string, endDate:string, idPaymentOption:number, comentarios:string, fechaVenta:string, token: any) => {
     const body = {
         idUser: idUser,
         idSubscriptionType: idSubscriptionType,
@@ -47,7 +47,8 @@ export const newOrUpdateSubscription = (idUser: number, idSubscriptionType:numbe
         endDate: endDate,
         idPaymentOption: idPaymentOption, 
         price: price,
-        comentarios: comentarios
+        comentarios: comentarios,
+        fechaVenta: fechaVenta
     }
     const requestOptions = {
         method: 'POST',
