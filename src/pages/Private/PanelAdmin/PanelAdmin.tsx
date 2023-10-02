@@ -2,14 +2,17 @@ import { Alert } from '@/components/AlertComponent/AlertComponent';
 import { ModalCategories } from '@/components/ModalCategories';
 import { ModalClubes } from '@/components/ModalClubes';
 import ModalProducts from '@/components/ModalProducts/ModalProducts';
+import { ModalSuppliers } from '@/components/ModalSuppliers';
 import { ModalUserSystem } from '@/components/ModalUsers/ModalUsers';
 import { Clubes, UserSys } from '@/models';
 import { Categories } from '@/models/categories';
 import { Products } from '@/models/products';
+import { Suppliers } from '@/models/suppliers/suppliers';
 import { AppStore } from '@/redux/store';
 import { crudCategoriesProducts } from '@/services/Categories/categories.service';
 import { crudClub } from '@/services/Clubes/clubes.service';
 import { crudProducts } from '@/services/Products/products.service';
+import { crudSuppliers } from '@/services/Suppliers/suppliers.service';
 import { crudUserSystem } from '@/services/Users/users.service';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -31,11 +34,13 @@ const PanelAdmin: React.FC = () => {
 	const [categories, setCategory] = useState<Categories[]>([]);
 	const [products, setProducts] = useState<Products[]>([]);
 	const [userSys, setUserSys] = useState<UserSys[]>([]);
+	const [supplier, setSupplier] = useState<Suppliers[]>([]);
 
 	const [mostrarClubes, setMostrarClubes] = useState(true);
 	const [mostrarCategorias, setMostrarCategorias] = useState(false);
 	const [mostrarProductos, setMostrarProductos] = useState(false);
 	const [mostrarUsuarios, setMostrarUsuarios] = useState(true);
+	const [mostrarProveedores, setMostrarProveedores] = useState(false);
 	const [isDisabled, setDisabled] = useState(false);
 
 	const getData = async () => {
@@ -63,6 +68,13 @@ const PanelAdmin: React.FC = () => {
 		try {
 			const { data } = await crudUserSystem(0, '', '', 0, 0, 2, token);
 			setUserSys(data);
+		} catch (error) {
+			console.log(error);
+		}
+
+		try {
+			const { data } = await crudSuppliers(0, '', 2, token);
+			setSupplier(data);
 		} catch (error) {
 			console.log(error);
 		}
@@ -210,6 +222,40 @@ const PanelAdmin: React.FC = () => {
 														<FontAwesomeIcon icon={faPenToSquare} className='h-4'></FontAwesomeIcon>
 													</a>
 													<button title='Eliminar Club' disabled={isDisabled}><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteClub(club.idClub)} /></button>
+												</div>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				{/* Crud Suppliers */}
+				<div className='overflow-hidden'>
+					<div className='flex h-16 px-2 justify-between items-center'>
+						<button className='text-black lg:text-lg md:text-lg text-sm text-center' onClick={() => setMostrarProveedores(!mostrarProveedores)}>Proveedores</button>
+						<ModalSuppliers></ModalSuppliers>
+					</div>
+					<hr className={`content-container mb-2 ${mostrarProveedores ? 'hide' : 'show'}`} />
+					<div className={`content-container grid shadow-xl border-2 rounded-2xl ${mostrarProveedores ? 'show' : 'hide'}`}>
+						<div className='max-h-48 overflow-auto m-2'>
+							<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white text-center'>
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Nombre del proveedor</th>
+									</tr>
+								</thead>
+								<tbody>
+									{supplier.map((supplier) => (
+										<tr key={supplier.idSupplier}>
+											<td>{supplier.idSupplier}</td>
+											<td>{supplier.nameSupplier}</td>
+											<td>
+												<div className='grid grid-flow-col gap-2'>
+													<button title='Eliminar proveedor' disabled={isDisabled}><FontAwesomeIcon icon={faTrash} className='h-4' onClick={() => deleteClub(supplier.idSupplier)} /></button>
 												</div>
 											</td>
 										</tr>

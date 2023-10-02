@@ -95,13 +95,15 @@ const Inventario: React.FC<InventarioProps> = () => {
                                                 ? data.dateReorder.toString().split("T")[0]
                                                 : "N/A"}
                                         </td>
-                                        <td>
+                                        {isAdmin && (
+                                            <td>
                                             <div className="grid grid-flow-col gap-2">
                                                 <button title="Eliminar Producto" disabled={isDisabled} onClick={() => deleteProduct(data.inventoryID)}>
                                                     <FontAwesomeIcon icon={faTrash} className="h-4" />
                                                 </button>
                                             </div>
                                         </td>
+                                        )}
                                     </tr>
                                 ))}
                             </tbody>

@@ -123,7 +123,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 		} catch (error) {
 			console.log(error)
 		};
-	};
+	}; 
 
 	const deleteUserVisitor = async (id: number) => {
 		const confirmation = await Swal.fire({

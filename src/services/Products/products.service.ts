@@ -41,12 +41,14 @@ export const crudProducts = async (productID: number, productName:string, produc
         });
 };
 
-export const pointOfSale = async (cantProducts: number, totalVenta:number, productID: number, idClub: number, token: any) => {
+export const pointOfSale = async (cantProducts: number, totalVenta:number, productID: number, idClub: number, typeAction:number, idPaymentOption:number, token: any) => {
     const body = {
         cantProducts: cantProducts,
         totalVenta: totalVenta,
         productID: productID,
         idClub: idClub,
+        typeAction: typeAction,
+        idPaymentOption: idPaymentOption
     }
 	
     const requestOptions = {

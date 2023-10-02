@@ -1,5 +1,7 @@
+import { PaymentOptions } from '@/models/paymentOptions/paymentOptions';
 import { Products } from '@/models/products';
 import { AppStore } from '@/redux/store';
+import { getPaymentData } from '@/services/PaymentOptions/paymentoptions.service';
 import { crudProducts, pointOfSale } from '@/services/Products/products.service';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -16,13 +18,16 @@ const ModalPuntoDeVenta: React.FC<ModalPuntoDeVentaProps> = ({ }) => {
 	const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
 	const params: any = useParams();
 
-	const [products, setProducts] = useState<Products[]>([])
+	const [products, setProducts] = useState<Products[]>([]);
+	const [paymentOptions, setPaymentOptions] = useState<PaymentOptions[]>([]);
 	const [idProduct, setIdProduct] = useState(0);
 	const [amountProduct, setAmountProduct] = useState(0);
 	const [isDisabled, setDisabled] = useState(false);
 	const [total, setTotal] = useState(0);
 	const [pagoCliente, setPagoCliente] = useState(0);
 	const [restate, setRestate] = useState(0);
+
+	const [paymentSelected, setPaymentSelected] = useState(0);
 
 	const openModal = () => {
 		window.modalPuntoDeVenta.showModal();
@@ -34,7 +39,7 @@ const ModalPuntoDeVenta: React.FC<ModalPuntoDeVentaProps> = ({ }) => {
 		setTotal(0);
 		setPagoCliente(0);
 		setRestate(0);
-		window.modalPuntoDeVenta.close();		
+		window.modalPuntoDeVenta.close();
 	};
 
 	const handleProductChange = (event: any) => {
@@ -48,22 +53,22 @@ const ModalPuntoDeVenta: React.FC<ModalPuntoDeVentaProps> = ({ }) => {
 		const selectedProduct = parseInt(event.target.value, 10);
 		const targetClub = products.find((product) => product.productID === idProduct);
 		let valor: any = (targetClub?.productPrice)?.toString();
-	  
+
 		if (selectedProduct && !isNaN(parseFloat(valor))) {
-		  let total: number = selectedProduct * parseFloat(valor);
-		  setTotal(total);
-		  setAmountProduct(selectedProduct);
+			let total: number = selectedProduct * parseFloat(valor);
+			setTotal(total);
+			setAmountProduct(selectedProduct);
 		} else {
-		  setTotal(0);
-		  setAmountProduct(selectedProduct);
+			setTotal(0);
+			setAmountProduct(selectedProduct);
 		}
-	  };
+	};
 
 	const calculateTotal = (pagaCliente: number) => {
 		setPagoCliente(pagaCliente);
 		let totalLocal = pagaCliente - total;
 		setRestate(totalLocal);
-	  };
+	};
 
 	const getProducts = async () => {
 		try {
@@ -83,7 +88,7 @@ const ModalPuntoDeVenta: React.FC<ModalPuntoDeVentaProps> = ({ }) => {
 				setShowEmptyFieldsAlert(false);
 				setDisabled(true);
 				//console.log(amountProduct, parseFloat(parseInt), idProduct, parseInt(params.idClub), token);
-				const result = await pointOfSale(amountProduct, total, idProduct, params.idClub, token);
+				const result = await pointOfSale(amountProduct, total, idProduct, parseInt(params.idClub), 1, paymentSelected, token);
 				if (result) {
 					Alert(result.mensaje, true);
 					setTimeout(() => {
@@ -100,8 +105,18 @@ const ModalPuntoDeVenta: React.FC<ModalPuntoDeVentaProps> = ({ }) => {
 		}
 	}
 
+	const getPayment = async () => {
+		try {
+			const { data } = await getPaymentData(token);
+			setPaymentOptions(data);
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
 	useEffect(() => {
 		getProducts();
+		getPayment();
 	}, []);
 
 	return (
@@ -159,9 +174,25 @@ const ModalPuntoDeVenta: React.FC<ModalPuntoDeVentaProps> = ({ }) => {
 								<input type="number" id="totalACobrar" name="totalACobrar" value={restate} onChange={() => setRestate(restate)} required className='input input-bordered w-full' />
 							</div>
 						</div>
+						<div className='form-control w-full'>
+							<label className='label'>
+								<span className='label-text'>Método de pago:</span>
+							</label>
+							<select
+								onChange={(e) => setPaymentSelected(parseInt(e.target.value))}
+								className='input input-bordered w-full'
+							>
+								<option value=''>Seleccione un método de pago</option>
+								{paymentOptions.map((pay) => (
+									<option key={pay.idPaymentOption} value={pay.idPaymentOption}>
+										{pay.paymentDescription}
+									</option>
+								))}
+							</select>
+						</div>
 						<div className='grid grid-cols-2 gap-6'>
 							<button className=' btn btn-success btn-sm font-normal' onClick={newSale} disabled={isDisabled}>Agregar</button>
-							<button type="button" className='btn btn-sm font-normal'>
+							<button type="button" className='btn btn-sm font-normal' onClick={closeModalVenta}>
 								Cerrar
 							</button>
 						</div>
