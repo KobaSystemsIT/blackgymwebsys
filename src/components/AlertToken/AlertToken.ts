@@ -9,8 +9,7 @@ export function tokenExpired() {
         showCancelButton: false,
     }).then((result) => {
         if (result.isConfirmed) {
-            // Redirige al usuario a la página de inicio de sesión
-            window.location.href = '/login';; // Reemplaza esto con la ruta de tu página de inicio de sesión
+            window.location.href = '/login';
         }
     });
 }

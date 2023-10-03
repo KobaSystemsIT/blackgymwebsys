@@ -1,18 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { OpenState, UserInfo } from '../models';
-import userSliceReducer from './states/user';
-import  clubSliceReducer  from './states/club';
 import { Clubes } from '@/models/clubes';
-import openReducer from './states/token'
 import { Token } from '@/models/token/token';
+import { configureStore } from '@reduxjs/toolkit';
+import { UserInfo } from '../models';
+import clubSliceReducer from './states/club';
+import openReducer from './states/token';
+import userSliceReducer from './states/user';
 
 export interface AppStore {
   user: UserInfo;
   club: Clubes;
   token: Token;
 }
-
-
 
 export default configureStore<AppStore>({
   reducer: {

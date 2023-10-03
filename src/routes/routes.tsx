@@ -1,9 +1,9 @@
-import { BrowserRouter, Navigate, Route, useNavigate } from "react-router-dom";
-import { RoutesWithNotFound } from "../utilities";
-import { PrivateRoutes, PublicRoutes } from "../models";
-import { AuthGuard } from "../guards";
-import { lazy } from "react";
 import { RecuperarCuenta } from "@/pages/RecuperarCuenta";
+import { lazy } from "react";
+import { BrowserRouter, Navigate, Route } from "react-router-dom";
+import { AuthGuard } from "../guards";
+import { PrivateRoutes, PublicRoutes } from "../models";
+import { RoutesWithNotFound } from "../utilities";
 
 const Login = lazy(() => import('@/pages/Login/Login'));
 const Private = lazy(() => import('@/pages/Private/Private'));
