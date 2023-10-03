@@ -1,6 +1,6 @@
 import { Roles } from '@/models';
 import { AppStore } from '@/redux/store';
-import { faArrowRightToBracket, faCity, faHome, faShop, faUsers, faWarehouse } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightToBracket, faCartShopping, faCity, faHome, faShop, faUsers, faWarehouse } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import { Logout } from '../../components/Logout';
@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 								</a>
 							</li>
 						)}
-						{/* {!isAdmin && (
+						{!isAdmin && (
 							<li className="m-5 lg:mt-10 hover:bg-white rounded-md hover:text-black">
 								<a
 									href={`/Dashboard/Punto_de_Venta/${clubState.idClub}`}
@@ -79,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = ({ }) => {
 									<h1 className='lg:block md:block hidden'>Punto de Venta</h1>
 								</a>
 							</li>
-						)} */}
+						)}
 						{!isAdmin && (
 							<li className="m-5 lg:mt-10 hover:bg-white rounded-md hover:text-black">
 								<a
