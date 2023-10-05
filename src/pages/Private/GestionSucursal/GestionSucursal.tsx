@@ -1,21 +1,17 @@
 import icon from '@/assets/icons/iconBG.svg';
-import { Alert } from '@/components/AlertComponent/AlertComponent';
 import { ModalUsers } from '@/components/ModalUsers/ModalUsers';
-import { UserVisitor } from '@/models';
 import { Clients, ClientsData, ClientsSubs } from '@/models/clients';
 import { Staff } from '@/models/staff/staff';
 import { DataSubs } from '@/models/subscription/subscription';
 import { AppStore } from '@/redux/store';
 import { getClientsData, viewDataClientsOrStaff } from '@/services/Clients/clients.service';
 import { crudSubscription } from '@/services/Subscriptions/subscription.service';
-import { crudUserVisitor } from '@/services/Users/users.service';
 import { faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DateTime } from 'luxon';
 import React, { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import './GestionSucursal.css';
 
 
@@ -34,13 +30,11 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const [filteredSubsClients, setfilteredSubsClients] = useState<ClientsSubs[]>([]);
 	const [cantsubs, setCantSubs] = useState<DataSubs[]>([]);
 	const [clientsData, setClientsData] = useState<ClientsData[]>([]);
-	const [userVisitor, setUserVisitor] = useState<UserVisitor[]>([]);
 
 	const [mostrarSubscripciones, setMostrarSubscripciones] = useState(false);
 	const [mostrarClientes, setMostrarClientes] = useState(true);
 	const [mostrarClientesSubs, setMostrarClientesSubs] = useState(true);
 	const [mostrarStaff, setMostrarStaff] = useState(true);
-	const [mostrarVisitantes, setMostrarVisitantes] = useState(false);
 	const [isDisabled, setDisabled] = useState(false);
 
 	const [currentPage, setCurrentPage] = useState(1);
@@ -112,94 +106,9 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 		};
 
 		try {
-			const { data } = await crudUserVisitor(0, '', params.idClub, '', 2, token);
-			setUserVisitor(data);
-		} catch (error) {
-			console.log(error);
-		};
-
-		try {
 			const { data } = await crudSubscription(0, '', 0, 0, 5, token);
 		} catch (error) {
 			console.log(error)
-		};
-	};
-
-	const deleteUserVisitor = async (id: number) => {
-		const confirmation = await Swal.fire({
-			title: '¿Desea eliminar a este usuario?',
-			icon: 'question',
-			showCancelButton: true,
-			confirmButtonText: 'Sí',
-			cancelButtonText: 'Cancelar',
-		});
-
-		if (confirmation.isConfirmed) {
-			try {
-				setDisabled(true);
-				const response = await crudUserVisitor(id, '', 0, '', 5, token);
-				if (response) {
-					Alert(response.mensaje, true);
-					setTimeout(() => {
-						window.location.reload();
-					}, 2500);
-				}
-			} catch (error: any) {
-				Alert(error, false);
-				console.log(error);
-			}
-		}
-	};
-
-	const logInCheck = async (id: number, user: string) => {
-		const usuario = user;
-		const confirmation = await Swal.fire({
-			title: '¿Checar entrada de ' + [usuario] + '?',
-			icon: 'question',
-			showCancelButton: true,
-			confirmButtonText: 'Sí',
-			cancelButtonText: 'Cancelar',
-		});
-
-		if (confirmation.isConfirmed) {
-			try {
-				const result = await crudUserVisitor(id, usuario, 0, '', 3, token);
-				if (result) {
-					Alert(result.mensaje, true);
-					setTimeout(() => {
-						window.location.reload();
-					}, 2500);
-				}
-			} catch (error: any) {
-				Alert(error, false);
-				console.log(error);
-			}
-		};
-	};
-
-	const logOutCheck = async (id: number, user: string) => {
-		const usuario = user;
-		const confirmation = await Swal.fire({
-			title: '¿Checar salida de ' + [usuario] + '?',
-			icon: 'question',
-			showCancelButton: true,
-			confirmButtonText: 'Sí',
-			cancelButtonText: 'Cancelar',
-		});
-
-		if (confirmation.isConfirmed) {
-			try {
-				const result = await crudUserVisitor(id, usuario, 0, '', 4, token);
-				if (result) {
-					Alert(result.mensaje, true);
-					setTimeout(() => {
-						window.location.reload();
-					}, 2500);
-				}
-			} catch (error: any) {
-				Alert(error, false);
-				console.log(error);
-			}
 		};
 	};
 
