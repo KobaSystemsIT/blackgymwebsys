@@ -36,11 +36,17 @@ export const crudSuppliers = (idSupplier: number, nameSupplier: string, typeActi
         });
 };
 
-export const paySuppliers = (idSupplier: number, nameSupplier: string, typeAction: number, token: any) => {
+export const paySuppliers = (payment:number, conceptPayment:string, idSupplier:number, idClub: number,
+     adminID: number, fechaPago:string, idPaymentOption:number, typeAction:number, token: any) => {
     const body = {
-        idSupplier: idSupplier,
-        nameSupplier: nameSupplier,
-        typeAction: typeAction,
+    payment: payment,
+    conceptPayment: conceptPayment,
+    idSupplier: idSupplier,
+    idClub: idClub,
+    adminID: adminID,
+    fechaPago: fechaPago,
+    idPaymentOption: idPaymentOption,
+    typeAction: typeAction
     }
     const requestOptions = {
         method: 'POST',

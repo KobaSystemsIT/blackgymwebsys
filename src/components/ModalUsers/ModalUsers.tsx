@@ -76,7 +76,8 @@ export const ModalUsers: React.FC<ModalUsersProps> = ({ idUserTypeInt }) => {
 				}
 			} catch (error: any) {
 				setTimeout(() => {
-					Alert('Hubo un error al procesar la solicitud', false)
+					Alert('Hubo un error al procesar la solicitud', false);
+					setDisabled(false);
 				}, 3000)
 			}
 		}
@@ -197,6 +198,7 @@ export const ModalUserSystem: React.FC<ModalUserSystemProps> = ({ }) => {
 				}
 			} catch (error: any) {
 				Alert(error, false);
+				setDisabled(false);
 				console.log(error);
 			}
 		}
@@ -341,6 +343,7 @@ export const ModalUserVisitors: React.FC = () => {
 				}
 			} catch (error: any) {
 				Alert(error, false);
+				setDisabled(false);
 				console.log(error);
 			}
 		}
