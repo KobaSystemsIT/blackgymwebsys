@@ -6,12 +6,12 @@ import { AppStore } from '@/redux/store';
 import { getDataUser } from '@/services/Clients/clients.service';
 import { getPaymentData } from '@/services/PaymentOptions/paymentoptions.service';
 import { crudSubscription, newOrUpdateSubscription } from '@/services/Subscriptions/subscription.service';
-import { modifyOrDeleteUser } from '@/services/Users/users.service';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './GestionUsuarioView.css';
+import { modifyOrDeleteUser } from '@/services/Users/users.service';
 
 
 const GestionUsuarioView: React.FC = () => {
@@ -44,7 +44,6 @@ const GestionUsuarioView: React.FC = () => {
 	const [isDisabled, setDisabled] = useState(false);
 	const [comments, setCommets] = useState('');
 	const [fechaVenta, setFechaVenta] = useState('');
-
 
 	const handleGoBack = () => {
 		navigate(-1);
@@ -166,8 +165,8 @@ const GestionUsuarioView: React.FC = () => {
 						Alert(result.mensaje, true);
 						setTimeout(() => {
 							setDisabled(false);
-					        handleGoBack();
-					    }, 3000)
+							handleGoBack();
+						}, 3000)
 					}
 				} catch (error) {
 					Alert('Hubo un error al procesar la solicitud.', false);
@@ -182,17 +181,43 @@ const GestionUsuarioView: React.FC = () => {
 		setSubscription(selectedSubscriptionType);
 		const selectedSubscription = subscriptionData.find((sub) => sub.idSubscriptionType === selectedSubscriptionType);
 		if (selectedSubscription) {
-
 			const { idSubscriptionType, nameSubscriptionType, daysSubscription, priceSubscription, allAccess } = selectedSubscription;
 			const data = { idSubscriptionType, nameSubscriptionType, daysSubscription, priceSubscription, allAccess };
-			console.log(idSubscriptionType)
+			let year = new Date();
+			let mesActual = year.getUTCMonth() + 1;
+			let diasSub:number = data.daysSubscription;
+
+			if(selectedSubscription.idSubscriptionType === 3 || selectedSubscription.idSubscriptionType === 4){
+				if (year.getFullYear() % 4 === 0) {
+					if (mesActual <= 7 && mesActual % 2 === 0) {
+						if (mesActual === 2) {
+							diasSub -= 1;
+						} else {
+							diasSub += 1;
+						}
+					} else if (mesActual >= 8 && mesActual % 2 === 0) {
+						diasSub += 1;
+					}
+				} else {
+					if (mesActual <= 7 && mesActual % 2 === 0) {
+						if (mesActual === 2) {
+							diasSub -= 2;
+						} else {
+							diasSub += 1;
+						}
+					} else if (mesActual >= 8 && mesActual % 2 === 0) {
+						diasSub += 1;
+					}
+				}
+			}
+
 			let startDate: string = new Date().toISOString().split('T')[0];
 			let endDate: string = new Date(
-				new Date().getTime() + daysSubscription * 24 * 60 * 60 * 1000
+				new Date().getTime() + diasSub * 24 * 60 * 60 * 1000
 			).toISOString().split('T')[0];
-			let duration: string = daysSubscription.toString();
+			let duration = diasSub;
 			setPrice(data.priceSubscription);
-			setDuration(duration);
+			setDuration(duration.toString());
 			setStartDate(startDate);
 			setEndDate(endDate);
 		}
@@ -381,7 +406,7 @@ const GestionUsuarioView: React.FC = () => {
 									<label className='label'>
 										<span className='label-text'>Comentarios:</span>
 									</label>
-									<textarea value={comments} onChange={(e)=>setCommets(e.target.value)} className="textarea textarea-bordered" placeholder="Comentarios"></textarea>
+									<textarea value={comments} onChange={(e) => setCommets(e.target.value)} className="textarea textarea-bordered" placeholder="Comentarios"></textarea>
 								</div>
 							</form>
 							{showEmptyFieldsAlert && (

@@ -35,7 +35,6 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 	const [mostrarClientes, setMostrarClientes] = useState(true);
 	const [mostrarClientesSubs, setMostrarClientesSubs] = useState(true);
 	const [mostrarStaff, setMostrarStaff] = useState(true);
-	const [isDisabled, setDisabled] = useState(false);
 
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSubs, setCurrentPageSubs] = useState(1);
@@ -60,14 +59,14 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 
 	const handleSearch = () => {
 		const filtered = clients.filter((client) =>
-			client.username.toLowerCase().includes(searchTerm.toLowerCase())
+			client.username.toLowerCase().includes(searchTerm.toLowerCase()) || client.lastName.toLowerCase().includes(searchTerm.toLowerCase())
 		);
 		setFilteredClients(filtered);
 	};
 
-	const searchClientsSUbs = () => {
+	const searchClientsSubs = () => {
 		const filtered = clientsSubs.filter((client) =>
-			client.username.toLowerCase().includes(searchSubUser.toLowerCase())
+			client.username.toLowerCase().includes(searchSubUser.toLowerCase()) || client.lastName.toLowerCase().includes(searchSubUser.toLowerCase())
 		);
 		setfilteredSubsClients(filtered);
 	};
@@ -114,7 +113,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 
 	useLayoutEffect(() => {
 		obtainClients();
-		searchClientsSUbs();
+		searchClientsSubs();
 		handleSearch();
 	}, []);
 
@@ -240,7 +239,7 @@ const GestionSucursal: React.FC<GestionSucursalProps> = ({ }) => {
 								onChange={(e) => setSearchSubUser(e.target.value)}
 								className='input input-group-xs input-bordered w-full max-w-xs'
 							/>
-							<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={searchClientsSUbs}>Buscar</button>
+							<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black' onClick={searchClientsSubs}>Buscar</button>
 						</div>
 						<hr />
 						<div className='max-h-56 overflow-auto m-2'>
