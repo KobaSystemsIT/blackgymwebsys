@@ -56,7 +56,7 @@ function Login() {
   const handleClub = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     const id = parseInt(selectedValue);
-    const targetClub = clubes.find((club) => club.idClub === id);
+    const targetClub = clubes.find((club: { idClub: number; }) => club.idClub === id);
     if (targetClub) {
       setIdClub(id);
       const { idClub, nameClub, addressClub } = targetClub;

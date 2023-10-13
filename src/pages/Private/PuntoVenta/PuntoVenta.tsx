@@ -14,11 +14,15 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './PuntoVenta.css';
+import { paySuppliers } from '@/services/Suppliers/suppliers.service';
+import { toDate } from 'date-fns-tz';
+import { PaySuppliers } from '@/models/suppliers/suppliers';
 
 export type PuntoVentaProps = {
 }
 
 const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
+	const userState = useSelector((store: AppStore) => store.user);
 	const tokenState = useSelector((store: AppStore) => store.token);
 	const token = tokenState.token;
 	let params: any = useParams();
@@ -26,6 +30,7 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 	const [ventas, setVentas] = useState<POSData[]>([]);
 	const [ventasTot, setVentasTOT] = useState<POSVentas[]>([]);
 	const [userVisitor, setUserVisitor] = useState<UserVisitor[]>([]);
+	const [pagoProveedores, setPagoProveedores] = useState<PaySuppliers[]>([]);
 	const [mostrarVisitantes, setMostrarVisitantes] = useState(false);
 	const [isDisabled, setDisabled] = useState(false);
 
@@ -50,6 +55,13 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 		} catch (error) {
 			console.log(error);
 		};
+
+		try {
+			const { data } = await paySuppliers(0, 'mandamos a llamar a la funcion', 0, params.idClub, userState.idUser, '2000-01-01', 0, 2, token);
+			setPagoProveedores(data);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const deleteUserVisitor = async (id: number) => {
@@ -142,7 +154,7 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 					<ModalPagoProveedores></ModalPagoProveedores>
 				</div>
 			</div>
-			<div>
+			<div className='grid lg:grid-flow-col gap-4'>
 				<div className='overflow-hidden pt-10'>
 					<div className='grid shadow-xl border-2 rounded-2xl'>
 						<div className='max-h-48 overflow-auto m-2'>
@@ -169,8 +181,41 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 								</tbody>
 							</table>
 						</div>
-					</div>
-					<div className='flex flex-col gap-4 justify-center align-middle text-center pt-10'>
+					</div>					
+				</div>
+				<div className='overflow-hidden pt-10'>
+					<div className='grid shadow-xl border-2 rounded-2xl'>
+						<div className='max-h-48 overflow-auto m-2'>
+							<table className='table table-zebra table-xs table-pin-rows table-pin-cols bg-white text-center'>
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Proveedor</th>
+										<th>Total pagado</th>
+										<th>Método de pago</th>
+										<th>Concepto</th>
+										
+									</tr>
+								</thead>
+								<tbody>
+									{pagoProveedores.map((pagos) => (
+										<tr key={pagos.id}>
+											<td>{pagos.id}</td>
+											<td>{pagos.nameSupplier}</td>											
+											<td>${pagos.paymentAmount}.00</td>
+											<td>{pagos.paymentDescription}</td>
+											<td>{pagos.conceptPayment}</td>
+											<td>{pagos.date}</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					</div>					
+				</div>
+			</div>
+			<div>
+			<div className='flex flex-col gap-4 justify-center align-middle text-center pt-10'>
 						<div>
 							<h1 className='font-bold text-xl'>Total de ventas del día</h1>
 						</div>
@@ -184,10 +229,9 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 							))}
 						</div>
 					</div>
-				</div>
 			</div>
 			<hr />
-			<div className='overflow-hidden'>
+			<div className='overflow-hidden mt-10'>
 				<div>
 					<div className='flex h-16 px-2 justify-between items-center'>
 						<button className='text-black lg:text-lg md:text-lg text-sm' onClick={() => setMostrarVisitantes(!mostrarVisitantes)}>Clientes Visitantes</button>
