@@ -1,16 +1,16 @@
 import { Alert } from '@/components/AlertComponent/AlertComponent';
-import { ModalPagoProveedores, ModalPuntoDeVenta } from '@/components/ModalPuntoDeVenta/ModalPuntoDeVenta';
+import { ModalCashRegister, ModalPagoProveedores, ModalPuntoDeVenta } from '@/components/ModalPuntoDeVenta/ModalPuntoDeVenta';
 import { ModalUserVisitors } from '@/components/ModalUsers/ModalUsers';
 import { UserVisitor } from '@/models';
 import { POSData, POSVentas } from '@/models/pointOfSale/pointOfSale';
 import { AppStore } from '@/redux/store';
-import { pointOfSale } from '@/services/Products/products.service';
+import { openOrCloseCashRegister, pointOfSale } from '@/services/Products/products.service';
 import { crudUserVisitor } from '@/services/Users/users.service';
 import { faCircleCheck, faRightFromBracket, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './PuntoVenta.css';
@@ -26,6 +26,8 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 	const tokenState = useSelector((store: AppStore) => store.token);
 	const token = tokenState.token;
 	let params: any = useParams();
+
+	const dispatch = useDispatch();
 
 	const [ventas, setVentas] = useState<POSData[]>([]);
 	const [ventasTot, setVentasTOT] = useState<POSVentas[]>([]);
@@ -62,6 +64,12 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 		} catch (error) {
 			console.log(error);
 		}
+
+		// try {
+			//let idCaja = localStorage.getItem('idCaja');
+			console.log(localStorage.getItem('idCaja'));
+			//const { data } = await openOrCloseCashRegister(idCaja, 0, params.idClub, userState.idUser, 3, token);
+		// }
 	};
 
 	const deleteUserVisitor = async (id: number) => {
@@ -150,9 +158,16 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 			<div className='flex flex-col h-16 px-2 items-center justify-center gap-4'>
 				<h1 className='text-black lg:text-2xl md:text-lg text-base'>Punto de Venta</h1>
 				<div className='grid grid-flow-col gap-4 justify-between'>
-					<ModalPuntoDeVenta></ModalPuntoDeVenta>
-					<ModalPagoProveedores></ModalPagoProveedores>
+					<ModalPuntoDeVenta/>
+					<ModalPagoProveedores/>
+					<ModalCashRegister/>
 				</div>
+			</div>
+			<div>
+				<h1>
+					ID DE CAJA: 1
+				</h1>
+				<h1>MONTO DE APERTURA: 400</h1>
 			</div>
 			<div className='grid lg:grid-flow-col gap-4'>
 				<div className='overflow-hidden pt-10'>
@@ -181,7 +196,7 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 								</tbody>
 							</table>
 						</div>
-					</div>					
+					</div>
 				</div>
 				<div className='overflow-hidden pt-10'>
 					<div className='grid shadow-xl border-2 rounded-2xl'>
@@ -194,14 +209,13 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 										<th>Total pagado</th>
 										<th>Método de pago</th>
 										<th>Concepto</th>
-										
 									</tr>
 								</thead>
 								<tbody>
 									{pagoProveedores.map((pagos) => (
 										<tr key={pagos.id}>
 											<td>{pagos.id}</td>
-											<td>{pagos.nameSupplier}</td>											
+											<td>{pagos.nameSupplier}</td>
 											<td>${pagos.paymentAmount}.00</td>
 											<td>{pagos.paymentDescription}</td>
 											<td>{pagos.conceptPayment}</td>
@@ -211,7 +225,7 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 								</tbody>
 							</table>
 						</div>
-					</div>					
+					</div>
 				</div>
 			</div>
 			<div>
@@ -221,7 +235,7 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 						</div>
 						<div className="flex stats stats-horizontal gap-4 justify-center">
 							{ventasTot.map((ventas, index) => (
-								<div className={`stat gap-4 rounded-xl ${ventas.paymentDescription === 'Efectivo' ? ' bg-lime-500' : ''} 
+								<div className={`stat gap-4 rounded-xl ${ventas.paymentDescription === 'Efectivo' ? ' bg-lime-500' : ''}
 							${ventas.paymentDescription === 'Transferencia' ? 'bg-yellow-500' : ''}`} key={index}>
 									<div className="stat-title font-semibold">{ventas.paymentDescription}</div>
 									<div className="stat-value">${ventas.ventas}.00</div>

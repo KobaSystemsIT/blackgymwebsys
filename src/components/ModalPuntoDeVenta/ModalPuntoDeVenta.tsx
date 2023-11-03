@@ -3,13 +3,15 @@ import { Products } from '@/models/products';
 import { Suppliers } from '@/models/suppliers/suppliers';
 import { AppStore } from '@/redux/store';
 import { getPaymentData } from '@/services/PaymentOptions/paymentoptions.service';
-import { crudProducts, pointOfSale } from '@/services/Products/products.service';
+import { crudProducts, openOrCloseCashRegister, pointOfSale } from '@/services/Products/products.service';
 import { crudSuppliers, paySuppliers } from '@/services/Suppliers/suppliers.service';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Alert } from '../AlertComponent/AlertComponent';
 import './ModalPuntoDeVenta.css';
+import { useDispatch } from 'react-redux';
+import { persistLocalStorage } from '@/utilities';
 
 export type ModalPuntoDeVentaProps = {
 }
@@ -232,7 +234,7 @@ export const ModalPagoProveedores: React.FC<ModalPagoProveedores> = ({ }) => {
 
 	const [paymentSelected, setPaymentSelected] = useState(0);
 
-	const openModal = () => {		
+	const openModal = () => {
 		window.modalPaySuppliers.showModal();
 	};
 
@@ -264,7 +266,7 @@ export const ModalPagoProveedores: React.FC<ModalPagoProveedores> = ({ }) => {
 	};
 
 	const newPay = async (event: React.MouseEvent<HTMLButtonElement>) => {
-		
+
 		event.preventDefault();
 		if (supplier === 0 || conceptPayment === '') {
 			setShowEmptyFieldsAlert(true);
@@ -306,7 +308,7 @@ export const ModalPagoProveedores: React.FC<ModalPagoProveedores> = ({ }) => {
 
 	return (
 		<>
-			<button className='btn lg:btn-sm btn-xs bg-black text-white rounded-lg hover:text-black hover:bg-transparent'
+			<button className='btn lg:btn-sm btn-sm bg-black text-white rounded-lg hover:text-black hover:bg-transparent'
 				onClick={openModal}
 			>
 				<h1>Pago a proveedores</h1>
@@ -381,6 +383,114 @@ export const ModalPagoProveedores: React.FC<ModalPagoProveedores> = ({ }) => {
 						</div>
 						<div className='grid grid-cols-2 gap-6'>
 							<button className=' btn btn-success btn-sm font-normal' onClick={newPay} disabled={isDisabled}>Agregar</button>
+							<button type="button" className='btn btn-sm font-normal' onClick={closeModalVenta}>
+								Cerrar
+							</button>
+						</div>
+					</form>
+					<br />
+					{showEmptyFieldsAlert && (
+						<div className="text-red-600">
+							Por favor, complete todos los campos.
+						</div>
+					)}
+				</div>
+			</dialog>
+		</>
+	);
+};
+
+export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
+	const userState = useSelector((store: AppStore) => store.user);
+	const tokenState = useSelector((store: AppStore) => store.token);
+	const token = tokenState.token;
+	const adminID = userState.idUser;
+	const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
+	const params: any = useParams();
+	const dispatch = useDispatch();
+
+	const [idCaja, setIdCaja] = useState(0);
+	const [monto, setMonto] = useState(0);
+	const [isDisabled, setDisabled] = useState(false);
+
+	const openModal = () => {
+		setMonto(0);
+		window.modalCashRegister.showModal();
+	};
+
+	const closeModalVenta = () => {
+		window.modalCashRegister.close();
+	};
+
+	const openOrClose = async (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		if (monto <= 0) {
+			setShowEmptyFieldsAlert(true);
+		} else {
+			try {
+				setShowEmptyFieldsAlert(false);
+				setDisabled(true);
+				const { data } = await openOrCloseCashRegister(idCaja, monto, parseInt(params.idClub), adminID, 1, token);
+				if (data) {
+					let idCaja:number = data.caja;
+					Alert('Apertura de caja realizada correctamente', true);
+					persistLocalStorage('idCaja', idCaja);
+					setTimeout(() => {
+						closeModalVenta();
+						setDisabled(false);
+						window.location.reload()
+					}, 2500);
+				}
+			} catch (error) {
+				setTimeout(() => {
+					Alert('Hubo un error al procesar la solicitud', false);
+					setDisabled(false);
+				}, 3000)
+			}
+		}
+	};
+
+	// const getIdCaja = async () => {
+	// 	try {
+	// 		const{ data } = await openOrCloseCashRegister(idCaja, monto, parseInt(params.idClub), adminID, 3, token);
+	// 		if(data){
+	// 			setIdCaja(data.idCaja);
+	// 		}
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+	// };
+
+	useEffect(() => {
+		// getIdCaja();
+	})
+
+	return (
+		<>
+			<button className='btn lg:btn-sm btn-sm bg-black text-white rounded-lg hover:text-black hover:bg-transparent'
+				onClick={openModal}
+			>
+				<h1>{idCaja === 0 ? 'Apertura' : 'Corte'} de caja</h1>
+			</button>
+			<dialog id="modalCashRegister" className="modal-box">
+				<div>
+					<h3 className="font-bold text-lg text-center m-4">{idCaja === 0 ? 'Apertura' : 'Corte'} de caja</h3>
+					<form className="grid text-black lg:text-sm text-xs gap-4">
+						<div className='grid lg:grid-flow-col gap-4'>
+							<div className='form-control w-full'>
+								<label className='label'>
+									<span className='label-text'>Total en caja de {idCaja === 0 ? 'apertura' : 'corte'}:</span>
+								</label>
+								<input
+									type="number"
+									value={monto}
+									onChange={(e) => setMonto(parseFloat(e.target.value))}
+									className='input input-bordered w-full'
+								/>
+							</div>
+						</div>
+						<div className='grid grid-cols-2 gap-6'>
+							<button className=' btn btn-success btn-sm font-normal' onClick={openOrClose} disabled={isDisabled}>Registrar</button>
 							<button type="button" className='btn btn-sm font-normal' onClick={closeModalVenta}>
 								Cerrar
 							</button>
