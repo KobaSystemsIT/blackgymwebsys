@@ -262,7 +262,7 @@ export const ModalPagoProveedores: React.FC<ModalPagoProveedores> = ({ }) => {
 		};
 
 		let startDate: string = new Date().toISOString().split('T')[0];
-	    setFechaVenta(startDate);
+		setFechaVenta(startDate);
 	};
 
 	const newPay = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -400,9 +400,56 @@ export const ModalPagoProveedores: React.FC<ModalPagoProveedores> = ({ }) => {
 	);
 };
 
+export const ModalCorteCaja: React.FC<{ data: any, closeModalCorteCaja: () => void }> = ({ data, closeModalCorteCaja }) => {
+    const [ventasProductos, setVentasProductos] = useState(0);
+    const [ventasSubs, setVentasSubs] = useState(0);
+    const [pagos, setPagos] = useState(0);
+    const [total, setTotal] = useState(0);
+
+    useEffect(() => {
+        if (data) {
+            setVentasProductos(data.ventasProductos || 0);
+            setVentasSubs(data.ventasSubs || 0);
+            setPagos(data.pagos || 0);
+            setTotal((data.ventasProductos || 0) + (data.ventasSubs || 0) - (data.pagos || 0));
+        }
+    }, [data]);
+
+    return (
+        <>
+            <dialog id="modalCorteCaja" className="modal-box">
+                <div>
+                    <h3 className="font-bold text-lg text-center m-4">Resumen de Corte de Caja</h3>
+                    <div className="grid grid-cols-2 gap-4 text-black lg:text-sm text-xs">
+                        <div>
+                            <p className="font-bold">Ganancias</p>
+                            <p>Ventas Productos: {ventasProductos}</p>
+                            <p>Ventas Subs: {ventasSubs}</p>
+                        </div>
+                        <div>
+                            <p className="font-bold">Gastos</p>
+                            <p>Pagos: {pagos}</p>
+                        </div>
+                    </div>
+                    <div className="mt-4 text-black lg:text-sm text-xs">
+                        <p className="font-bold">Total: {total}</p>
+                    </div>
+                    <div className='grid grid-cols-1 gap-6 mt-4'>
+                        <button type="button" className='btn btn-sm font-normal' onClick={closeModalCorteCaja}>
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </dialog>
+        </>
+    );
+}
+
 export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 	const userState = useSelector((store: AppStore) => store.user);
 	const tokenState = useSelector((store: AppStore) => store.token);
+	const [showCorteCaja, setShowCorteCaja] = useState(false);
+	const [corteCajaData, setCorteCajaData] = useState(null);
 	const token = tokenState.token;
 	const adminID = userState.idUser;
 	const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
@@ -422,6 +469,21 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 		window.modalCashRegister.close();
 	};
 
+	const closeModalCorteCaja = () => {
+        setShowCorteCaja(false);
+    };
+
+	const getIdCajaFromLocalStorage = () => {
+		const item = localStorage.getItem('idCaja');
+		if (item) {
+			const parsedItem = JSON.parse(item);
+			return parsedItem.idCaja;
+		}
+		return null;
+	}
+
+	const cajaId = getIdCajaFromLocalStorage();
+
 	const openOrClose = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 		if (monto <= 0) {
@@ -430,17 +492,35 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 			try {
 				setShowEmptyFieldsAlert(false);
 				setDisabled(true);
-				const { data } = await openOrCloseCashRegister(idCaja, monto, parseInt(params.idClub), adminID, 1, token);
-				if (data) {
-					let idCaja:number = data.caja;
-					Alert('Apertura de caja realizada correctamente', true);
-					persistLocalStorage('idCaja', idCaja);
-					setTimeout(() => {
-						closeModalVenta();
-						setDisabled(false);
-						window.location.reload()
-					}, 2500);
+				if (cajaId === 0) {
+					const { data } = await openOrCloseCashRegister(idCaja, monto, parseInt(params.idClub), adminID, 1, token);
+					localStorage.setItem('montoCaja', monto.toString());
+
+					if (data) {
+						let idCaja: number = data.caja;
+						Alert('Apertura de caja realizada correctamente', true);
+						const idCajaValue = { idCaja: idCaja };
+						persistLocalStorage('idCaja', idCajaValue);
+						setTimeout(() => {
+							closeModalVenta();
+							setDisabled(false);
+							window.location.reload()
+						}, 2500);
+					}
+				} else {
+					const { data } = await openOrCloseCashRegister(idCaja, monto, parseInt(params.idClub), adminID, 2, token);
+					if (data) {
+						Alert('Cierre de caja realizada correctamente', true);
+						setCorteCajaData(data.data[0]);
+						setShowCorteCaja(true);
+						setTimeout(() => {
+							closeModalVenta();
+							setDisabled(false);
+							window.location.reload()
+						}, 2500);
+					}
 				}
+
 			} catch (error) {
 				setTimeout(() => {
 					Alert('Hubo un error al procesar la solicitud', false);
@@ -448,7 +528,13 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 				}, 3000)
 			}
 		}
+
+		const closeModalCorteCaja = () => {
+			setShowCorteCaja(false);
+		};
 	};
+
+
 
 	// const getIdCaja = async () => {
 	// 	try {
@@ -462,7 +548,6 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 	// };
 
 	useEffect(() => {
-		// getIdCaja();
 	})
 
 	return (
@@ -470,16 +555,16 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 			<button className='btn lg:btn-sm btn-sm bg-black text-white rounded-lg hover:text-black hover:bg-transparent'
 				onClick={openModal}
 			>
-				<h1>{idCaja === 0 ? 'Apertura' : 'Corte'} de caja</h1>
+				<h1>{cajaId === 0 ? 'Apertura' : 'Corte'} de caja</h1>
 			</button>
 			<dialog id="modalCashRegister" className="modal-box">
 				<div>
-					<h3 className="font-bold text-lg text-center m-4">{idCaja === 0 ? 'Apertura' : 'Corte'} de caja</h3>
+					<h3 className="font-bold text-lg text-center m-4">{cajaId === 0 ? 'Apertura' : 'Corte'} de caja</h3>
 					<form className="grid text-black lg:text-sm text-xs gap-4">
 						<div className='grid lg:grid-flow-col gap-4'>
 							<div className='form-control w-full'>
 								<label className='label'>
-									<span className='label-text'>Total en caja de {idCaja === 0 ? 'apertura' : 'corte'}:</span>
+									<span className='label-text'>Total en caja de {cajaId === 0 ? 'apertura' : 'corte'}:</span>
 								</label>
 								<input
 									type="number"
@@ -504,11 +589,13 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 					)}
 				</div>
 			</dialog>
+			{showCorteCaja && <ModalCorteCaja data={corteCajaData} closeModalCorteCaja={closeModalCorteCaja} />}
 		</>
 	);
 };
 
 export default {
 	ModalPuntoDeVenta,
-	ModalPagoProveedores
+	ModalPagoProveedores,
+	ModalCorteCaja
 }

@@ -1,5 +1,5 @@
 import { Alert } from '@/components/AlertComponent/AlertComponent';
-import { ModalCashRegister, ModalPagoProveedores, ModalPuntoDeVenta } from '@/components/ModalPuntoDeVenta/ModalPuntoDeVenta';
+import { ModalCashRegister, ModalPagoProveedores, ModalPuntoDeVenta, ModalCorteCaja } from '@/components/ModalPuntoDeVenta/ModalPuntoDeVenta';
 import { ModalUserVisitors } from '@/components/ModalUsers/ModalUsers';
 import { UserVisitor } from '@/models';
 import { POSData, POSVentas } from '@/models/pointOfSale/pointOfSale';
@@ -66,9 +66,9 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 		}
 
 		// try {
-			//let idCaja = localStorage.getItem('idCaja');
-			console.log(localStorage.getItem('idCaja'));
-			//const { data } = await openOrCloseCashRegister(idCaja, 0, params.idClub, userState.idUser, 3, token);
+		//let idCaja = localStorage.getItem('idCaja');
+		console.log(localStorage.getItem('idCaja'));
+		//const { data } = await openOrCloseCashRegister(idCaja, 0, params.idClub, userState.idUser, 3, token);
 		// }
 	};
 
@@ -153,21 +153,31 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 	useEffect(() => {
 		getVentas();
 	}, []);
+
+	const getIdCajaFromLocalStorage = () => {
+		const item = localStorage.getItem('idCaja');
+		if (item) {
+			const parsedItem = JSON.parse(item);
+			return parsedItem.idCaja;
+		}
+		return null;
+	}
+	const idCaja = getIdCajaFromLocalStorage();
 	return (<>
 		<div>
 			<div className='flex flex-col h-16 px-2 items-center justify-center gap-4'>
 				<h1 className='text-black lg:text-2xl md:text-lg text-base'>Punto de Venta</h1>
 				<div className='grid grid-flow-col gap-4 justify-between'>
-					<ModalPuntoDeVenta/>
-					<ModalPagoProveedores/>
-					<ModalCashRegister/>
+					<ModalPuntoDeVenta />
+					<ModalPagoProveedores />
+					<ModalCashRegister />
 				</div>
 			</div>
 			<div>
 				<h1>
-					ID DE CAJA: 1
+					ID DE CAJA: {idCaja !== null ? idCaja : 'No disponible'}
 				</h1>
-				<h1>MONTO DE APERTURA: 400</h1>
+				<h1>MONTO DE APERTURA: {localStorage.montoCaja !== null ? localStorage.montoCaja : "No disponible"}</h1>
 			</div>
 			<div className='grid lg:grid-flow-col gap-4'>
 				<div className='overflow-hidden pt-10'>
@@ -229,20 +239,20 @@ const PuntoVenta: React.FC<PuntoVentaProps> = ({ }) => {
 				</div>
 			</div>
 			<div>
-			<div className='flex flex-col gap-4 justify-center align-middle text-center pt-10'>
-						<div>
-							<h1 className='font-bold text-xl'>Total de ventas del día</h1>
-						</div>
-						<div className="flex stats stats-horizontal gap-4 justify-center">
-							{ventasTot.map((ventas, index) => (
-								<div className={`stat gap-4 rounded-xl ${ventas.paymentDescription === 'Efectivo' ? ' bg-lime-500' : ''}
-							${ventas.paymentDescription === 'Transferencia' ? 'bg-yellow-500' : ''}`} key={index}>
-									<div className="stat-title font-semibold">{ventas.paymentDescription}</div>
-									<div className="stat-value">${ventas.ventas}.00</div>
-								</div>
-							))}
-						</div>
+				<div className='flex flex-col gap-4 justify-center align-middle text-center pt-10'>
+					<div>
+						<h1 className='font-bold text-xl'>Total de ventas del día</h1>
 					</div>
+					<div className="flex stats stats-horizontal gap-4 justify-center">
+						{ventasTot.map((ventas, index) => (
+							<div className={`stat gap-4 rounded-xl ${ventas.paymentDescription === 'Efectivo' ? ' bg-lime-500' : ''}
+							${ventas.paymentDescription === 'Transferencia' ? 'bg-yellow-500' : ''}`} key={index}>
+								<div className="stat-title font-semibold">{ventas.paymentDescription}</div>
+								<div className="stat-value">${ventas.ventas}.00</div>
+							</div>
+						))}
+					</div>
+				</div>
 			</div>
 			<hr />
 			<div className='overflow-hidden mt-10'>
