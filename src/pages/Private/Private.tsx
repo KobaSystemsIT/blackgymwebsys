@@ -40,7 +40,6 @@ declare global {
     modalSuppliers:HTMLDialogElement;
     modalPaySuppliers:HTMLDialogElement;
     modalCashRegister: HTMLDialogElement;
-    modalCorteCaja: HTMLDialogElement;
   }
 }
 

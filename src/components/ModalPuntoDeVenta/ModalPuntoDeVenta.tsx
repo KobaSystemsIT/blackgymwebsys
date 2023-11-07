@@ -415,8 +415,8 @@ interface ModalCorteCajaProps {
 
   export const ModalCorteCaja = forwardRef<ModalCorteCajaHandles, ModalCorteCajaProps>((props, ref) => {
     const [isVisible, setIsVisible] = useState(false);
+	const { data } = props;
 
-    // Expose the showModal and closeModal methods to the parent component
     useImperativeHandle(ref, () => ({
 		showModal: () => {
 		  setIsVisible(true);
@@ -428,24 +428,38 @@ interface ModalCorteCajaProps {
 	
     if (!isVisible) return null;
 
-    // Define the close modal function within the component
     const closeCorteCajaModal = () => {
         setIsVisible(false);
     };
 
     return (
-        <>
-            <dialog open={isVisible} className="modal-box">
-                {/* Modal content here */}
-                <div className='grid grid-cols-1 gap-6 mt-4'>
-                    <button type="button" className='btn btn-sm font-normal' onClick={closeCorteCajaModal}>
-                        Cerrar
-                    </button>
-                </div>
-            </dialog>
-            {/* The button to open the modal should be moved to where it's needed. */}
-        </>
-    );
+		<>
+		  <div className="p-5">
+			<h2 className="text-xl font-bold text-center mb-4">Resumen de Corte de Caja</h2>
+			<div className="mb-4">
+			  <h3 className="font-semibold">Ventas Totales:</h3>
+			  <p>${data.ventasProductos}</p>
+			</div>
+			<div className="mb-4">
+			  <h3 className="font-semibold">Suscripciones:</h3>
+			  <p>${data.ventasSubs}</p>
+			</div>
+			<div className="mb-4">
+			  <h3 className="font-semibold">Pagos Recibidos:</h3>
+			  <p>${data.pagos}</p>
+			</div>
+			<div className="flex justify-end mt-4">
+			  <button
+				type="button"
+				className="btn btn-sm font-normal"
+				onClick={() => {}}
+			  >
+				Cerrar
+			  </button>
+			</div>
+		  </div>
+		</>
+	  );
 });
 
 
