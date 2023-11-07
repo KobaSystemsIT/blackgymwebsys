@@ -5,7 +5,7 @@ import { AppStore } from '@/redux/store';
 import { getPaymentData } from '@/services/PaymentOptions/paymentoptions.service';
 import { crudProducts, openOrCloseCashRegister, pointOfSale } from '@/services/Products/products.service';
 import { crudSuppliers, paySuppliers } from '@/services/Suppliers/suppliers.service';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useImperativeHandle, forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Alert } from '../AlertComponent/AlertComponent';
@@ -400,56 +400,64 @@ export const ModalPagoProveedores: React.FC<ModalPagoProveedores> = ({ }) => {
 	);
 };
 
-export const ModalCorteCaja: React.FC<{ data: any, closeModalCorteCaja: () => void }> = ({ data, closeModalCorteCaja }) => {
-    const [ventasProductos, setVentasProductos] = useState(0);
-    const [ventasSubs, setVentasSubs] = useState(0);
-    const [pagos, setPagos] = useState(0);
-    const [total, setTotal] = useState(0);
+interface ModalCorteCajaProps {
+	data: {
+	  ventasProductos: number;
+	  ventasSubs: number;
+	  pagos: number;
+	};
+  }
 
-    useEffect(() => {
-        if (data) {
-            setVentasProductos(data.ventasProductos || 0);
-            setVentasSubs(data.ventasSubs || 0);
-            setPagos(data.pagos || 0);
-            setTotal((data.ventasProductos || 0) + (data.ventasSubs || 0) - (data.pagos || 0));
-        }
-    }, [data]);
+  interface ModalCorteCajaHandles {
+	showModal: () => void;
+	closeModal: () => void;
+  }
+
+  export const ModalCorteCaja = forwardRef<ModalCorteCajaHandles, ModalCorteCajaProps>((props, ref) => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Expose the showModal and closeModal methods to the parent component
+    useImperativeHandle(ref, () => ({
+		showModal: () => {
+		  setIsVisible(true);
+		},
+		closeModal: () => {
+		  setIsVisible(false);
+		},
+	  }));
+	
+    if (!isVisible) return null;
+
+    // Define the close modal function within the component
+    const closeCorteCajaModal = () => {
+        setIsVisible(false);
+    };
 
     return (
         <>
-            <dialog id="modalCorteCaja" className="modal-box">
-                <div>
-                    <h3 className="font-bold text-lg text-center m-4">Resumen de Corte de Caja</h3>
-                    <div className="grid grid-cols-2 gap-4 text-black lg:text-sm text-xs">
-                        <div>
-                            <p className="font-bold">Ganancias</p>
-                            <p>Ventas Productos: {ventasProductos}</p>
-                            <p>Ventas Subs: {ventasSubs}</p>
-                        </div>
-                        <div>
-                            <p className="font-bold">Gastos</p>
-                            <p>Pagos: {pagos}</p>
-                        </div>
-                    </div>
-                    <div className="mt-4 text-black lg:text-sm text-xs">
-                        <p className="font-bold">Total: {total}</p>
-                    </div>
-                    <div className='grid grid-cols-1 gap-6 mt-4'>
-                        <button type="button" className='btn btn-sm font-normal' onClick={closeModalCorteCaja}>
-                            Cerrar
-                        </button>
-                    </div>
+            <dialog open={isVisible} className="modal-box">
+                {/* Modal content here */}
+                <div className='grid grid-cols-1 gap-6 mt-4'>
+                    <button type="button" className='btn btn-sm font-normal' onClick={closeCorteCajaModal}>
+                        Cerrar
+                    </button>
                 </div>
             </dialog>
+            {/* The button to open the modal should be moved to where it's needed. */}
         </>
     );
-}
+});
+
 
 export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 	const userState = useSelector((store: AppStore) => store.user);
 	const tokenState = useSelector((store: AppStore) => store.token);
-	const [showCorteCaja, setShowCorteCaja] = useState(false);
-	const [corteCajaData, setCorteCajaData] = useState(null);
+	const corteCajaModalRef = useRef<ModalCorteCajaHandles>(null);
+	const [corteCajaData, setCorteCajaData] = useState({
+		ventasProductos: 0,
+		ventasSubs: 0,
+		pagos: 0
+	  });
 	const token = tokenState.token;
 	const adminID = userState.idUser;
 	const [showEmptyFieldsAlert, setShowEmptyFieldsAlert] = useState(false);
@@ -469,10 +477,6 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 		window.modalCashRegister.close();
 	};
 
-	const closeModalCorteCaja = () => {
-        setShowCorteCaja(false);
-    };
-
 	const getIdCajaFromLocalStorage = () => {
 		const item = localStorage.getItem('idCaja');
 		if (item) {
@@ -483,6 +487,10 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 	}
 
 	const cajaId = getIdCajaFromLocalStorage();
+
+	const openCorteCajaModal = () => {
+		corteCajaModalRef.current?.showModal();
+	  };
 
 	const openOrClose = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
@@ -511,12 +519,11 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 					const { data } = await openOrCloseCashRegister(idCaja, monto, parseInt(params.idClub), adminID, 2, token);
 					if (data) {
 						Alert('Cierre de caja realizada correctamente', true);
-						setCorteCajaData(data.data[0]);
-						setShowCorteCaja(true);
+						setCorteCajaData(data);
 						setTimeout(() => {
 							closeModalVenta();
 							setDisabled(false);
-							window.location.reload()
+							openCorteCajaModal();
 						}, 2500);
 					}
 				}
@@ -528,10 +535,6 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 				}, 3000)
 			}
 		}
-
-		const closeModalCorteCaja = () => {
-			setShowCorteCaja(false);
-		};
 	};
 
 
@@ -589,7 +592,7 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 					)}
 				</div>
 			</dialog>
-			{showCorteCaja && <ModalCorteCaja data={corteCajaData} closeModalCorteCaja={closeModalCorteCaja} />}
+			<ModalCorteCaja ref={corteCajaModalRef} data={corteCajaData}/>
 		</>
 	);
 };
@@ -597,5 +600,4 @@ export const ModalCashRegister: React.FC<ModalPagoProveedores> = ({ }) => {
 export default {
 	ModalPuntoDeVenta,
 	ModalPagoProveedores,
-	ModalCorteCaja
 }
